@@ -1011,6 +1011,11 @@
       opacity: 0;
     }
 
+    /* 无演示视频的卡片：悬停时保留静态图片 */
+    .character-card:not(:has(.character-video)):hover .character-image .character-img {
+      opacity: 1;
+    }
+
     .character-card:hover .character-image .character-video {
       opacity: 1;
     }
@@ -1904,6 +1909,82 @@
         opacity: 0;
       }
     }
+
+    /* 背景音乐播放器 */
+    .bgm-player {
+      position: fixed;
+      right: 1.4rem;
+      bottom: 1.4rem;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      background: rgba(15, 17, 30, 0.85);
+      border: 1px solid rgba(255, 159, 67, 0.4);
+      border-radius: 999px;
+      padding: 0.5rem 0.9rem 0.5rem 0.5rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .bgm-player:hover {
+      border-color: rgba(255, 159, 67, 0.8);
+      box-shadow: 0 8px 34px rgba(255, 159, 67, 0.25);
+    }
+    .bgm-btn {
+      width: 2.6rem;
+      height: 2.6rem;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1rem;
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+    .bgm-btn:hover { transform: scale(1.08); }
+    .bgm-btn:active { transform: scale(0.95); }
+    .bgm-eq {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 1.2rem;
+    }
+    .bgm-eq span {
+      width: 3px;
+      border-radius: 2px;
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      height: 30%;
+      transition: height 0.2s ease;
+    }
+    .bgm-eq.playing span { animation: eqBounce 1s ease-in-out infinite; }
+    .bgm-eq.playing span:nth-child(1) { animation-delay: 0s; }
+    .bgm-eq.playing span:nth-child(2) { animation-delay: 0.25s; }
+    .bgm-eq.playing span:nth-child(3) { animation-delay: 0.5s; }
+    .bgm-eq.playing span:nth-child(4) { animation-delay: 0.1s; }
+    .bgm-eq.playing span:nth-child(5) { animation-delay: 0.35s; }
+    @keyframes eqBounce {
+      0%, 100% { height: 30%; }
+      50% { height: 100%; }
+    }
+    .bgm-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      white-space: nowrap;
+      max-width: 9rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .bgm-label b { color: var(--ink); font-weight: 600; }
+    @media (max-width: 640px) {
+      .bgm-player { right: 0.9rem; bottom: 0.9rem; }
+      .bgm-label { display: none; }
+      .bgm-btn { width: 2.4rem; height: 2.4rem; }
+    }
   </style>
 </head>
 <body>
@@ -2021,7 +2102,7 @@
   <!-- 英雄区域 -->
   <section class="hero">
     <div class="hero-bg">
-      <img src="assets/hero_16x9.jpg" alt="放开那个女巫 游戏背景">
+      <img src="assets/hero_16x9.webp" alt="放开那个女巫 游戏背景" fetchpriority="high">
     </div>
     <div class="hero-content">
       <span class="hero-tag">同名动画改编 奇幻冒险RPG</span>
@@ -2069,7 +2150,7 @@
           </div>
         </div>
         <div class="trailer-wrapper">
-          <video id="trailerVideo" class="trailer-video" autoplay muted loop playsinline poster="assets/hero_16x9.jpg">
+          <video id="trailerVideo" class="trailer-video" autoplay muted loop playsinline poster="assets/hero_16x9.webp">
             <source src="assets/trailer.mp4" type="video/mp4">
             您的浏览器不支持视频播放
           </video>
@@ -2093,7 +2174,7 @@
       <h2 class="section-title">角色精神世界全景</h2>
       <p class="section-subtitle">每位女巫的意识深处，都拥有一片独特而广袤的精神领域</p>
       <div class="spirit-container" id="spiritContainer">
-        <img src="assets/spirit_panorama_16x9.jpg" alt="精神世界全景">
+        <img src="assets/spirit_panorama_16x9.webp" alt="精神世界全景" loading="lazy">
         <div class="spirit-overlay">
           <h3>多重梦境碎片集合体</h3>
           <p>夜莺的能力可以将多名女巫的意识链接在一起，形成一个共享的精神世界。在这里，所有女巫的能力叠加放大，可以共同对抗魔鬼的侵蚀，也能在意识层面进行更深层次的沟通。</p>
@@ -2131,8 +2212,8 @@
             <span class="character-particle" style="left:88%; background:#ff6b6b; --move-x:18px; animation-delay:3s;"></span>
           </div>
           <div class="character-image">
-            <img class="character-img" src="assets/anna.jpg" alt="安娜·切尔娜">
-            <video class="character-video" muted loop playsinline preload="none" poster="assets/anna.jpg">
+            <img class="character-img" src="assets/anna.webp" alt="安娜·切尔娜" loading="lazy">
+            <video class="character-video" muted loop playsinline preload="none" poster="assets/anna.webp">
               <source src="assets/anna_demo.mp4" type="video/mp4">
             </video>
             <span class="character-hover-tip">悬停预览</span>
@@ -2157,8 +2238,8 @@
             <span class="character-particle" style="left:85%; background:#6c5ce7; --move-x:-10px; animation-delay:1.1s;"></span>
           </div>
           <div class="character-image">
-            <img class="character-img" src="assets/nightingale.jpg" alt="夜莺">
-            <video class="character-video" muted loop playsinline preload="none" poster="assets/nightingale.jpg">
+            <img class="character-img" src="assets/nightingale.webp" alt="夜莺" loading="lazy">
+            <video class="character-video" muted loop playsinline preload="none" poster="assets/nightingale.webp">
               <source src="assets/nightingale_demo.mp4" type="video/mp4">
             </video>
             <span class="character-hover-tip">悬停预览</span>
@@ -2183,11 +2264,7 @@
             <span class="character-particle" style="left:90%; background:#f5576c; --move-x:12px; animation-delay:0.5s;"></span>
           </div>
           <div class="character-image">
-            <img class="character-img" src="assets/lily.jpg" alt="莉莉">
-            <video class="character-video" muted loop playsinline preload="none" poster="assets/lily.jpg">
-              <source src="assets/lily_demo.mp4" type="video/mp4">
-            </video>
-            <span class="character-hover-tip">悬停预览</span>
+            <img class="character-img" src="assets/lily.webp" alt="莉莉" loading="lazy">
           </div>
           <div class="character-info">
             <h3 class="character-name">莉莉</h3>
@@ -2209,11 +2286,7 @@
             <span class="character-particle" style="left:88%; background:#4dd8f7; --move-x:-14px; animation-delay:1.8s;"></span>
           </div>
           <div class="character-image">
-            <img class="character-img" src="assets/wendy.jpg" alt="温蒂">
-            <video class="character-video" muted loop playsinline preload="none" poster="assets/wendy.jpg">
-              <source src="assets/wendy_demo.mp4" type="video/mp4">
-            </video>
-            <span class="character-hover-tip">悬停预览</span>
+            <img class="character-img" src="assets/wendy.webp" alt="温蒂" loading="lazy">
           </div>
           <div class="character-info">
             <h3 class="character-name">温蒂</h3>
@@ -2405,7 +2478,6 @@
     </div>
   </div>
 
-  <script src="./_shared/js/echarts.min.js"></script>
   <script>
     // 加载屏进度动画
     const loadingScreen = document.getElementById('loadingScreen');
@@ -2615,7 +2687,7 @@
         name: '安娜',
         title: '火焰女巫',
         badge: '灰烬河畔 - 幸存者',
-        image: 'assets/anna.jpg',
+        image: 'assets/anna.webp',
         stats: [
           { num: 'S', label: '魔力等级' },
           { num: '高阶', label: '火焰控制' },
@@ -2633,7 +2705,7 @@
         name: '夜莺',
         title: '灵魂女巫',
         badge: '教会神罚者 - 隐形',
-        image: 'assets/nightingale.jpg',
+        image: 'assets/nightingale.webp',
         stats: [
           { num: 'A', label: '魔力等级' },
           { num: 'S', label: '潜行暗杀' },
@@ -2651,7 +2723,7 @@
         name: '莉莉',
         title: '唤兽女巫',
         badge: '猫语者 - 情报大师',
-        image: 'assets/lily.jpg',
+        image: 'assets/lily.webp',
         stats: [
           { num: 'B', label: '魔力等级' },
           { num: 'S', label: '情报收集' },
@@ -2669,7 +2741,7 @@
         name: '温蒂',
         title: '风之女巫',
         badge: '前狩猎女巫 - 大姐头',
-        image: 'assets/wendy.jpg',
+        image: 'assets/wendy.webp',
         stats: [
           { num: 'A', label: '魔力等级' },
           { num: 'A', label: '风力操控' },
@@ -2809,7 +2881,7 @@
     const spiritDetail = {
       title: '精神世界 · 多重梦境链接',
       badge: '女巫意识集合体',
-      image: 'assets/spirit_panorama_16x9.jpg',
+      image: 'assets/spirit_panorama_16x9.webp',
       stats: [
         { num: '16+', label: '女巫可链接' },
         { num: '∞', label: '空间大小' },
@@ -2917,6 +2989,58 @@
         closeInfoModal();
       }
     });
+
+    // 背景音乐播放器
+    const bgmAudio = new Audio();
+    bgmAudio.loop = true;
+    bgmAudio.preload = 'auto';
+    const bgmBtn = document.getElementById('bgmBtn');
+    const bgmEq = document.getElementById('bgmEq');
+    const bgmIcon = document.getElementById('bgmIcon');
+    let bgmPlaying = false;
+
+    function setBgmSrc(path) {
+      bgmAudio.src = path;
+      bgmAudio.load();
+    }
+    setBgmSrc('assets/bgm.mp3');
+
+    function toggleBgm() {
+      if (bgmPlaying) {
+        bgmAudio.pause();
+        bgmPlaying = false;
+        bgmEq.classList.remove('playing');
+        bgmIcon.textContent = '♪';
+      } else {
+        bgmAudio.play().then(() => {
+          bgmPlaying = true;
+          bgmEq.classList.add('playing');
+          bgmIcon.textContent = '⏸';
+        }).catch(() => {
+          // 音频不可用或未提供文件时静默失败
+          bgmIcon.textContent = '♪';
+        });
+      }
+    }
+    bgmBtn.addEventListener('click', toggleBgm);
+
+    // 加载屏结束后自动淡入播放器（不自动播放，等待用户点击）
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden && bgmPlaying) {
+        bgmAudio.pause();
+      }
+    });
     </script>
+
+  <!-- 背景音乐播放器 -->
+  <div class="bgm-player" id="bgmPlayer">
+    <button class="bgm-btn" id="bgmBtn" aria-label="播放/暂停背景音乐">
+      <span id="bgmIcon">♪</span>
+    </button>
+    <div class="bgm-eq" id="bgmEq">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="bgm-label"><b>天亮以前说再见</b> · DJ版</div>
+  </div>
 </body>
 </html>
