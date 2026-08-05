@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>活动公告 - 放开那个女巫 官方网站</title>
   <style>
     @font-face {
@@ -43,6 +43,9 @@
 
     html {
       scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+      scroll-padding-top: 76px;
     }
 
     body {
@@ -51,6 +54,18 @@
       color: var(--ink);
       line-height: 1.6;
       overflow-x: hidden;
+    }
+
+    a, button {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    @media (hover: none) {
+      a:active, button:active, .activity-card:active {
+        opacity: 0.75;
+        transform: scale(0.98);
+      }
     }
 
     /* 顶部导航 */
@@ -702,6 +717,17 @@
       .footer-content { grid-template-columns: 1fr; gap: 2rem; padding: 0 1rem; }
       .detail-head h2 { font-size: 1.7rem; }
       .container { padding: 0 1rem; }
+    }
+
+    /* 刘海屏安全区适配 */
+    .nav-inner {
+      padding-left: max(1rem, env(safe-area-inset-left));
+      padding-right: max(1rem, env(safe-area-inset-right));
+    }
+
+    /* 尊重系统"减弱动态效果" */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
     }
   </style>
 </head>
