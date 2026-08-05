@@ -2297,6 +2297,8 @@
       .char-slide {
         width: 190px;
         height: 340px;
+        /* 移动端只提示 transform 建层，避免为每张卡强制 filter/opacity 层造成 GPU 压力 */
+        will-change: transform;
       }
       .char-slide .char-info-box {
         padding: 0.8rem 0.8rem 1rem;
@@ -3909,14 +3911,24 @@
             const x = d === -1 ? -step : step;
             transform = `translate(calc(-50% + ${x}px), -50%) scale(0.82) rotateY(${d === -1 ? rotateY : -rotateY}deg)`;
             opacity = 0.55;
-            filter = 'blur(4px)';
+            filter = isMobile ? 'blur(2px)' : 'blur(4px)';
             zIndex = 5;
           } else if (d === -2 || d === 2) {
-            const x = d === -2 ? -step * 2 : step * 2;
-            transform = `translate(calc(-50% + ${x}px), -50%) scale(0.62) rotateY(${d === -2 ? rotateY * 1.4 : -rotateY * 1.4}deg)`;
-            opacity = 0.2;
-            filter = 'blur(7px)';
-            zIndex = 3;
+            if (isMobile) {
+              // 移动端只保留中间三张，更远的卡片隐去，降低合成层与滤镜压力，
+              // 避免部分 iOS/低配安卓 WebView 因过多 blur+3D 层导致卡片空白/闪烁
+              const mx = d === -2 ? -step * 3 : step * 3;
+              transform = `translate(calc(-50% + ${mx}px), -50%) scale(0.5)`;
+              opacity = 0;
+              filter = 'blur(0px)';
+              zIndex = 1;
+            } else {
+              const x = d === -2 ? -step * 2 : step * 2;
+              transform = `translate(calc(-50% + ${x}px), -50%) scale(0.62) rotateY(${d === -2 ? rotateY * 1.4 : -rotateY * 1.4}deg)`;
+              opacity = 0.2;
+              filter = 'blur(7px)';
+              zIndex = 3;
+            }
           } else {
             // 更远的卡片隐藏到两侧
             const x = d < 0 ? -step * 4 : step * 4;
