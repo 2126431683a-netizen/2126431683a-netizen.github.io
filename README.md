@@ -46,10 +46,6 @@
 
 直接修改 `assets/activities.json` 并提交推送即可，前端自动同步。
 
-### 获取 GitHub 令牌
-
-GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token，勾选 `repo` 权限。令牌仅显示一次，请妥善保存。
-
 ## 部署
 
 本站部署于 GitHub Pages，分支 `main`。推送 `index.html` 及 `assets/` 目录后自动发布。
@@ -63,4 +59,4 @@ GitHub → Settings → Developer settings → Personal access tokens → Tokens
 
 ## 免责声明
 
-本网站为粉丝向概念设计展示，与官方无关联。游戏名与角色设定版权归原作者 / 发行方所有。
+本网站为概念设计展示，与官方无关联。
