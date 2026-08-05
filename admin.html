@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>公告管理后台 - 放开那个女巫 官方网站</title>
   <style>
     @font-face {
@@ -45,6 +45,16 @@
       color: var(--ink);
       line-height: 1.6;
       padding: 2rem 1.2rem 4rem;
+      overflow-x: hidden;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+    a, button, input, select, textarea {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .wrap { max-width: 980px; margin: 0 auto; }
@@ -140,6 +150,7 @@
     @media (max-width: 640px) {
       .row > div { min-width: 100%; }
       .act-item { flex-wrap: wrap; }
+      .wrap { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
     }
   </style>
 </head>
