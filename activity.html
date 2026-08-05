@@ -1222,6 +1222,41 @@
     const backBtn = document.getElementById('backToList');
     const filterBar = document.getElementById('activityFilter');
 
+    // 将结构化 section 渲染为 HTML（与原有 .detail-section 样式一致）
+    function sectionToHTML(s) {
+      if (!s) return '';
+      if (s.type === 'rewards') {
+        const lis = (s.items || []).map(i => `<li><span class="reward-name">${i.name || ''}</span> — ${i.desc || ''}</li>`).join('');
+        return `<div class="detail-section"><h4>${s.heading || ''}</h4><ul class="reward-list">${lis}</ul></div>`;
+      }
+      if (s.type === 'list') {
+        const lis = (s.items || []).map(i => `<li>${i}</li>`).join('');
+        return `<div class="detail-section"><h4>${s.heading || ''}</h4><ul>${lis}</ul></div>`;
+      }
+      return `<div class="detail-section"><h4>${s.heading || ''}</h4><p>${s.text || ''}</p></div>`;
+    }
+
+    // 由活动对象生成详情正文（支持新结构化 sections 与旧 content 兜底）
+    function activityHTML(a) {
+      if (a && Array.isArray(a.sections)) return a.sections.map(sectionToHTML).join('');
+      if (a && a.content) return a.content;
+      return '';
+    }
+
+    // 数据源：优先从 activities.json 拉取（CMS），失败时使用内置兜底数据
+    async function loadActivities() {
+      try {
+        const res = await fetch('assets/activities.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error('fetch failed');
+        const data = await res.json();
+        if (data && Array.isArray(data.activities) && data.activities.length) {
+          activities.splice(0, activities.length, ...data.activities);
+        }
+      } catch (e) {
+        // 兜底：保留内置 activities
+      }
+    }
+
     // 渲染活动列表
     function renderList(filter) {
       if (!listEl) return;
@@ -1246,6 +1281,7 @@
     function renderDetail(id) {
       const a = activities.find(x => x.id === id);
       if (!a) { showList(); return; }
+      const noteHTML = a.note ? `<div class="detail-note"><b>温馨提示：</b>${a.note}</div>` : '';
       detailContent.innerHTML = `
         <div class="detail-head">
           <h2>${a.title}</h2>
@@ -1255,7 +1291,8 @@
             <span>🏷 ${a.tag}</span>
           </div>
         </div>
-        ${a.content}
+        ${activityHTML(a)}
+        ${noteHTML}
       `;
       listEl.style.display = 'none';
       detailEl.style.display = 'block';
@@ -1318,8 +1355,13 @@
       }
     }
 
-    renderList('all');
-    initFromHash();
+    // 初始化：先加载 CMS 数据再渲染
+    async function init() {
+      await loadActivities();
+      renderList(currentFilter);
+      initFromHash();
+    }
+    init();
   </script>
 </body>
 </html>
