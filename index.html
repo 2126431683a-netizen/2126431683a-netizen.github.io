@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>放开那个女巫 - 官方网站</title>
   <style>
     @font-face {
@@ -48,6 +48,26 @@
       font-size: 16px;
       line-height: 1.7;
       overflow-x: hidden;
+    }
+
+    /* 移动端全局基础优化：防 iOS 字体自动缩放、锚点偏移、触控反馈 */
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+      scroll-padding-top: 76px;
+    }
+
+    a, button {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* 触控设备点击反馈（替代 hover） */
+    @media (hover: none) {
+      a:active, button:active, .btn:active, .news-item:active {
+        opacity: 0.75;
+        transform: scale(0.98);
+      }
     }
 
     /* 加载进入画面 */
@@ -530,7 +550,7 @@
       margin-top: 0;
       padding: 0;
       position: relative;
-      height: 100vh;
+      height: 100svh;
       min-height: 600px;
       display: flex;
       align-items: center;
@@ -2407,6 +2427,23 @@
       .bgm-player { right: 0.9rem; bottom: 0.9rem; }
       .bgm-btn { width: 2.2rem; height: 2.2rem; }
     }
+
+    /* 刘海屏安全区适配 */
+    .nav-inner {
+      padding-left: max(2rem, env(safe-area-inset-left));
+      padding-right: max(2rem, env(safe-area-inset-right));
+    }
+    .bgm-player {
+      bottom: max(0.9rem, env(safe-area-inset-bottom));
+    }
+
+    /* 尊重系统"减弱动态效果"：移动端大幅简化重动画，提升流畅度 */
+    @media (prefers-reduced-motion: reduce) {
+      .loading-svg, .particle, .hero-bg img, .magic-particles {
+        animation: none !important;
+      }
+      html { scroll-behavior: auto; }
+    }
   </style>
 </head>
 <body>
@@ -3944,6 +3981,27 @@
       carousel.addEventListener('mouseleave', startAuto);
       // 触摸时暂停
       carousel.addEventListener('touchstart', stopAuto, { passive: true });
+
+      // 移动端触摸滑动手势切换卡片
+      var touchStartX = null;
+      var touchStartY = null;
+      carousel.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+      carousel.addEventListener('touchend', function(e) {
+        if (touchStartX === null) return;
+        var dx = e.changedTouches[0].clientX - touchStartX;
+        var dy = e.changedTouches[0].clientY - touchStartY;
+        // 仅在横向滑动且距离足够时触发，避免与纵向滚动冲突
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+          if (dx < 0) { next(); } else { prev(); }
+          startAuto();
+        }
+        touchStartX = null;
+        touchStartY = null;
+      }, { passive: true });
+
       // 窗口尺寸变化时重新布局
       window.addEventListener('resize', function() { layout(); });
 
