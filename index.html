@@ -2862,6 +2862,17 @@
     </div>
   </div>
 
+  <!-- 背景音乐播放器 -->
+  <div class="bgm-player" id="bgmPlayer">
+    <button class="bgm-btn" id="bgmBtn" aria-label="播放/暂停背景音乐">
+      <span id="bgmIcon">♪</span>
+    </button>
+    <div class="bgm-eq" id="bgmEq">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="bgm-label"><b>天亮以前说再见</b> · DJ版</div>
+  </div>
+
   <script>
     // 加载屏进度动画
     const loadingScreen = document.getElementById('loadingScreen');
@@ -3781,16 +3792,5 @@
       startAuto();
     })();
     </script>
-
-  <!-- 背景音乐播放器 -->
-  <div class="bgm-player" id="bgmPlayer">
-    <button class="bgm-btn" id="bgmBtn" aria-label="播放/暂停背景音乐">
-      <span id="bgmIcon">♪</span>
-    </button>
-    <div class="bgm-eq" id="bgmEq">
-      <span></span><span></span><span></span><span></span><span></span>
-    </div>
-    <div class="bgm-label"><b>天亮以前说再见</b> · DJ版</div>
-  </div>
 </body>
 </html>
