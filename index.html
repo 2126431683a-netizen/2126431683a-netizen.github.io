@@ -2839,7 +2839,7 @@
     <div class="container">
       <h2 class="section-title">活动公告</h2>
       <p class="section-subtitle">最新活动与官方资讯</p>
-      <div class="news-list">
+      <div class="news-list" id="newsList">
         <a class="news-item" href="activity.html?act=spring-festival">
           <div class="news-header">
             <span class="news-title">新年特别活动「新春魔法祭」</span>
@@ -3951,6 +3951,30 @@
       buildSlides();
       layout();
       startAuto();
+    })();
+
+    // 活动公告：从 activities.json（CMS）动态加载首页公告列表
+    (function() {
+      var newsList = document.getElementById('newsList');
+      if (!newsList) return;
+      fetch('assets/activities.json', { cache: 'no-store' })
+        .then(function(res) { if (!res.ok) throw new Error('fetch failed'); return res.json(); })
+        .then(function(data) {
+          if (!data || !Array.isArray(data.activities) || !data.activities.length) return;
+          var html = data.activities.map(function(a) {
+            return '<a class="news-item" href="activity.html?act=' + encodeURIComponent(a.id) + '">' +
+              '<div class="news-header">' +
+                '<span class="news-title">' + (a.title || '') + '</span>' +
+                '<span class="news-badge badge-' + (a.badge || 'event') + '">' + (a.badgeText || '活动') + '</span>' +
+              '</div>' +
+              '<div class="news-date">' + (a.date || '') + '</div>' +
+              '<p class="news-excerpt">' + (a.desc || '') + '</p>' +
+              '<span class="news-more">查看详情 ›</span>' +
+            '</a>';
+          }).join('');
+          newsList.innerHTML = html;
+        })
+        .catch(function() { /* 兜底：保留内置公告 */ });
     })();
     </script>
 </body>
