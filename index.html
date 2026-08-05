@@ -242,11 +242,32 @@
       top: 0;
       left: 0;
       width: 100%;
-      background: rgba(10, 11, 21, 0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--rule);
+      background: linear-gradient(180deg, rgba(12, 13, 26, 0.92), rgba(10, 11, 21, 0.72));
+      backdrop-filter: blur(18px) saturate(140%);
+      -webkit-backdrop-filter: blur(18px) saturate(140%);
+      border-bottom: 1px solid rgba(255, 159, 67, 0.18);
       z-index: 100;
       transition: all 0.3s ease;
+      box-shadow: 0 1px 0 rgba(108, 92, 231, 0.12) inset, 0 8px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    /* 导航条底部流光渐变线 */
+    nav::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent) 20%, var(--accent2) 50%, #a855f7 80%, transparent);
+      background-size: 200% 100%;
+      animation: navFlow 6s linear infinite;
+      opacity: 0.85;
+    }
+
+    @keyframes navFlow {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
     }
 
     .nav-inner {
@@ -255,7 +276,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 2rem;
+      padding: 0.9rem 2rem;
     }
 
     .logo {
@@ -308,43 +329,110 @@
 
     .nav-links {
       display: flex;
-      gap: 2.5rem;
+      gap: 0.6rem;
       list-style: none;
+      align-items: center;
     }
 
     .nav-links a {
       color: var(--muted);
       text-decoration: none;
       font-weight: 500;
-      transition: color 0.3s ease;
+      letter-spacing: 0.04em;
+      transition: color 0.3s ease, letter-spacing 0.3s ease, text-shadow 0.3s ease;
       position: relative;
+      display: inline-flex;
+      align-items: center;
+      padding: 0.55rem 1.1rem;
+      border-radius: 12px;
+      overflow: hidden;
+      z-index: 1;
     }
 
+    /* 链接悬浮胶囊高亮背景 */
+    .nav-links a::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(255, 159, 67, 0.16), rgba(108, 92, 231, 0.18));
+      border: 1px solid rgba(255, 159, 67, 0.28);
+      box-shadow: 0 0 18px rgba(255, 159, 67, 0.22), inset 0 0 12px rgba(108, 92, 231, 0.12);
+      opacity: 0;
+      transform: scale(0.85);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    /* 悬浮渐变流光文字 */
     .nav-links a:hover {
-      color: var(--accent);
+      color: #fff;
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 12px rgba(255, 159, 67, 0.7);
     }
 
+    .nav-links a:hover::before {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* 装饰星芒 */
+    .nav-links a::marker {
+      display: none;
+    }
+
+    .nav-links a em {
+      font-style: normal;
+      margin-right: 0.35rem;
+      font-size: 0.85rem;
+      opacity: 0;
+      transform: translateX(-6px) rotate(-20deg);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      color: var(--accent);
+      text-shadow: 0 0 8px var(--accent);
+    }
+
+    .nav-links a:hover em {
+      opacity: 1;
+      transform: translateX(0) rotate(0deg);
+    }
+
+    /* 渐变光晕下划线 */
     .nav-links a::after {
       content: '';
       position: absolute;
-      bottom: -4px;
-      left: 0;
+      bottom: 6px;
+      left: 50%;
+      transform: translateX(-50%);
       width: 0;
       height: 2px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      transition: width 0.3s ease;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), #a855f7);
+      box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent2);
+      transition: width 0.35s ease;
     }
 
     .nav-links a:hover::after {
-      width: 100%;
+      width: 46%;
     }
 
     .nav-links a.active {
-      color: var(--accent);
+      color: #fff;
+      text-shadow: 0 0 12px rgba(255, 159, 67, 0.7);
+    }
+
+    .nav-links a.active::before {
+      opacity: 1;
+      transform: scale(1);
     }
 
     .nav-links a.active::after {
-      width: 100%;
+      width: 46%;
+    }
+
+    .nav-links a.active em {
+      opacity: 1;
+      transform: translateX(0) rotate(0deg);
     }
 
     .cta-button {
@@ -354,13 +442,33 @@
       border-radius: 30px;
       text-decoration: none;
       font-weight: bold;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      box-shadow: 0 4px 15px rgba(255, 159, 67, 0.3);
+      letter-spacing: 0.05em;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 0 4px 15px rgba(255, 159, 67, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+    }
+
+    /* CTA 流光扫过 */
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -75%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.6s ease;
     }
 
     .cta-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 159, 67, 0.4);
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 8px 28px rgba(255, 159, 67, 0.5), 0 0 24px rgba(108, 92, 231, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+    }
+
+    .cta-button:hover::before {
+      left: 125%;
     }
 
     .mobile-menu-toggle {
@@ -1957,15 +2065,21 @@
         width: 100%;
         flex-direction: column;
         gap: 0;
-        background: rgba(10, 11, 21, 0.97);
-        backdrop-filter: blur(14px);
-        border-bottom: 1px solid var(--rule);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        background: linear-gradient(180deg, rgba(16, 17, 33, 0.98), rgba(10, 11, 21, 0.98));
+        backdrop-filter: blur(18px) saturate(140%);
+        border-bottom: 1px solid rgba(255, 159, 67, 0.25);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(108, 92, 231, 0.2) inset;
         padding: 0.5rem 0;
       }
 
       .nav-links.open {
         display: flex;
+        animation: navDrop 0.35s ease;
+      }
+
+      @keyframes navDrop {
+        0% { opacity: 0; transform: translateY(-12px); }
+        100% { opacity: 1; transform: translateY(0); }
       }
 
       .nav-links li {
@@ -1973,13 +2087,26 @@
       }
 
       .nav-links li a {
-        display: block;
+        display: flex;
+        align-items: center;
         padding: 1rem 2rem;
         border-bottom: 1px solid rgba(43, 48, 74, 0.5);
+        border-radius: 0;
+        letter-spacing: 0.06em;
+      }
+
+      .nav-links li a::before {
+        border-radius: 0;
       }
 
       .nav-links li a::after {
         display: none;
+      }
+
+      .nav-links li a:hover {
+        background: linear-gradient(90deg, rgba(255, 159, 67, 0.12), rgba(108, 92, 231, 0.12));
+        padding-left: 2.4rem;
+        letter-spacing: 0.1em;
       }
 
       .mobile-menu-toggle {
@@ -2368,10 +2495,10 @@
     <div class="nav-inner">
       <div class="logo" id="logoHome">放开那个女巫</div>
       <ul class="nav-links" id="navLinks">
-        <li><a href="#intro">游戏介绍</a></li>
-        <li><a href="#spirit">精神世界</a></li>
-        <li><a href="#characters">魔女图鉴</a></li>
-        <li><a href="#news">活动公告</a></li>
+        <li><a href="#intro" data-label="游戏介绍"><em>✦</em>游戏介绍</a></li>
+        <li><a href="#spirit" data-label="精神世界"><em>✦</em>精神世界</a></li>
+        <li><a href="#characters" data-label="魔女图鉴"><em>✦</em>魔女图鉴</a></li>
+        <li><a href="#news" data-label="活动公告"><em>✦</em>活动公告</a></li>
       </ul>
       <a href="#preorder" class="cta-button">立即预约</a>
       <button class="mobile-menu-toggle" id="menuToggle" aria-label="打开菜单" aria-expanded="false">
