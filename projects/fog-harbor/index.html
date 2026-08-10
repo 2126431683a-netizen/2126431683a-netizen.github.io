@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>雾港疑云 · 第一幕：抵达</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="stage">
+  <div id="wrap">
+    <canvas id="game" width="480" height="270"></canvas>
+    <div id="vignette"></div>
+    <div id="grain"></div>
+
+    <!-- HUD -->
+    <div id="hud" class="hidden">
+      <div id="objective"></div>
+      <div id="stats">
+        <span id="stat-truth">真相度 0</span>
+        <span id="stat-trust">镇民信任 20</span>
+        <span id="stat-letters">信件 1/5</span>
+      </div>
+      <div id="location"></div>
+    </div>
+
+    <!-- 交互提示 -->
+    <div id="prompt" class="hidden">E · 调查</div>
+
+    <!-- 操作说明 -->
+    <div id="controls-hint" class="hidden">方向键 / WASD 移动 · E 调查 · M 静音</div>
+
+    <!-- 对话框 -->
+    <div id="dialog" class="hidden">
+      <div id="dlg-speaker"></div>
+      <div id="dlg-text"></div>
+      <div id="dlg-choices"></div>
+      <div id="dlg-hint">空格 继续</div>
+    </div>
+
+    <!-- 信件 -->
+    <div id="letter" class="hidden">
+      <div id="letter-paper">
+        <div id="letter-text"></div>
+        <div id="letter-hint">空格 / E 合上信纸</div>
+      </div>
+    </div>
+
+    <!-- 开场剧情 -->
+    <div id="intro">
+      <div id="intro-title">雾 港 疑 云</div>
+      <div id="intro-sub">第一幕 · 抵达</div>
+      <div id="intro-text"></div>
+      <div id="intro-hint">空格 继续</div>
+      <button id="intro-skip">跳过剧情 ▸</button>
+    </div>
+
+    <!-- 幕尾 -->
+    <div id="ending" class="hidden">
+      <div id="end-title">第一幕 · 抵达 —— 完</div>
+      <div id="end-stats"></div>
+      <div id="end-teaser">「距离满月，还有七天。」<br>第二幕 · 潮水 —— 敬请期待</div>
+      <div id="end-hint">按 R 重新开始</div>
+    </div>
+
+    <!-- 触屏虚拟按键 -->
+    <div id="touch-ui" class="hidden">
+      <div id="dpad">
+        <button class="tk tk-up" data-k="ArrowUp">▲</button>
+        <button class="tk tk-left" data-k="ArrowLeft">◀</button>
+        <button class="tk tk-down" data-k="ArrowDown">▼</button>
+        <button class="tk tk-right" data-k="ArrowRight">▶</button>
+      </div>
+      <button id="btn-act" class="tk">E</button>
+    </div>
+    <div id="rotate-hint">建议横屏游玩体验更佳</div>
+
+    <div id="fade"></div>
+  </div>
+</div>
+<script src="main.js"></script>
+</body>
+</html>

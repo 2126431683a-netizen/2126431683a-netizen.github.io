@@ -1,0 +1,145 @@
+/* ============ 雾港疑云 · 全局样式 ============ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; background: #05070c; overflow: hidden;
+  font-family: "Songti SC", "STSong", "Noto Serif SC", "SimSun", serif;
+  color: #c8d2dc; user-select: none; }
+
+#stage { height: 100%; display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(ellipse at 50% 40%, #0b1220 0%, #05070c 70%); }
+
+/* 游戏画面：480x270 整数倍放大，保持像素锐利 */
+#wrap { position: relative; width: min(96vw, calc(96vh * 16 / 9)); aspect-ratio: 16 / 9;
+  box-shadow: 0 0 80px rgba(20, 40, 70, .55), 0 0 0 1px #1a2634; }
+#game { width: 100%; height: 100%; display: block; image-rendering: pixelated;
+  image-rendering: crisp-edges; background: #060a12; }
+
+/* 暗角 + 颗粒，营造胶片感 */
+#vignette { position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 46%, transparent 55%, rgba(3, 6, 12, .55) 88%, rgba(2, 4, 9, .85) 100%); }
+#grain { position: absolute; inset: 0; pointer-events: none; opacity: .05; mix-blend-mode: overlay;
+  background-image: repeating-conic-gradient(#fff 0 .00006turn, #000 .00006turn .00012turn);
+  background-size: 3px 3px; animation: grain .45s steps(3) infinite; }
+@keyframes grain { 0%{transform:translate(0,0)} 33%{transform:translate(-2px,1px)} 66%{transform:translate(1px,-2px)} 100%{transform:translate(0,0)} }
+
+.hidden { display: none !important; }
+
+/* ============ HUD ============ */
+#hud { position: absolute; inset: 0; pointer-events: none; }
+#objective { position: absolute; top: 3.2%; left: 3%; font-size: clamp(10px, 1.35vw, 15px);
+  color: #9fb0be; text-shadow: 0 1px 3px #000; letter-spacing: .08em;
+  border-left: 2px solid #8a2f2f; padding-left: .7em; max-width: 46%; line-height: 1.7; }
+#stats { position: absolute; top: 3.2%; right: 3%; display: flex; gap: 1.2em;
+  font-size: clamp(10px, 1.3vw, 14px); letter-spacing: .1em; text-shadow: 0 1px 3px #000; }
+#stat-truth { color: #b08898; }
+#stat-trust { color: #88a4b8; }
+#stat-letters { color: #c8b87a; }
+#location { position: absolute; top: 12%; left: 50%; transform: translateX(-50%);
+  font-size: clamp(13px, 1.9vw, 22px); letter-spacing: .5em; text-indent: .5em; color: #dfe6ec;
+  text-shadow: 0 0 14px rgba(120, 160, 200, .6), 0 2px 4px #000;
+  opacity: 0; transition: opacity 1.2s ease; }
+#location.show { opacity: .95; }
+
+/* ============ 交互提示 ============ */
+#prompt { position: absolute; left: 50%; bottom: 26%; transform: translateX(-50%);
+  font-size: clamp(10px, 1.3vw, 14px); color: #e8eef4; background: rgba(8, 14, 24, .78);
+  border: 1px solid #33465c; padding: .35em 1em; letter-spacing: .12em;
+  text-shadow: 0 1px 2px #000; animation: bob 1.4s ease-in-out infinite; }
+@keyframes bob { 0%,100%{transform:translate(-50%,0)} 50%{transform:translate(-50%,-4px)} }
+
+#controls-hint { position: absolute; bottom: 2.5%; left: 50%; transform: translateX(-50%);
+  font-size: clamp(9px, 1.1vw, 12px); color: #5c6d7d; letter-spacing: .15em; text-shadow: 0 1px 2px #000; }
+
+/* ============ 对话框 ============ */
+#dialog { position: absolute; left: 4%; right: 4%; bottom: 4.5%; min-height: 24%;
+  background: linear-gradient(180deg, rgba(9, 14, 24, .92), rgba(6, 10, 18, .96));
+  border: 1px solid #33465c; box-shadow: 0 6px 30px rgba(0, 0, 0, .6), inset 0 0 40px rgba(30, 50, 80, .15);
+  padding: 2.2% 3%; }
+#dlg-speaker { position: absolute; top: -1em; left: 3%; font-size: clamp(11px, 1.5vw, 17px);
+  color: #d8c9a0; background: #101a2a; border: 1px solid #33465c; padding: .15em .9em;
+  letter-spacing: .3em; text-indent: .3em; }
+#dlg-text { font-size: clamp(12px, 1.7vw, 19px); line-height: 2; color: #dbe3ea;
+  letter-spacing: .06em; min-height: 4em; white-space: pre-wrap; }
+#dlg-hint { position: absolute; right: 3%; bottom: 6%; font-size: clamp(9px, 1.1vw, 12px);
+  color: #55677a; letter-spacing: .2em; animation: blink 1.2s steps(2) infinite; }
+@keyframes blink { 50% { opacity: .15; } }
+#dlg-choices { display: flex; flex-direction: column; gap: .5em; margin-top: .8em; }
+.choice { font-size: clamp(11px, 1.5vw, 16px); color: #9fb0be; padding: .3em 1em;
+  border-left: 2px solid #2a3a4e; cursor: pointer; letter-spacing: .08em; transition: all .15s; }
+.choice.sel { color: #f0e6c8; border-left-color: #c04060; background: rgba(160, 60, 80, .12); padding-left: 1.4em; }
+
+/* ============ 信纸 ============ */
+#letter { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: rgba(4, 6, 11, .72); backdrop-filter: blur(2px); z-index: 5; }
+#letter-paper { width: 62%; max-height: 78%; overflow: auto; padding: 5% 7%;
+  background: linear-gradient(173deg, #d8ccb0 0%, #cbbc9c 55%, #bfae8e 100%);
+  color: #2e2418; box-shadow: 0 20px 60px rgba(0, 0, 0, .8); transform: rotate(-1.2deg);
+  font-size: clamp(12px, 1.7vw, 19px); line-height: 2.3; letter-spacing: .1em;
+  animation: letterIn .8s ease; }
+@keyframes letterIn { from { opacity: 0; transform: rotate(-1.2deg) translateY(30px); } }
+#letter-text { white-space: pre-wrap; }
+#letter-hint { margin-top: 1.5em; text-align: right; font-size: .72em; color: #7a6a4e; letter-spacing: .2em; }
+
+/* ============ 开场剧情 ============ */
+#intro { position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  background: radial-gradient(ellipse at 50% 30%, rgba(10, 18, 32, .35), rgba(4, 7, 13, .88) 80%); }
+#intro-title { font-size: clamp(26px, 5vw, 56px); letter-spacing: .6em; text-indent: .6em;
+  color: #dfe7ee; text-shadow: 0 0 30px rgba(110, 150, 200, .55), 0 4px 10px #000;
+  transition: opacity 1.5s; }
+#intro-sub { margin-top: 1.2em; font-size: clamp(11px, 1.5vw, 17px); letter-spacing: .8em;
+  text-indent: .8em; color: #8a2f2f; text-shadow: 0 0 12px rgba(138, 47, 47, .8); }
+#intro-text { margin-top: 6vh; max-width: 72%; min-height: 9em;
+  font-size: clamp(12px, 1.7vw, 19px); line-height: 2.4; color: #b9c6d2;
+  letter-spacing: .12em; white-space: pre-wrap; text-shadow: 0 2px 6px #000; }
+#intro-hint { position: absolute; bottom: 6%; font-size: clamp(9px, 1.1vw, 12px);
+  color: #55677a; letter-spacing: .3em; animation: blink 1.2s steps(2) infinite; }
+#intro-skip { position: absolute; top: 5%; right: 4.5%; font-family: inherit; cursor: pointer;
+  font-size: clamp(10px, 1.2vw, 13px); letter-spacing: .25em; color: #6b7c8c;
+  background: rgba(10, 16, 26, .6); border: 1px solid #26364a; padding: .5em 1.4em;
+  transition: all .2s; }
+#intro-skip:hover { color: #e8eef4; border-color: #c04060; background: rgba(60, 20, 30, .5); }
+
+/* ============ 幕尾 ============ */
+#ending { position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center; background: #04060b;
+  animation: endIn 2.5s ease; }
+@keyframes endIn { from { opacity: 0; } }
+#end-title { font-size: clamp(18px, 3vw, 34px); letter-spacing: .5em; text-indent: .5em; color: #dfe7ee; }
+#end-stats { margin-top: 3vh; font-size: clamp(11px, 1.4vw, 15px); color: #7d8fa0;
+  letter-spacing: .25em; line-height: 2.2; }
+#end-teaser { margin-top: 5vh; font-size: clamp(12px, 1.6vw, 18px); color: #96505c;
+  letter-spacing: .2em; line-height: 2.6; }
+#end-hint { position: absolute; bottom: 7%; font-size: clamp(9px, 1.1vw, 12px);
+  color: #44566a; letter-spacing: .3em; animation: blink 1.2s steps(2) infinite; }
+
+/* ============ 转场 ============ */
+#fade { position: absolute; inset: 0; background: #02040a; pointer-events: none;
+  opacity: 1; transition: opacity .8s ease; z-index: 8; }
+
+/* ============ 触屏适配 ============ */
+#touch-ui { position: absolute; inset: 0; pointer-events: none; z-index: 7; }
+#dpad { position: absolute; left: 3.5%; bottom: 5%;
+  display: grid; grid-template-areas: ". up ." "left down right";
+  gap: 6px; pointer-events: auto; }
+.tk { width: clamp(44px, 9vw, 64px); height: clamp(44px, 9vw, 64px);
+  font-family: inherit; font-size: clamp(16px, 3vw, 22px); color: #c8d2dc;
+  background: rgba(14, 22, 36, .42); border: 1px solid rgba(90, 120, 155, .55);
+  border-radius: 6px; touch-action: none; -webkit-tap-highlight-color: transparent;
+  text-shadow: 0 1px 2px #000; backdrop-filter: blur(1px); }
+.tk:active, .tk.on { background: rgba(90, 130, 175, .5); color: #fff;
+  border-color: #9fc0e0; }
+.tk-up { grid-area: up; } .tk-left { grid-area: left; }
+.tk-down { grid-area: down; } .tk-right { grid-area: right; }
+#btn-act { position: absolute; right: 4%; bottom: 6%; pointer-events: auto;
+  width: clamp(56px, 11vw, 76px); height: clamp(56px, 11vw, 76px); border-radius: 50%;
+  font-size: clamp(20px, 4vw, 28px); font-weight: bold; color: #f0e6c8;
+  border-color: rgba(200, 150, 90, .6); background: rgba(50, 34, 20, .45); }
+#btn-act:active { background: rgba(160, 110, 60, .55); }
+
+#rotate-hint { display: none; position: absolute; top: 2%; left: 50%; transform: translateX(-50%);
+  font-size: 11px; color: #7d8fa0; letter-spacing: .2em; text-shadow: 0 1px 2px #000;
+  background: rgba(8, 14, 24, .6); padding: .3em 1em; border: 1px solid #26364a; z-index: 7; }
+@media (orientation: portrait) { body.touch #rotate-hint { display: block; } }
+
+/* 触屏设备上底部提示文案占位，避免与虚拟按键重叠 */
+body.touch #controls-hint { bottom: auto; top: 8%; }
