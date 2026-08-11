@@ -248,8 +248,8 @@ a {
   z-index: -3;
   width: 100%;
   height: calc(100% - var(--nav-height));
-  opacity: 0.44;
-  filter: saturate(0.82) contrast(1.12);
+  opacity: 0.64;
+  filter: saturate(0.94) contrast(1.08);
   border: 0;
   pointer-events: none;
   animation: hero-drift 20s ease-in-out infinite alternate;
@@ -260,7 +260,7 @@ a {
   position: absolute;
   inset: var(--nav-height) 0 0;
   z-index: -2;
-  background: rgba(8, 9, 13, 0.34);
+  background: rgba(8, 9, 13, 0.18);
 }
 
 .home-hero::after {
@@ -269,7 +269,7 @@ a {
   inset: auto 0 0;
   z-index: -1;
   height: 58%;
-  background: rgba(8, 9, 13, 0.84);
+  background: rgba(8, 9, 13, 0.74);
   border-top: 1px solid rgba(255, 60, 166, 0.28);
 }
 
@@ -475,6 +475,129 @@ a {
   font-size: 30px;
   line-height: 1;
   text-shadow: 2px 2px 0 rgba(92, 242, 239, 0.34);
+}
+
+.document-section {
+  padding: 72px 0 0;
+}
+
+.document-grid {
+  display: grid;
+  grid-template-columns: minmax(250px, 0.72fr) repeat(2, minmax(0, 1fr));
+  border: 1px solid var(--line);
+}
+
+.document-intro,
+.document-card {
+  min-width: 0;
+  padding: 30px;
+}
+
+.document-intro {
+  color: var(--ink);
+  background: var(--pink);
+}
+
+.document-intro .project-code {
+  color: var(--ink);
+}
+
+.document-intro h2 {
+  margin: 42px 0 0;
+  font-size: 34px;
+  line-height: 1.06;
+}
+
+.document-intro p:last-child {
+  margin: 18px 0 0;
+  font-size: 13px;
+  line-height: 1.7;
+  opacity: 0.78;
+}
+
+.document-card {
+  min-height: 340px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-soft);
+  border-left: 1px solid var(--line);
+  transition: background 200ms ease, box-shadow 200ms ease;
+}
+
+.document-card:hover {
+  background: #151821;
+  box-shadow: inset 0 3px 0 var(--cyan);
+}
+
+.document-card-accent:hover {
+  box-shadow: inset 0 3px 0 var(--lime);
+}
+
+.document-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  color: var(--cyan);
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.document-topline strong {
+  color: var(--pink);
+}
+
+.document-card h3 {
+  margin: 34px 0 0;
+  font-size: 27px;
+  line-height: 1.12;
+}
+
+.document-card > p {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.document-facts {
+  margin-top: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.document-facts span {
+  padding: 6px 8px;
+  color: #d7dbe2;
+  border: 1px solid var(--line);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.document-link {
+  margin-top: auto;
+  padding-top: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  color: var(--white);
+  border-top: 1px solid var(--line);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.document-link span {
+  color: var(--pink);
+  font-size: 16px;
+  transition: transform 180ms ease;
+}
+
+.document-link:hover span {
+  transform: translate(2px, -2px);
 }
 
 .section {
@@ -1231,6 +1354,22 @@ a {
     grid-template-columns: 1.4fr repeat(3, 0.7fr);
   }
 
+  .document-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .document-intro {
+    grid-column: 1 / -1;
+  }
+
+  .document-intro h2 {
+    margin-top: 28px;
+  }
+
+  .document-card:first-of-type {
+    border-left: 0;
+  }
+
   .terminal-stage {
     grid-template-columns: 1fr;
   }
@@ -1337,11 +1476,16 @@ a {
   .hero-live {
     width: 150%;
     left: -25%;
-    opacity: 0.34;
+    opacity: 0.52;
+  }
+
+  .home-hero::before {
+    background: rgba(8, 9, 13, 0.12);
   }
 
   .home-hero::after {
     height: 70%;
+    background: rgba(8, 9, 13, 0.78);
   }
 
   .home-hero h1 {
@@ -1393,6 +1537,29 @@ a {
 
   .section {
     padding: 72px 0;
+  }
+
+  .document-section {
+    padding-top: 54px;
+  }
+
+  .document-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .document-intro {
+    grid-column: auto;
+  }
+
+  .document-card,
+  .document-card:first-of-type {
+    min-height: auto;
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+
+  .document-link {
+    margin-top: 26px;
   }
 
   .section-head {

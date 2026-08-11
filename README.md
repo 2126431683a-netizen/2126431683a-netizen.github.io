@@ -12,6 +12,7 @@ https://2126431683a-netizen.github.io/
 - `about.html`：个人方法、经历、教育背景与联系方式
 - `assets/site.css`：全站响应式视觉系统与赛博朋克动效
 - `assets/site.js`：移动导航、项目终端、滚动揭示与图片灯箱
+- `assets/docs/`：可公开查看的 HotPick Studio PRD 与《暮鸦之墓》GDD
 - `release-the-witch-game.html`：《放开那个女巫》Web 试玩容器
 - `release-the-witch-site.html`：《放开那个女巫》原项目展示页
 - `game/release-the-witch/`：Godot Web 导出文件
