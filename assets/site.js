@@ -101,6 +101,28 @@
     });
   }
 
+  const genreFilter = document.querySelector('[data-genre-filter]');
+  if (genreFilter) {
+    const filterButtons = [...genreFilter.querySelectorAll('[data-genre]')];
+    const genrePanels = [...document.querySelectorAll('[data-genre-panel]')];
+    const count = genreFilter.querySelector('[data-genre-count]');
+
+    filterButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const selectedGenre = button.dataset.genre;
+        let visibleCount = 0;
+
+        filterButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+        genrePanels.forEach((panel) => {
+          const isVisible = selectedGenre === 'all' || panel.dataset.genrePanel === selectedGenre;
+          panel.hidden = !isVisible;
+          if (isVisible) visibleCount += 1;
+        });
+        if (count) count.textContent = `${visibleCount} 个类型拆解`;
+      });
+    });
+  }
+
   document.querySelectorAll('[data-year]').forEach((item) => {
     item.textContent = String(new Date().getFullYear());
   });

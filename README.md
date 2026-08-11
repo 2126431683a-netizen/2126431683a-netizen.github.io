@@ -8,6 +8,7 @@ https://2126431683a-netizen.github.io/
 
 - `index.html`：以《放开那个女巫》实时官网开场的官方网站式首页
 - `projects.html`：五个核心项目的独立入口与分类目录
+- `game-analysis.html`：个人游戏体验谱系、类型理解与系统拆解
 - `project-*.html`：五个项目各自的系统拆解、决策说明与画面证据
 - `about.html`：个人方法、经历、教育背景与联系方式
 - `assets/site.css`：全站响应式视觉系统与赛博朋克动效
@@ -20,6 +21,7 @@ https://2126431683a-netizen.github.io/
 - `projects/sango/`：《三国文字合成塔防》React / TypeScript 试玩版
 - `projects/hotpick/`：HotPick Studio 产品 Demo
 - `assets/portfolio/`：作品集使用的项目截图、视频与头像
+- `assets/games/`：类型拆解页使用的商业游戏官方商店头图
 - `assets/陈黄勇_游戏产品经理_系统策划_简历.pdf`：可下载 PDF 简历
 
 ## 重点项目
