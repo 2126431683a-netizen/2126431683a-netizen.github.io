@@ -483,7 +483,7 @@ a {
 
 .document-grid {
   display: grid;
-  grid-template-columns: minmax(250px, 0.72fr) repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(220px, 0.72fr) repeat(3, minmax(0, 1fr));
   border: 1px solid var(--line);
 }
 
@@ -531,6 +531,10 @@ a {
 
 .document-card-accent:hover {
   box-shadow: inset 0 3px 0 var(--lime);
+}
+
+.document-card-witch:hover {
+  box-shadow: inset 0 3px 0 var(--pink);
 }
 
 .document-topline {
@@ -1370,6 +1374,10 @@ a {
     border-left: 0;
   }
 
+  .document-card:last-child {
+    grid-column: 1 / -1;
+  }
+
   .terminal-stage {
     grid-template-columns: 1fr;
   }
@@ -1556,6 +1564,10 @@ a {
     min-height: auto;
     border-top: 1px solid var(--line);
     border-left: 0;
+  }
+
+  .document-card:last-child {
+    grid-column: auto;
   }
 
   .document-link {

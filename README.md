@@ -12,7 +12,7 @@ https://2126431683a-netizen.github.io/
 - `about.html`：个人方法、经历、教育背景与联系方式
 - `assets/site.css`：全站响应式视觉系统与赛博朋克动效
 - `assets/site.js`：移动导航、项目终端、滚动揭示与图片灯箱
-- `assets/docs/`：可公开查看的 HotPick Studio PRD 与《暮鸦之墓》GDD
+- `assets/docs/`：可公开查看的《放开那个女巫》PRD、HotPick Studio PRD 与《暮鸦之墓》GDD
 - `release-the-witch-game.html`：《放开那个女巫》Web 试玩容器
 - `release-the-witch-site.html`：《放开那个女巫》原项目展示页
 - `game/release-the-witch/`：Godot Web 导出文件
@@ -26,7 +26,7 @@ https://2126431683a-netizen.github.io/
 
 ### 《放开那个女巫：灰堡黎明》
 
-Godot 4 竖屏卡牌回合 RPG MVP。覆盖用户定位、MVP 范围、3 AP 速度行动战斗、角色收集养成、关卡循环、数值与移动端规范，并提供在线试玩。
+Godot 4 竖屏卡牌回合 RPG MVP。覆盖用户定位、MVP 范围、3 AP 速度行动战斗、角色收集养成、关卡循环、数值与移动端规范，并提供在线试玩与 8 页完整 PRD。
 
 ### 《暮鸦之墓》
 
