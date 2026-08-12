@@ -1477,7 +1477,7 @@ a {
   background: var(--bg-soft);
 }
 
-.game-entry:nth-child(5) {
+.game-entry:nth-child(7) {
   grid-column: 1 / -1;
   grid-template-columns: minmax(0, 0.44fr) minmax(0, 1.56fr);
 }
@@ -1494,6 +1494,15 @@ a {
 
 .game-entry:hover img {
   filter: saturate(1) contrast(1.04);
+}
+
+.game-entry--whiteout {
+  height: 360px;
+  overflow: hidden;
+}
+
+.game-entry--whiteout img {
+  object-position: center 37%;
 }
 
 .game-entry-copy {
@@ -1678,6 +1687,100 @@ a {
   color: var(--white);
 }
 
+.localization-section {
+  position: relative;
+  overflow: hidden;
+  background: #12141b;
+  border-bottom: 1px solid var(--line);
+}
+
+.localization-section::before {
+  content: "GLOBAL / LOCAL / PLAYABLE";
+  position: absolute;
+  top: 24px;
+  right: 3vw;
+  color: rgba(255, 255, 255, 0.025);
+  font-size: 72px;
+  font-weight: 950;
+  pointer-events: none;
+}
+
+.localization-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.localization-grid article {
+  min-width: 0;
+  min-height: 330px;
+  padding: 28px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  transition: background 200ms ease, box-shadow 200ms ease;
+}
+
+.localization-grid article:hover {
+  background: rgba(255, 60, 166, 0.055);
+  box-shadow: inset 0 3px 0 var(--pink);
+}
+
+.localization-grid article > span {
+  color: var(--cyan);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.localization-grid h3 {
+  margin: 36px 0 0;
+  font-size: 24px;
+}
+
+.localization-grid p {
+  margin: 15px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+.localization-grid ul {
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.localization-grid li {
+  position: relative;
+  padding: 9px 0 9px 16px;
+  color: #d9dce3;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.localization-grid li::before {
+  content: "+";
+  position: absolute;
+  left: 0;
+  color: var(--pink);
+  font-weight: 900;
+}
+
+.localization-principle {
+  margin: 26px 0 0;
+  padding: 20px 22px;
+  color: var(--muted);
+  border: 1px solid var(--cyan);
+  font-size: 12px;
+  line-height: 1.75;
+  box-shadow: 5px 5px 0 var(--pink);
+}
+
+.localization-principle strong {
+  color: var(--white);
+}
+
 .analysis-method {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -1831,9 +1934,17 @@ a {
     grid-template-columns: 1fr;
   }
 
-  .game-entry:nth-child(5) {
+  .game-entry:nth-child(7) {
     grid-column: auto;
     grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+  }
+
+  .game-entry--whiteout {
+    height: auto;
+  }
+
+  .localization-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .genre-panel {
@@ -2016,7 +2127,7 @@ a {
   }
 
   .game-entry,
-  .game-entry:nth-child(5) {
+  .game-entry:nth-child(7) {
     grid-template-columns: 1fr;
   }
 
@@ -2076,6 +2187,28 @@ a {
 
   .genre-panel blockquote {
     font-size: 15px;
+    box-shadow: 4px 4px 0 var(--pink);
+  }
+
+  .localization-section::before {
+    display: none;
+  }
+
+  .localization-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .localization-grid article {
+    min-height: 0;
+    padding: 26px 24px;
+  }
+
+  .localization-grid h3 {
+    margin-top: 24px;
+  }
+
+  .localization-principle {
+    padding: 18px;
     box-shadow: 4px 4px 0 var(--pink);
   }
 
