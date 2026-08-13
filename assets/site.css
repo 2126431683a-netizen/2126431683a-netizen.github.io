@@ -1149,6 +1149,103 @@ a {
   filter: saturate(1.1);
 }
 
+.emberfall-hero .page-hero-media img {
+  object-position: center 45%;
+  filter: saturate(0.9) contrast(1.08);
+}
+
+.demo-proof {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 44px;
+  align-items: center;
+}
+
+.demo-proof-copy h3 {
+  margin: 14px 0 0;
+  font-size: 30px;
+}
+
+.demo-proof-copy > p:not(.project-code),
+.demo-proof-copy li {
+  color: rgba(18, 19, 24, 0.72);
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.demo-proof-copy ol {
+  margin: 22px 0 0;
+  padding-left: 20px;
+}
+
+.demo-preview {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  color: var(--white);
+  border: 1px solid rgba(18, 19, 24, 0.28);
+  border-radius: 3px;
+  box-shadow: 14px 14px 0 rgba(255, 60, 166, 0.14);
+}
+
+.demo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 420ms ease, filter 220ms ease;
+}
+
+.demo-preview span {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  padding: 10px 12px;
+  color: var(--cyan);
+  background: rgba(7, 8, 12, 0.9);
+  border: 1px solid rgba(83, 224, 242, 0.5);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.demo-preview:hover img {
+  transform: scale(1.025);
+  filter: saturate(1.12);
+}
+
+.verification-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 2px solid var(--pink);
+}
+
+.verification-grid article {
+  min-height: 230px;
+  padding: 28px;
+  border-right: 1px solid rgba(18, 19, 24, 0.18);
+}
+
+.verification-grid article:last-child {
+  border-right: 0;
+}
+
+.verification-grid span {
+  color: var(--pink);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.verification-grid h3 {
+  margin: 38px 0 0;
+  font-size: 20px;
+}
+
+.verification-grid p {
+  color: rgba(18, 19, 24, 0.7);
+  font-size: 12px;
+  line-height: 1.75;
+}
+
 .pixel-art img {
   image-rendering: pixelated;
 }
@@ -2043,6 +2140,20 @@ a {
 
   .method-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .demo-proof {
+    grid-template-columns: 1fr;
+  }
+
+  .verification-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .verification-grid article {
+    min-height: auto;
+    border-right: 0;
+    border-bottom: 1px solid rgba(18, 19, 24, 0.18);
   }
 
   .method-step:nth-child(2) {
