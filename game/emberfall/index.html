@@ -120,18 +120,15 @@ const GODOT_CHUNK_MANIFEST = {
 
 async function loadChunkedFile(fileName, onProgress) {
 	const manifest = GODOT_CHUNK_MANIFEST[fileName];
-	const chunks = [];
-	let loaded = 0;
-	for (let index = 0; index < manifest.count; index += 1) {
+	const chunks = await Promise.all(Array.from({ length: manifest.count }, async (_, index) => {
 		const response = await fetch(`${fileName}.parts/${String(index).padStart(2, "0")}.part`);
 		if (!response.ok) {
 			throw new Error(`Failed to load ${fileName} part ${index + 1}/${manifest.count}`);
 		}
 		const chunk = new Uint8Array(await response.arrayBuffer());
-		chunks.push(chunk);
-		loaded += chunk.byteLength;
-		onProgress?.(loaded, manifest.size);
-	}
+		onProgress?.(fileName, chunk.byteLength);
+		return chunk;
+	}));
 	const joined = new Uint8Array(manifest.size);
 	let offset = 0;
 	for (const chunk of chunks) {
@@ -160,9 +157,12 @@ const engine = new Engine(GODOT_CONFIG);
 	const statusOverlay = document.getElementById('status');
 	const statusProgress = document.getElementById('status-progress');
 	const statusNotice = document.getElementById('status-notice');
-	window.__godotChunkProgress = function (current, total) {
-		statusProgress.value = current;
-		statusProgress.max = total;
+	const totalChunkBytes = Object.values(GODOT_CHUNK_MANIFEST).reduce((sum, file) => sum + file.size, 0);
+	let loadedChunkBytes = 0;
+	window.__godotChunkProgress = function (_fileName, addedBytes) {
+		loadedChunkBytes += addedBytes;
+		statusProgress.value = loadedChunkBytes;
+		statusProgress.max = totalChunkBytes;
 	};
 
 	let initializing = true;
