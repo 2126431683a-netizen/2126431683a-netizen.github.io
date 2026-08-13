@@ -7,10 +7,10 @@ https://2126431683a-netizen.github.io/
 ## 内容结构
 
 - `index.html`：以《放开那个女巫》实时官网开场的官方网站式首页
-- `projects.html`：五个核心项目的独立入口与分类目录
+- `projects.html`：六个核心项目的独立入口与分类目录
 - `game-analysis.html`：个人游戏体验、八类玩法拆解与重点出海市场本地化判断
 - `game-*.html`：七款游戏各自的完整体验与系统拆解档案
-- `project-*.html`：五个项目各自的系统拆解、决策说明与画面证据
+- `project-*.html`：六个项目各自的系统拆解、决策说明与画面证据
 - `about.html`：个人方法、经历、教育背景与联系方式
 - `assets/site.css`：全站响应式视觉系统与赛博朋克动效
 - `assets/site.js`：移动导航、项目终端、滚动揭示与图片灯箱
@@ -18,6 +18,8 @@ https://2126431683a-netizen.github.io/
 - `release-the-witch-game.html`：《放开那个女巫》Web 试玩容器
 - `release-the-witch-site.html`：《放开那个女巫》原项目展示页
 - `game/release-the-witch/`：Godot Web 导出文件
+- `emberfall-game.html`：《余烬之城》横屏 Web Demo 容器
+- `game/emberfall/`：《余烬之城》Godot Web 导出文件
 - `projects/fog-harbor/`：《雾港疑云》双章节网页原型
 - `projects/sango/`：《三国文字合成塔防》React / TypeScript 试玩版
 - `projects/hotpick/`：HotPick Studio 产品 Demo
@@ -46,6 +48,10 @@ React + TypeScript 实现的纯前端策略游戏原型。包含 8 条合成路�
 ### HotPick Studio
 
 从 0 到 1 设计的 AI 热点选题工作台。以 15 页 PRD 和两轮迭代定义五阶段工作流，并分别完成 React、Electron 与 Capacitor 形态验证。
+
+### 《余烬之城 Emberfall》
+
+Godot 4.7 生存城建 SLG 可玩切片。Demo 从第 28 天的临界城镇切入，用熔炉供暖、资源生产、暴风雪倒计时、冻原探索与英雄远征验证一段完整的生存压力循环。
 
 ## 设计方向
 
