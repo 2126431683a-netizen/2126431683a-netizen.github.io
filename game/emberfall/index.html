@@ -114,20 +114,25 @@ body {
 const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":false,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":42469376,"index.wasm":39513091},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const GODOT_CHUNK_MANIFEST = {
-	"index.pck": { count: 6, size: 42469376 },
-	"index.wasm": { count: 5, size: 39513091 },
+	"index.pck": { count: 6, size: 42469376, transferSize: 42469376, compressed: false },
+	"index.wasm": { count: 5, size: 39513091, transferSize: 10057510, compressed: true },
 };
 
 async function loadChunkedFile(fileName, onProgress) {
 	const manifest = GODOT_CHUNK_MANIFEST[fileName];
 	const chunks = await Promise.all(Array.from({ length: manifest.count }, async (_, index) => {
-		const response = await fetch(`${fileName}.parts/${String(index).padStart(2, "0")}.part`);
+		const suffix = manifest.compressed ? ".part.gz" : ".part";
+		const response = await fetch(`${fileName}.parts/${String(index).padStart(2, "0")}${suffix}`);
 		if (!response.ok) {
 			throw new Error(`Failed to load ${fileName} part ${index + 1}/${manifest.count}`);
 		}
-		const chunk = new Uint8Array(await response.arrayBuffer());
-		onProgress?.(fileName, chunk.byteLength);
-		return chunk;
+		const transferred = new Uint8Array(await response.arrayBuffer());
+		onProgress?.(fileName, transferred.byteLength);
+		if (!manifest.compressed) {
+			return transferred;
+		}
+		const stream = new Response(transferred).body.pipeThrough(new DecompressionStream("gzip"));
+		return new Uint8Array(await new Response(stream).arrayBuffer());
 	}));
 	const joined = new Uint8Array(manifest.size);
 	let offset = 0;
@@ -157,7 +162,7 @@ const engine = new Engine(GODOT_CONFIG);
 	const statusOverlay = document.getElementById('status');
 	const statusProgress = document.getElementById('status-progress');
 	const statusNotice = document.getElementById('status-notice');
-	const totalChunkBytes = Object.values(GODOT_CHUNK_MANIFEST).reduce((sum, file) => sum + file.size, 0);
+	const totalChunkBytes = Object.values(GODOT_CHUNK_MANIFEST).reduce((sum, file) => sum + file.transferSize, 0);
 	let loadedChunkBytes = 0;
 	window.__godotChunkProgress = function (_fileName, addedBytes) {
 		loadedChunkBytes += addedBytes;
