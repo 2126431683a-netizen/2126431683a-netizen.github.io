@@ -3205,6 +3205,7 @@ html:has(body[data-page="home"]) {
 }
 
 .starfield {
+  transform: translate3d(var(--parallax-x, 0px), var(--parallax-y, 0px), 0);
   background:
     radial-gradient(1px 1px at 12% 22%, rgba(255, 255, 255, 0.8) 50%, transparent 51%),
     radial-gradient(1px 1px at 68% 8%, rgba(255, 255, 255, 0.5) 50%, transparent 51%),
@@ -3433,7 +3434,7 @@ html:has(body[data-page="home"]) {
   opacity: 0;
 }
 
-/* 舞台：星系居中；打开面板时左移 */
+/* 舞台：星系居中；打开面板时左移；--parallax 为鼠标视差 */
 .solar-stage {
   position: relative;
   width: 640px;
@@ -3441,11 +3442,12 @@ html:has(body[data-page="home"]) {
   max-width: 92svh;
   max-height: 92svh;
   flex-shrink: 0;
+  transform: translate(var(--parallax-x, 0px), var(--parallax-y, 0px));
   transition: transform 700ms var(--ease-out);
 }
 
 .solar-universe.is-focused .solar-stage {
-  transform: translateX(-19vw) scale(0.9);
+  transform: translate(calc(-19vw + var(--parallax-x, 0px)), calc(0px + var(--parallax-y, 0px))) scale(0.9);
 }
 
 /* ---- 轨道环 ---- */
@@ -3483,9 +3485,28 @@ html:has(body[data-page="home"]) {
   background: transparent;
   border: 0;
   cursor: pointer;
-  transform: rotate(var(--angle)) translate(var(--dist), 0) rotate(calc(-1 * var(--angle)));
+  /* 公转：绕原点 --orbit-duration 转一圈，--angle 只是初始相位 */
+  transform: rotate(calc(var(--angle) + var(--rev, 0deg))) translate(var(--dist), 0) rotate(calc(-1 * (var(--angle) + var(--rev, 0deg))));
+  animation: planet-orbit var(--orbit-duration, 90s) linear infinite;
   transition: opacity 500ms ease;
   z-index: 2;
+}
+
+@property --rev {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes planet-orbit {
+  from { --rev: 0deg; }
+  to { --rev: 360deg; }
+}
+
+/* 聚焦态停止公转，星球归位到标签可读角度 */
+.solar-universe.is-focused .planet,
+.solar-universe.is-focused .sun {
+  animation-play-state: paused;
 }
 
 .planet-label {
@@ -3552,12 +3573,162 @@ html:has(body[data-page="home"]) {
     0 0 44px var(--halo);
 }
 
+/* 每颗行星：独立配色 + 公转周期 + 自转 + 专属光圈效果 */
+.planet-p1 { --orbit-duration: 96s; }   /* PROJECTS 沙金 */
+.planet-p2 { --orbit-duration: 148s; }  /* SKILLS 冰蓝，最大 */
+.planet-p3 { --orbit-duration: 82s; }   /* OPS 赤红 */
+.planet-p4 { --orbit-duration: 132s; }  /* STORY 苔绿 */
+.planet-p5 { --orbit-duration: 112s; }  /* LENS 暗紫 */
+.planet-p6 { --orbit-duration: 168s; }  /* LINK 落日金 */
+
 .planet-p1 .planet-core { --hi: #d9c9a8; --mid: #8d7a58; --lo: #4a3d2a; --halo: rgba(217, 201, 168, 0.22); }
 .planet-p2 .planet-core { --hi: #a8c8d9; --mid: #5d7f8d; --lo: #2c3e42; --halo: rgba(168, 200, 217, 0.2); width: 62px; height: 62px; }
 .planet-p3 .planet-core { --hi: #d9a8a8; --mid: #8d5d5d; --lo: #422c2c; --halo: rgba(217, 168, 168, 0.2); }
 .planet-p4 .planet-core { --hi: #c9d9a8; --mid: #7f8d5d; --lo: #3e422c; --halo: rgba(201, 217, 168, 0.2); }
 .planet-p5 .planet-core { --hi: #b8a8d9; --mid: #6d5d8d; --lo: #352c42; --halo: rgba(184, 168, 217, 0.2); }
 .planet-p6 .planet-core { --hi: #d9d0a8; --mid: #8d845d; --lo: #42392c; --halo: rgba(217, 208, 168, 0.2); }
+
+/* 行星自转：球面纹理层旋转（贴在球体上的高光带） */
+.planet-core::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.16) 46%,
+    transparent 62%
+  );
+  animation: planet-spin var(--spin-duration, 14s) linear infinite;
+}
+
+.planet-core {
+  position: relative;
+}
+
+@keyframes planet-spin {
+  from { transform: rotate(0deg) translateX(0); }
+  to { transform: rotate(360deg) translateX(0); }
+}
+
+/* ---- 专属光圈 ---- */
+
+/* P2 SKILLS：冰环（土星环式倾斜环） */
+.planet-p2 .planet-core::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 96px;
+  height: 26px;
+  border: 1px solid rgba(168, 200, 217, 0.5);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(-24deg);
+  box-shadow: 0 0 12px rgba(168, 200, 217, 0.3);
+}
+
+/* P3 OPS：脉冲光圈（红色警戒脉冲） */
+.planet-p3 .planet-core {
+  box-shadow:
+    inset -8px -10px 24px rgba(0, 0, 0, 0.75),
+    0 0 26px var(--halo);
+}
+.planet-p3::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 1px solid rgba(217, 168, 168, 0.55);
+  transform: translate(-50%, -50%);
+  animation: halo-pulse 2.6s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes halo-pulse {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+  100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
+}
+
+/* P4 STORY：双层呼吸光圈 */
+.planet-p4::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  border: 1px dashed rgba(201, 217, 168, 0.4);
+  transform: translate(-50%, -50%);
+  animation: ring-breathe 4.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes ring-breathe {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+  50% { transform: translate(-50%, -50%) scale(1.28); opacity: 0.9; }
+}
+
+/* P5 LENS：能量弧（紫色旋转弧线） */
+.planet-p5::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  border-top-color: rgba(184, 168, 217, 0.75);
+  border-right-color: rgba(184, 168, 217, 0.3);
+  transform: translate(-50%, -50%);
+  animation: arc-spin 5.5s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes arc-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* P6 LINK：信标闪环（缓慢外扩的双环） */
+.planet-p6::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 1px solid rgba(217, 208, 168, 0.45);
+  transform: translate(-50%, -50%);
+  animation: beacon-expand 3.6s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes beacon-expand {
+  0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
+  70% { transform: translate(-50%, -50%) scale(1.9); opacity: 0; }
+  100% { transform: translate(-50%, -50%) scale(1.9); opacity: 0; }
+}
+
+/* P1 PROJECTS：静态柔光外圈 */
+.planet-p1::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  box-shadow: 0 0 22px rgba(217, 201, 168, 0.18), inset 0 0 14px rgba(217, 201, 168, 0.1);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
 
 /* ---- 太阳 ---- */
 
@@ -3595,6 +3766,8 @@ html:has(body[data-page="home"]) {
 
 .planet-focus {
   position: absolute;
+  margin-left: var(--parallax-x, 0px);
+  margin-top: var(--parallax-y, 0px);
   top: 50%;
   left: 50%;
   width: 0;
@@ -3899,7 +4072,7 @@ html:has(body[data-page="home"]) {
   }
 
   .solar-universe.is-focused .solar-stage {
-    transform: translateX(-24vw) scale(0.8);
+    transform: translate(calc(-24vw + var(--parallax-x, 0px)), calc(0px + var(--parallax-y, 0px))) scale(0.8);
   }
 }
 

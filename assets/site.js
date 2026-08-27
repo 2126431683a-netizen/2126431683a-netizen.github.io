@@ -44,6 +44,42 @@
   }
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- 鼠标视差：星空 + 星系舞台随指针轻微漂移 ---- */
+  const parallaxLayers = [
+    ...[...document.querySelectorAll('.starfield')].map((el) => ({ el, depth: 14 })),
+    { el: document.querySelector('[data-solar-stage]'), depth: 26 },
+    { el: document.querySelector('[data-planet-focus]'), depth: 10 }
+  ].filter((layer) => layer.el);
+
+  if (!reducedMotion && parallaxLayers.length && window.matchMedia('(pointer: fine)').matches) {
+    let parallaxRaf = null;
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+
+    const renderParallax = () => {
+      currentX += (targetX - currentX) * 0.06;
+      currentY += (targetY - currentY) * 0.06;
+      parallaxLayers.forEach((layer) => {
+        layer.el.style.setProperty('--parallax-x', `${(-currentX * layer.depth).toFixed(2)}px`);
+        layer.el.style.setProperty('--parallax-y', `${(-currentY * layer.depth).toFixed(2)}px`);
+      });
+      if (Math.abs(targetX - currentX) > 0.001 || Math.abs(targetY - currentY) > 0.001) {
+        parallaxRaf = requestAnimationFrame(renderParallax);
+      } else {
+        parallaxRaf = null;
+      }
+    };
+
+    window.addEventListener('pointermove', (event) => {
+      targetX = (event.clientX / window.innerWidth) * 2 - 1;
+      targetY = (event.clientY / window.innerHeight) * 2 - 1;
+      if (!parallaxRaf) parallaxRaf = requestAnimationFrame(renderParallax);
+    }, { passive: true });
+  }
+
   const revealItems = document.querySelectorAll('[data-reveal]');
   if (reducedMotion || !('IntersectionObserver' in window)) {
     revealItems.forEach((item) => item.classList.add('revealed'));
