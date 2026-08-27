@@ -3145,34 +3145,46 @@
       menuToggle.setAttribute('aria-expanded', 'false');
     }
 
-    menuToggle.addEventListener('click', toggleMobileMenu);
+    if (menuToggle && navLinksContainer) {
+      menuToggle.addEventListener('click', toggleMobileMenu);
+    }
 
     // Logo 点击回到顶部
     const logoHome = document.getElementById('logoHome');
-    logoHome.addEventListener('click', function() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    if (logoHome) {
+      logoHome.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
 
     // 初始化高亮
     setActiveNav();
 
     // 滚动进入动画 - Intersection Observer
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            entry.target.classList.add('visible');
-          }, index * 100);
-          observer.unobserve(entry.target);
+    let observer = null;
+    if ('IntersectionObserver' in window) {
+      observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              entry.target.classList.add('visible');
+            }, index * 100);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.15
+      });
+
+      document.querySelectorAll('.section').forEach(section => {
+        if (!section || section.nodeType !== 1) return;
+        try {
+          observer.observe(section);
+        } catch (_) {
+          section.classList.add('visible');
         }
       });
-    }, {
-      threshold: 0.15
-    });
-
-    document.querySelectorAll('.section').forEach(section => {
-      observer.observe(section);
-    });
+    }
 
     // 触发第一个section立即可见
     if (document.querySelectorAll('.section')[0]) {
