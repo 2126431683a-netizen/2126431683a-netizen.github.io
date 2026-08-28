@@ -1,0 +1,60 @@
+/* ============================================================
+   全站统一材质与动效层（fx.css）
+   —— 月之暗面整体风格：黑底、灰阶像素、半调点阵、细白描边；
+      固定粒子流光（尘埃 + 字符余烬）、点阵纹理覆盖、
+      段落入场的“滑动”过渡（fade + 上浮 + 轻模糊）。
+      所有页（首页 + 各级子页面）共享。
+   ============================================================ */
+
+/* 固定粒子画布（指事件穿透，悬浮于内容之上、导航之下） */
+.fx-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 30;
+  pointer-events: none;
+}
+
+/* 半调点阵纹理（参考页背景材质） */
+.fx-dots {
+  position: fixed;
+  inset: 0;
+  z-index: 28;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1.8px);
+  background-size: 26px 26px;
+  opacity: 0.5;
+  -webkit-mask-image: radial-gradient(78% 78% at 50% 45%, transparent 30%, rgba(0, 0, 0, 0.9) 100%);
+  mask-image: radial-gradient(78% 78% at 50% 45%, transparent 30%, rgba(0, 0, 0, 0.9) 100%);
+}
+
+/* 段落入场：上滑淡入 + 轻模糊（配合粒子扫过强调“切换”） */
+.fx-sec {
+  opacity: 0;
+  transform: translateY(26px);
+  filter: blur(3px);
+  transition:
+    opacity 850ms ease,
+    transform 850ms var(--ease-out, cubic-bezier(0.22, 0.61, 0.36, 1)),
+    filter 850ms ease;
+}
+
+.fx-sec.fx-in {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+}
+
+/* 素材统一：站点内影像全部灰阶（对齐参考页的单色像素材质） */
+main img,
+main video,
+.page-hero img,
+.page-hero video {
+  filter: grayscale(1) contrast(1.05);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-canvas { display: none; }
+  .fx-sec { opacity: 1; transform: none; filter: none; transition: none; }
+}

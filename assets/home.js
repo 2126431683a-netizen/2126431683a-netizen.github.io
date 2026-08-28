@@ -187,7 +187,7 @@
 
   if (track) {
     // —— 像素画框：26×15 网格的小场景，放大成像素画 ——
-    var C = { k: '#050505', d: '#181818', g: '#454545', l: '#b5b5b5', w: '#f2f2f2', a: '#e8b46a', b: '#7fb4d8' };
+    var C = { k: '#050505', d: '#181818', g: '#454545', l: '#b5b5b5', w: '#f2f2f2', a: '#d9d9d9', b: '#9a9a9a' };
 
     function sceneCanvas(kind, label) {
       var gw = 26, gh = 15;
