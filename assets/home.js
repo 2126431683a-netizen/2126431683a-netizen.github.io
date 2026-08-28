@@ -366,6 +366,101 @@
 
   /* ==================== 3) 星系：流程轨道补充 ==================== */
 
+  /* ==================== 2.5) 深空星系团 ==================== */
+  var deepCanvas = document.getElementById('space-deep');
+  if (deepCanvas && deepCanvas.getContext) {
+    var dctx = deepCanvas.getContext('2d');
+    var dlow = document.createElement('canvas');
+    var dlctx = dlow.getContext('2d');
+    var dW = 0, dH = 0, dlw = 0, dlh = 0;
+
+    function drawDeep() {
+      dlctx.fillStyle = '#000';
+      dlctx.fillRect(0, 0, dlw, dlh);
+      var cx = dlw / 2, cy = dlh / 2;
+      var minR = Math.min(dlw, dlh) * 0.26;   // 中心留给主星系
+      var count = 11;
+      for (var i = 0; i < count; i++) {
+        var x = 0, y = 0, tries = 0;
+        do {
+          x = Math.random() * dlw;
+          y = Math.random() * dlh;
+          tries++;
+        } while (Math.hypot(x - cx, y - cy) < minR && tries < 30);
+        var size = 2.5 + Math.random() * 8.5;
+        var a = 0.18 + Math.random() * 0.3;
+        dlctx.globalAlpha = a;
+        var type = i % 3;
+        if (type === 0) {
+          // 旋涡星系：两条旋臂的点阵
+          var arms = 2, n = 80;
+          for (var k = 0; k < n; k++) {
+            var t = k / n;
+            var ang = t * 5.6 + (k % arms) * Math.PI;
+            var d = t * size;
+            var px = x + Math.cos(ang) * d;
+            var py = y + Math.sin(ang) * d;
+            dlctx.fillStyle = 'rgba(255,255,255,' + ((1 - t) * 0.75).toFixed(3) + ')';
+            dlctx.fillRect(px, py, 1, 1);
+            if (k % 3 === 0) dlctx.fillRect(px + 1, py + 1, 1, 1);
+          }
+          dlctx.fillStyle = '#fff';
+          dlctx.fillRect(x - 1, y - 1, 2, 2);
+        } else if (type === 1) {
+          // 椭圆星团：层层光晕 + 亮核
+          for (var l = 3; l >= 1; l--) {
+            dlctx.fillStyle = 'rgba(255,255,255,' + (0.05 * (4 - l)).toFixed(3) + ')';
+            dlctx.beginPath();
+            dlctx.arc(x, y, size * l / 3, 0, 7);
+            dlctx.fill();
+          }
+          dlctx.fillStyle = '#fff';
+          dlctx.fillRect(x - 1, y - 1, 2, 2);
+          dlctx.fillStyle = 'rgba(200,200,200,0.5)';
+          dlctx.fillRect(x - 3, y, 1, 1);
+          dlctx.fillRect(x + 2, y + 1, 1, 1);
+        } else {
+          // 不规则星团：高斯散点
+          for (var g = 0; g < 26; g++) {
+            var gx = x + (Math.random() - 0.5) * size * 2.2;
+            var gy = y + (Math.random() - 0.5) * size * 1.6;
+            var fall = Math.max(0, 1 - (Math.hypot(gx - x, gy - y) / (size * 1.4)));
+            dlctx.fillStyle = 'rgba(255,255,255,' + (fall * 0.6).toFixed(3) + ')';
+            dlctx.fillRect(gx, gy, 1, 1);
+          }
+        }
+        dlctx.globalAlpha = 1;
+      }
+      // 几颗孤星
+      for (var s2 = 0; s2 < 14; s2++) {
+        dlctx.fillStyle = 'rgba(255,255,255,' + (0.25 + Math.random() * 0.5).toFixed(3) + ')';
+        dlctx.fillRect(Math.random() * dlw, Math.random() * dlh, 1, 1);
+      }
+      dctx.imageSmoothingEnabled = false;
+      dctx.fillStyle = '#000';
+      dctx.fillRect(0, 0, dW, dH);
+      dctx.drawImage(dlow, 0, 0, dW, dH);
+    }
+
+    function deepResize() {
+      var rect = deepCanvas.getBoundingClientRect();
+      dW = Math.max(1, rect.width);
+      dH = Math.max(1, rect.height);
+      deepCanvas.width = Math.round(dW * DPR);
+      deepCanvas.height = Math.round(dH * DPR);
+      dctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      dlw = Math.max(30, Math.round(dW / 6));   // 低分辨率 → 像素感
+      dlh = Math.max(18, Math.round(dH / 6));
+      dlow.width = dlw;
+      dlow.height = dlh;
+      drawDeep();
+    }
+    if (typeof ResizeObserver !== 'undefined') new ResizeObserver(deepResize).observe(deepCanvas);
+    else window.addEventListener('resize', deepResize);
+    deepResize();
+  }
+
+
   // —— 程序化“月面岩石”纹理（参考图那种坑洼月面，非光滑圆球） ——
   function hash01(x, y) {
     var s = Math.sin(x * 127.1 + y * 311.7) * 43758.5453;

@@ -64,3 +64,12 @@ main img.img-color,
 .page-hero img.img-color {
   filter: none;
 }
+
+/* 项目彩色豁免：项目缩略图 / 项目页与游戏分析页的实拍图恢复彩色 */
+.panel-body .pb-thumb {
+  filter: none;
+}
+body[data-page="projects"] main img,
+body[data-page="insights"] main img {
+  filter: none;
+}

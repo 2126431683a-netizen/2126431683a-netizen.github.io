@@ -817,3 +817,30 @@
 .solar-stage.has-gsap::after {
   display: none;
 }
+
+/* ============================================================
+   深空星系团（星系周围的空间装饰层）
+   ============================================================ */
+.space-deep {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 0;
+  pointer-events: none;
+  animation: deep-drift 240s ease-in-out infinite alternate;
+}
+
+@keyframes deep-drift {
+  from { transform: translateX(-42px); }
+  to { transform: translateX(42px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .space-deep { animation: none; }
+}
+
+.orbit-grid {
+  z-index: 1;
+}
