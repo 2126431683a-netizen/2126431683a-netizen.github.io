@@ -594,3 +594,137 @@
     margin-bottom: 24px;
   }
 }
+
+/* ============================================================
+   星系 · 流程轨道动效（仿“登月申请流程”：
+   点阵网格背景 + 一条虚线大轨道 + 带编号的月球节点 +
+   节点来回循环摆动 + 轨道上游走的闪光点）
+   ============================================================ */
+
+/* 点阵网格背景 */
+.orbit-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1.8px);
+  background-size: 26px 26px;
+  opacity: 0.55;
+  -webkit-mask-image: radial-gradient(78% 78% at 50% 46%, rgba(0, 0, 0, 0.7), transparent 100%);
+  mask-image: radial-gradient(78% 78% at 50% 46%, rgba(0, 0, 0, 0.7), transparent 100%);
+}
+
+/* 只保留一条大虚线轨道 */
+.scene-solar .orbit-1,
+.scene-solar .orbit-3 {
+  display: none;
+}
+
+.scene-solar .orbit-2 {
+  width: 524px;
+  height: 524px;
+  border: 0;
+  background: repeating-conic-gradient(rgba(255, 255, 255, 0.3) 0deg 2.4deg, transparent 2.4deg 9.6deg);
+  -webkit-mask: radial-gradient(closest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+  mask: radial-gradient(closest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+  animation: orbit-spin 120s linear infinite;
+  opacity: 1;
+}
+
+/* 月球节点（参考图：灰度月面 + 陨石坑） */
+.scene-solar .planet-core {
+  width: 56px;
+  height: 56px;
+  background:
+    radial-gradient(circle at 30% 26%, #ffffff 0%, #cdcdcd 32%, #8d8d8d 60%, #383838 84%, #0c0c0c 100%);
+  box-shadow:
+    inset -10px -12px 26px rgba(0, 0, 0, 0.82),
+    0 0 20px rgba(255, 255, 255, 0.16);
+}
+
+.planet-p2 .planet-core {
+  width: 62px;
+  height: 62px;
+}
+
+.scene-solar .planet-core::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 66% 30%, rgba(0, 0, 0, 0.5) 0 7%, transparent 8%),
+    radial-gradient(circle at 34% 62%, rgba(0, 0, 0, 0.42) 0 9%, transparent 10%),
+    radial-gradient(circle at 60% 74%, rgba(0, 0, 0, 0.48) 0 6%, transparent 7%),
+    radial-gradient(circle at 44% 42%, rgba(255, 255, 255, 0.3) 0 5%, transparent 6%);
+}
+
+/* 编号角标（JS 注入 01-06） */
+.planet-badge {
+  position: absolute;
+  top: -8px;
+  left: 40px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #f2f2f2;
+  color: #000;
+  font-family: var(--pixel);
+  font-size: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
+}
+
+/* 来回循环摆动（ping-pong 沿轨道） */
+.planet-p1 { animation: swing-p1 34s ease-in-out infinite alternate; }
+.planet-p2 { animation: swing-p2 44s ease-in-out infinite alternate; }
+.planet-p3 { animation: swing-p3 26s ease-in-out infinite alternate; }
+.planet-p4 { animation: swing-p4 40s ease-in-out infinite alternate; }
+.planet-p5 { animation: swing-p5 30s ease-in-out infinite alternate; }
+.planet-p6 { animation: swing-p6 48s ease-in-out infinite alternate; }
+
+@keyframes swing-p1 { from { --rev: -18deg; } to { --rev: 18deg; } }
+@keyframes swing-p2 { from { --rev: -26deg; } to { --rev: 26deg; } }
+@keyframes swing-p3 { from { --rev: -11deg; } to { --rev: 11deg; } }
+@keyframes swing-p4 { from { --rev: -20deg; } to { --rev: 20deg; } }
+@keyframes swing-p5 { from { --rev: -14deg; } to { --rev: 14deg; } }
+@keyframes swing-p6 { from { --rev: -28deg; } to { --rev: 28deg; } }
+
+/* 聚焦时暂停摆动（保持原交互） */
+.solar-universe.is-focused .planet,
+.solar-universe.is-focused .sun {
+  animation-play-state: paused;
+}
+
+/* 轨道上游走的闪光点（来回） */
+.solar-stage::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow:
+    0 0 12px 5px rgba(255, 255, 255, 0.4),
+    0 0 30px 14px rgba(255, 255, 255, 0.1);
+  animation: comet-swing 30s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes comet-swing {
+  from { transform: rotate(-330deg) translate(0, -262px); }
+  to { transform: rotate(0deg) translate(0, -262px); }
+}
+
+/* 标题字号放大，匹配流程页 */
+.scene-solar .solar-title {
+  font-size: clamp(18px, 2.6vw, 28px);
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.9);
+}

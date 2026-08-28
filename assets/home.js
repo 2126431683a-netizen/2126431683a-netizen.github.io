@@ -340,7 +340,26 @@
     buildTextField();
   }
 
-  /* ==================== 3) 头部折叠菜单（移动端） ==================== */
+  /* ==================== 3) 星系：流程轨道补充 ==================== */
+  var solarStage = document.querySelector('[data-solar-stage]');
+  if (solarStage) {
+    var ORDER = ['projects', 'skills', 'ops', 'story', 'lens', 'link'];
+    document.querySelectorAll('[data-planet]').forEach(function (body) {
+      if (body.dataset.planet === 'sun') return;
+      // 统一到虚线大轨道上（行内 --dist 优先于样式表，需 JS 覆盖）
+      body.style.setProperty('--dist', '262px');
+      // 编号角标 01-06
+      var idx = ORDER.indexOf(body.dataset.planet);
+      if (idx < 0) return;
+      var badge = document.createElement('span');
+      badge.className = 'planet-badge';
+      badge.setAttribute('aria-hidden', 'true');
+      badge.textContent = '0' + (idx + 1);
+      body.appendChild(badge);
+    });
+  }
+
+  /* ==================== 4) 头部折叠菜单（移动端） ==================== */
   var header = document.querySelector('.ph-header');
   var burger = document.querySelector('.ph-burger');
   if (header && burger) {
