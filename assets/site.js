@@ -137,7 +137,7 @@
         title: '关于我',
         colors: { hi: '#fff2cf', mid: '#e8c66a', lo: '#a87f2e', halo: 'rgba(232,198,106,0.45)' },
         html: () => `
-          <p class="pb-lead">陈黄勇，游戏产品经理 / 运营策划 / 系统策划。网络与新媒体背景让我重视用户、内容和传播；产品与游戏实践让我把这些判断写成规则、数据、界面和可运行结果。</p>
+          <p class="pb-lead">陈黄勇，游戏产品经理 / 运营策划 / 系统策划。学的是网络与新媒体，做的是游戏——所以我写的判断，最后都会做成能玩的东西。</p>
           <div class="pb-stats">
             <div><strong>06</strong><span>项目档案</span></div>
             <div><strong>05</strong><span>可运行 Demo</span></div>
@@ -153,7 +153,7 @@
         title: '项目终端',
         colors: { hi: '#d9c9a8', mid: '#8d7a58', lo: '#4a3d2a', halo: 'rgba(217,201,168,0.4)' },
         html: () => `
-          <p class="pb-lead">六个项目，逐个验证：先看定位和结果，再进入独立页面检查系统、数值、职责与真实画面。图片与截图都收在各自的项目档案里。</p>
+          <p class="pb-lead">六个项目，没一个是纸面功夫。每个都有独立档案：定位、系统、数值、我干了什么、长什么样，全在里面。挑一个点进去。</p>
           <ul class="pb-list">
             <li><strong>放开那个女巫：灰堡黎明</strong><span>Godot 4 · 卡牌回合 RPG —— 3 AP 速度行动战斗、角色收集养成、28 节点关卡与移动端规范。</span></li>
             <li><strong>暮鸦之墓</strong><span>Godot 4.3 · 开放世界 ARPG —— 主城/野外/副本三类区域，任务、战斗、AI 与装备成长闭环。</span></li>
@@ -172,7 +172,7 @@
         title: '技能树',
         colors: { hi: '#a8c8d9', mid: '#5d7f8d', lo: '#2c3e42', halo: 'rgba(168,200,217,0.4)' },
         html: () => `
-          <p class="pb-lead">产品判断、系统策划、技术落地放在同一条链路：先确认为什么做，再写清怎样运行，最后用原型验证。</p>
+          <p class="pb-lead">我的路子很简单：先想清楚为什么做，再写清楚怎么跑，最后亲手做出能玩的原型。判断、系统、落地，一条线走完。</p>
           <ul class="pb-list">
             <li><strong>产品判断</strong><span>用户分层与竞品、MVP 范围与优先级、数据指标与埋点 —— 每个判断写进 PRD 并附验收标准。</span></li>
             <li><strong>系统策划</strong><span>战斗与数值、养成与关卡循环、经济与产出消耗 —— 系统是玩家行为互相咬合的齿轮组。</span></li>
@@ -187,7 +187,7 @@
         title: '运营策划',
         colors: { hi: '#d9a8a8', mid: '#8d5d5d', lo: '#422c2c', halo: 'rgba(217,168,168,0.4)' },
         html: () => `
-          <p class="pb-lead">内容先被看见，再把兴趣带回产品。从受众和平台语境出发选题，写成能拍能剪的脚本，发布后盯住信号，再把结果带回下一轮。</p>
+          <p class="pb-lead">做内容就一句话：先让人看见，再把兴趣带回来。选题看受众，脚本能拍能剪，发出去盯数据，好的坏的都记下来，带进下一轮。</p>
           <div class="pb-stats">
             <div><strong>30%</strong><span>热搜命中率</span></div>
             <div><strong>#02</strong><span>最高热搜榜</span></div>
@@ -206,7 +206,7 @@
         title: '经历',
         colors: { hi: '#c9d9a8', mid: '#7f8d5d', lo: '#3e422c', halo: 'rgba(201,217,168,0.4)' },
         html: () => `
-          <p class="pb-lead">The Player Log —— 从网络与新媒体出发，把用户、内容和传播的判断，继续写成规则、数据、界面和可运行结果。</p>
+          <p class="pb-lead">The Player Log —— 从网络与新媒体出发，一路做过内容、运营、产品，最后把判断写成规则、数据、界面和能跑的 Demo。</p>
           <div class="pb-timeline">
             <article><p>2026.06-</p><div><h3>西安纬度网络科技</h3><span>AI 类目编导：三条内容赛道 + 两款 Godot 游戏全流程策划。</span></div></article>
             <article><p>2026.02-06</p><div><h3>Newegg 新蛋</h3><span>电商产品经理实习生：竞品调研、差异化方案与转化复盘。</span></div></article>
@@ -219,7 +219,7 @@
         title: '游戏理解',
         colors: { hi: '#b8a8d9', mid: '#6d5d8d', lo: '#352c42', halo: 'rgba(184,168,217,0.4)' },
         html: () => `
-          <p class="pb-lead">从七组游戏体验出发，拆开动作、开放世界、竞速、叙事、休闲、FPS、策略与 SLG 的核心吸引与压力结构。</p>
+          <p class="pb-lead">七组游戏体验，七份拆解。凭什么好玩、哪里会劝退、压力怎么给——每个类型我都写出了自己的一套看法。</p>
           <ul class="pb-list">
             <li><strong>动作</strong><span>《只狼》《黑神话：悟空》—— 精确输入与节奏化的攻防交换。</span></li>
             <li><strong>开放世界</strong><span>《艾尔登法环》《巫师 3》—— 目的由玩家自己长出来的探索结构。</span></li>
@@ -235,7 +235,7 @@
         title: '联系',
         colors: { hi: '#d9d0a8', mid: '#8d845d', lo: '#42392c', halo: 'rgba(217,208,168,0.4)' },
         html: () => `
-          <p class="pb-lead">下一套系统，一起做成。邮件和电话都能直接找到我；也可以先试玩任意一个 Demo。</p>
+          <p class="pb-lead">下一套系统，想跟你一起做。邮件、电话都行；想先试手感，任意一个 Demo 都能直接玩。</p>
           <ul class="pb-list">
             <li><strong>2126431683@qq.com</strong><span>邮件</span></li>
             <li><strong>192 7945 9077</strong><span>电话</span></li>
