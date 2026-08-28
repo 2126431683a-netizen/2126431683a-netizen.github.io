@@ -867,6 +867,9 @@
     }
     function onTouchMove(e) {
       if (!touchActive) return;
+      // 面板/列表等可滚动区域：允许原生滚动，不拦截、不触发换场景
+      var tgt = e.target;
+      if (tgt && tgt.closest && tgt.closest('.moon-panel-body, .moon-panel, .moon-icons, .planet-panel')) return;
       e.preventDefault();
       var dy = touchY - e.touches[0].clientY;
       var dt = performance.now() - touchT;
