@@ -984,7 +984,7 @@
       var img = mctx.createImageData(RES, RES);
       var d = img.data;
       var c0 = RES / 2, R = RES * 0.44;
-      var ph = ((p % 1) + 1) % 1;
+      var ph = (((p / 8) % 1) + 1) % 1;   // p=月相索引0..7 → 归一化相位
       var sx = Math.sin(ph * Math.PI * 2);
       var k = -Math.cos(ph * Math.PI * 2);        // 新月=-1 满月=+1
       var wob = t * 0.00022;
@@ -996,8 +996,12 @@
           if (r2 <= 1) {
             var n = fbm(x / 14 + wob, y / 14 - wob, 4) * 0.62 + fbm(x / 5 + 3.7, y / 5 + 1.2, 3) * 0.38;
             var z = Math.sqrt(1 - r2);
-            var lit = dx * sx + z * k > 0;
-            var b = lit ? (0.30 + 0.72 * n) : (0.05 + 0.10 * n);
+            var litDot = dx * sx + z * k;
+            var lit = litDot > 0;
+            // 亮面提亮、暗面压暗，明暗分明（预览相位形态清晰）
+            var b = lit ? (0.58 + 0.42 * n) : (0.04 + 0.07 * n);
+            // 受光边缘亮轮廓：明暗交界描一圈白，像图标一样干脆
+            if (lit && litDot < 0.10) b = Math.max(b, 0.93);
             // Bayer 有序抖动（4x4）量化到灰阶
             var bayer = B4[y % 4][x % 4] / 16;
             var lv = b * 8;                        // 8 级灰度
@@ -1146,7 +1150,14 @@
 
     applyPhase(0, false);
     requestAnimationFrame(loop);
-    return { goPhase: goPhase, phases: PHASES };
+    window.__moonx = {
+      goPhase: goPhase,
+      phases: PHASES,
+      dbg: function () {
+        return { current: current, preview: preview, shown: +CUR.shown.toFixed(3), to: +CUR.to.toFixed(3) };
+      }
+    };
+    return window.__moonx;
   })();
 
 })();
