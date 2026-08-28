@@ -1053,6 +1053,73 @@
       }
     ];
 
+    /* ---------- 地球地平线（从地面仰望月球） ---------- */
+    var planetEl = document.getElementById('moon-planet');
+    var planetCtx = planetEl && planetEl.getContext('2d');
+    var plow = document.createElement('canvas');
+    var plctx = plow.getContext('2d');
+
+    function drawPlanet() {
+      if (!planetEl || !planetCtx) return;
+      var pr = planetEl.getBoundingClientRect();
+      var pw = Math.max(2, Math.round(pr.width));
+      var ph = Math.max(2, Math.round(pr.height));
+      var dpr2 = Math.min(window.devicePixelRatio || 1, 1.5);
+      planetEl.width = Math.round(pw * dpr2);
+      planetEl.height = Math.round(ph * dpr2);
+      planetCtx.setTransform(dpr2, 0, 0, dpr2, 0, 0);
+      planetCtx.imageSmoothingEnabled = false;
+
+      // 低分辨率像素网格
+      var cw = Math.max(40, Math.round(pw / 5));
+      var ch = Math.max(16, Math.round(ph / 5));
+      plow.width = cw;
+      plow.height = ch;
+      var img = plctx.createImageData(cw, ch);
+      var d = img.data;
+      var cx = cw / 2;
+      var cy = ch + cw * 0.62;                 // 地球圆心在画面下方，只露顶部弧
+      var R = cw * 0.82;
+      var B4p = B4;
+      for (var y = 0; y < ch; y++) {
+        for (var x = 0; x < cw; x++) {
+          var dx = (x - cx), dy = (y - cy);
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          var i4 = (y * cw + x) * 4;
+          var g = 0, a = 255;
+          if (dist <= R) {
+            // 地面：灰度 + 噪声斑块 + Bayer 抖动
+            var n = fbm(x / 26 + 4.2, y / 26 - 2.1, 4);
+            var base = 0.10 + 0.20 * n + (dy * 0.0004);
+            var bayer = B4p[y & 3][x & 3] / 16;
+            var q = (base * 6) | 0;
+            var g2 = Math.round((q + (bayer > 0.5 ? 1 : 0)) / 6 * 70);
+            // 边缘暗化，中央月光反射
+            var edge = 1 - Math.pow(Math.max(0, (dist - R * 0.72)) / (R * 0.28), 2);
+            g = Math.round(g2 * edge);
+            // 月光反射：中下部的亮条纹（水面/地面反光）
+            if (Math.abs(x - cx) < cw * 0.05 && dist > R * 0.30) {
+              var shimmer = 0.5 + 0.5 * fbm(x / 3.1, y / 4.7, 3);
+              g = Math.max(g, Math.round((26 + 60 * shimmer) * edge));
+            }
+            // 大气亮弧：贴着地平线一圈
+            var dA = dist - R;
+            if (dA > -3.2 && dA < 0.6) {
+              var glow = Math.exp(-Math.abs(dA) / 1.4);
+              g = Math.max(g, Math.round(120 * glow + 60 * glow * glow));
+            }
+          } else {
+            a = 0;
+          }
+          d[i4] = d[i4 + 1] = d[i4 + 2] = g;
+          d[i4 + 3] = a;
+        }
+      }
+      plctx.putImageData(img, 0, 0);
+      planetCtx.clearRect(0, 0, pw, ph);
+      planetCtx.drawImage(plow, 0, 0, pw, ph);
+    }
+
     /* ---------- 大月亮 canvas（低分辨率像素化 + Bayer 抖动） ---------- */
     var canvasEl = document.getElementById('moon-canvas');
     var stage = document.getElementById('moon-stage');
@@ -1269,6 +1336,7 @@
       var DPR2 = Math.min(window.devicePixelRatio || 1, 1.5);
       canvasEl.width = Math.max(2, Math.round(rect.width * DPR2));
       canvasEl.height = Math.max(2, Math.round(rect.height * DPR2));
+      drawPlanet();
     }
     if (typeof ResizeObserver !== 'undefined') new ResizeObserver(resize).observe(stage);
     else window.addEventListener('resize', resize);

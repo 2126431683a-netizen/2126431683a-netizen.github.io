@@ -1600,3 +1600,40 @@ body[data-page="home"].scene-mode .scene-flow > footer {
   line-height: 1.7;
   display: block;
 }
+
+/* ============================================================
+   月球页 · 地球地平线（从地面仰望月球）
+   ============================================================ */
+.moon-planet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: min(34vh, 320px);
+  z-index: 1;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+/* 月亮稍微抬高，悬在地平线上方 */
+.moon-stage {
+  top: 40%;
+}
+
+.moon-caption {
+  top: calc(40% + min(31vh, 270px) + 14px);
+}
+
+@media (max-width: 900px) {
+  .moon-planet {
+    height: min(26svh, 240px);
+    z-index: 0;
+  }
+  .moon-stage {
+    top: 21svh;
+  }
+  .moon-caption {
+    top: calc(21svh + min(13svh, 30vw) + 10px);
+  }
+}
