@@ -282,24 +282,35 @@
 
     function buildFilm() {
       var seq = [
-        ['moon'], ['slate', '2022'], ['castle'], ['pad'], ['phone'],
-        ['slate', 'P.01'], ['rocket'], ['dice'], ['card'], ['slate', 'DEMO'], ['ship']
+        ['moon', null, 'CHY.GALAXY'],
+        ['slate', '2022', ''],
+        ['castle', null, '放开那个女巫'],
+        ['pad', null, '暮鸦之墓'],
+        ['phone', null, 'HotPick Studio'],
+        ['slate', 'WITCH', ''],
+        ['rocket', null, '余烬之城'],
+        ['dice', null, '三国文字塔防'],
+        ['card', null, '雾港疑云'],
+        ['slate', 'PLAYABLE', ''],
+        ['ship', null, '星尘与作品']
       ];
-      var half = document.createDocumentFragment();
-      seq.forEach(function (item) {
+      function buildOne(item) {
         var frame = document.createElement('div');
         frame.className = 'film-frame';
         frame.appendChild(sceneCanvas(item[0], item[1]));
-        half.appendChild(frame);
-      });
+        if (item[2]) {
+          var cap = document.createElement('span');
+          cap.className = 'film-caption';
+          cap.textContent = item[2];
+          frame.appendChild(cap);
+        }
+        return frame;
+      }
+      var half = document.createDocumentFragment();
+      seq.forEach(function (item) { half.appendChild(buildOne(item)); });
       // 再复制一份，实现无缝循环
       var copy = document.createDocumentFragment();
-      seq.forEach(function (item) {
-        var frame = document.createElement('div');
-        frame.className = 'film-frame';
-        frame.appendChild(sceneCanvas(item[0], item[1]));
-        copy.appendChild(frame);
-      });
+      seq.forEach(function (item) { copy.appendChild(buildOne(item)); });
       track.appendChild(half);
       track.appendChild(copy);
     }
@@ -319,16 +330,29 @@
       x.setTransform(DPR, 0, 0, DPR, 0, 0);
       x.fillStyle = '#000';
       x.fillRect(0, 0, W, H);
-      var stepX = 7.2, stepY = 12;
+      // 关键词文字墙：把“小字”换成与本人相关的内容
+      var WORDS = [
+        'CHY.GALAXY', '陈黄勇', '游戏产品经理', '系统策划', '运营策划', '内容编导',
+        'Godot 4', 'Unity', 'React', 'Electron', 'PRD', 'GDD', '数值表', '埋点',
+        '放开那个女巫', '灰堡黎明', '暮鸦之墓', '雾港疑云', '三国文字合成塔防',
+        'HotPick Studio', '余烬之城', 'Emberfall', '可运行 Demo', '试玩',
+        '用户分层', '战斗循环', '养成曲线', '经济模型', '移动端适配', '数据验证',
+        'B 站热搜', '内容工作流', 'MVP 边界', 'P0 / P1 / P2', '回到星系', '点击星球'
+      ];
+      var stepY = 12;
       x.font = '9px ' + FONT;
-      for (var row = 0, yy = 10; yy < H; row++, yy += stepY) {
-        for (var col = 0, xx = 2; xx < W; col++, xx += stepX) {
-          var n = row * 0.7 + col * 0.13 + (row + col) * 0.031;
-          var base = 0.05 + 0.16 * (0.5 + 0.5 * Math.sin(n * 2.1));
-          var tw = (row * 31 + col * 17) % 23;
-          if (tw === 0) base *= 1.8;                 // 偶尔更亮，像“关键词”
-          x.fillStyle = 'rgba(255,255,255,' + clamp(base, 0.02, 0.4).toFixed(3) + ')';
-          x.fillText(randChar(), xx, yy);
+      var row = 0;
+      for (var yy = 10; yy < H; yy += stepY, row++) {
+        var xx = 2 + (row % 2) * 24;
+        var wIdx = (row * 7 + 3) % WORDS.length;
+        while (xx < W) {
+          var word = WORDS[(wIdx++ + ((row * 13) | 0)) % WORDS.length];
+          var n = row * 0.7 + xx * 0.02;
+          var base = 0.05 + 0.15 * (0.5 + 0.5 * Math.sin(n * 2.1));
+          if (word === 'CHY.GALAXY' || word === '陈黄勇') base *= 1.9;   // 名字更亮
+          x.fillStyle = 'rgba(255,255,255,' + clamp(base, 0.02, 0.36).toFixed(3) + ')';
+          x.fillText(word, xx, yy);
+          xx += x.measureText(word).width + 26;
         }
       }
     }
