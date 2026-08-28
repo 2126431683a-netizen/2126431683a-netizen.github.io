@@ -925,4 +925,367 @@
     return api;
   })();
 
+
+  /* ============================================================
+     MOONX —— 月亮相位切换页（Neo-retro 像素太空）
+     8 月相（新月→残月）内容联动；Bayer 有序抖动模拟灰度；
+     像素化 canvas；点击/悬停预览/方向键；字符洗牌；黑白灰。
+     ============================================================ */
+  var MOONX = (function () {
+    var page = document.querySelector('.moon-page');
+    if (!page) return null;
+
+    var B4 = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]];
+
+    /* ---------- 8 月相内容（对应本人 8 段内容） ---------- */
+    var PHASES = [
+      {
+        code: 'PHASE 0 / LANDING', name: '着陆', en: 'NEW MOON',
+        title: '作品星系',
+        lead: '八个月相，八段内容。点下面任意一个月亮，选一段打开——从我是谁，到我做过什么、怎么想、怎么联系。',
+        body: function () {
+          return '<ul class="pb-list">' +
+            '<li><strong>08</strong><span>个月相 = 8 个内容入口</span></li>' +
+            '<li><strong>06</strong><span>项目档案</span></li>' +
+            '<li><strong>05</strong><span>可运行 Demo</span></li>' +
+            '<li><strong>30%</strong><span>内容上过热搜</span></li>' +
+            '</ul>';
+        }
+      },
+      {
+        code: 'PHASE 1 / WAXING CRESCENT', name: '关于我', en: 'WAXING CRESCENT',
+        title: '先认识我',
+        lead: '陈黄勇，产品经理 / 运营策划 / 编导。影视编导的底子，产品经理的手艺——所以我写的判断，最后都会变成能看、能用的东西。',
+        body: function () {
+          return '<div class="pb-profile"><img class="pb-photo img-color" src="assets/portfolio/profile.png" alt="陈黄勇证件照">' +
+            '<div class="pb-stats"><div><strong>06</strong><span>项目档案</span></div><div><strong>05</strong><span>可运行 Demo</span></div></div></div>' +
+            '<div class="pb-actions"><a href="assets/陈黄勇_产品经理_系统策划_编导_简历.pdf" download>下载简历 PDF</a>' +
+            '<a class="pb-ghost" href="mailto:2126431683@qq.com">发邮件</a><a class="pb-ghost" href="tel:19279459077">打电话</a></div>';
+        }
+      },
+      {
+        code: 'PHASE 2 / FIRST QUARTER', name: '项目', en: 'FIRST QUARTER',
+        title: '做过的项目',
+        lead: '六个项目，没一个是纸面功夫。定位、系统、数值、我干了什么、长什么样——都在这。',
+        body: function () {
+          var P = [
+            { n: '放开那个女巫：灰堡黎明', d: 'Godot 4 · 卡牌回合 RPG —— 3 AP 速度行动战斗、角色收集养成、28 节点关卡。',
+              l: [['PRD', 'assets/docs/release-the-witch-prd.pdf'], ['试玩 →', 'release-the-witch-game.html']] },
+            { n: '暮鸦之墓', d: 'Godot 4.3 · 开放世界 ARPG —— 主城/野外/副本，任务、战斗、AI 与装备成长闭环。',
+              l: [['GDD', 'assets/docs/mournraven-gdd.pdf']] },
+            { n: '雾港疑云', d: 'Web + Unity · 悬疑叙事 —— 真相度与信任双变量、信件收集、三幕四结局。', l: [] },
+            { n: '三国文字合成塔防', d: 'React + TS · 策略塔防 —— 8 条合成线、双经济、20 波战役。', l: [] },
+            { n: 'HotPick Studio', d: 'React · Electron · AI 产品 —— 热点发现到数据复盘的五阶段工作台。',
+              l: [['PRD', 'assets/docs/hotpick-studio-prd.pdf']] },
+            { n: '余烬之城 Emberfall', d: 'Godot 4.7 · 生存城建 SLG —— 熔炉供暖、资源调度、暴风雪压力的可玩切片。',
+              l: [['试玩 →', 'emberfall-game.html']] }
+          ];
+          return '<ul class="pb-list">' + P.map(function (p) {
+            var links = '';
+            if (p.l.length) {
+              links = '<span class="pb-links">' + p.l.map(function (x) {
+                return '<a href="' + x[1] + '" target="' + (x[1].indexOf('.pdf') >= 0 ? '_blank' : '_self') + '" rel="noopener">' + x[0] + '</a>';
+              }).join('') + '</span>';
+            }
+            return '<li><strong>' + p.n + '</strong><span>' + p.d + '</span>' + links + '</li>';
+          }).join('') + '</ul>';
+        }
+      },
+      {
+        code: 'PHASE 3 / WAXING GIBBOUS', name: '技能', en: 'WAXING GIBBOUS',
+        title: '我会什么',
+        lead: '我的路子很简单：先想清楚为什么做，再写清楚怎么跑，最后亲手做出能玩的原型。判断、系统、落地，一条线。',
+        body: function () {
+          return '<ul class="pb-list">' +
+            '<li><strong>产品判断</strong><span>用户分层与竞品、MVP 范围与优先级、数据指标与埋点。</span></li>' +
+            '<li><strong>系统策划</strong><span>战斗与数值、养成与关卡循环、经济与产出消耗。</span></li>' +
+            '<li><strong>技术落地</strong><span>Godot / Unity / React、JSON 配置与存档、移动端验证。</span></li>' +
+            '<li><strong>内容编导</strong><span>选题、脚本、分镜、排期、复盘，三条 AI 内容赛道。</span></li>' +
+            '</ul>';
+        }
+      },
+      {
+        code: 'PHASE 4 / FULL MOON', name: '运营', en: 'FULL MOON',
+        title: '运营那些事',
+        lead: '做内容就一句话：先让人看见，再把兴趣带回来。选题看受众，脚本能拍能剪，发出去盯数据，好的坏的都记下来，带进下一轮。',
+        body: function () {
+          return '<div class="pb-stats"><div><strong>30%</strong><span>热搜命中率</span></div>' +
+            '<div><strong>#02</strong><span>最高热搜榜</span></div>' +
+            '<div><strong>300万</strong><span>单条最高播放</span></div></div>' +
+            '<ul class="pb-list"><li><strong>HotPick Studio</strong><span>把选题、评分、转化、生产、复盘的重复判断做成五阶段内容工作台。</span>' +
+            '<span class="pb-links"><a href="assets/docs/hotpick-studio-prd.pdf" target="_blank" rel="noopener">PRD</a></span></li></ul>';
+        }
+      },
+      {
+        code: 'PHASE 5 / WANING GIBBOUS', name: '游戏理解', en: 'WANING GIBBOUS',
+        title: '我怎么看游戏',
+        lead: '七组游戏体验，七份拆解。凭什么好玩、哪里会劝退、压力怎么给——每个类型我都写出了自己的一套看法。',
+        body: function () {
+          return '<ul class="pb-list">' +
+            '<li><strong>动作</strong><span>《只狼》《黑神话：悟空》—— 精确输入与节奏化的攻防交换。</span></li>' +
+            '<li><strong>开放世界</strong><span>《艾尔登法环》《巫师 3》—— 目的由玩家自己长出来的探索结构。</span></li>' +
+            '<li><strong>叙事</strong><span>《雾港疑云》同源方法 —— 双变量驱动的分支叙事。</span></li>' +
+            '<li><strong>策略 / SLG</strong><span>《三国塔防》《白色荒野》—— 循环与压力的设计取舍。</span></li>' +
+            '</ul>';
+        }
+      },
+      {
+        code: 'PHASE 6 / LAST QUARTER', name: '经历', en: 'LAST QUARTER',
+        title: '走到今天',
+        lead: 'The Player Log —— 从网络与新媒体出发，一路做过内容、运营、产品，最后把判断写成规则、数据、界面和能跑的 Demo。',
+        body: function () {
+          return '<div class="pb-timeline">' +
+            '<article><p>2026.06-</p><div><h3>西安纬度网络科技</h3><span>AI 类目编导：三条内容赛道 + 两款 Godot 游戏全流程策划。</span></div></article>' +
+            '<article><p>2026.02-06</p><div><h3>Newegg 新蛋</h3><span>电商产品经理实习生：竞品调研、差异化方案与转化复盘。</span></div></article>' +
+            '<article><p>2023.06-09</p><div><h3>闻泰科技 · 荣耀平板</h3><span>产品运营实习生：知识库建设，自助查询率 +40%，咨询量 -20%。</span></div></article>' +
+            '<article><p>2022-2026</p><div><h3>西安欧亚学院</h3><span>网络与新媒体本科 · 影视编导方向。</span></div></article>' +
+            '</div>';
+        }
+      },
+      {
+        code: 'PHASE 7 / WANING CRESCENT', name: '联系', en: 'WANING CRESCENT',
+        title: '找到我',
+        lead: '下一套系统，想跟你一起做。邮件、电话都行；想先试手感，任意一个 Demo 都能直接玩。',
+        body: function () {
+          return '<ul class="pb-list">' +
+            '<li><strong>2126431683@qq.com</strong><span>邮件</span></li>' +
+            '<li><strong>192 7945 9077</strong><span>电话</span></li></ul>' +
+            '<div class="pb-actions"><a href="release-the-witch-game.html">放开那个女巫 · Play</a>' +
+            '<a class="pb-ghost" href="emberfall-game.html">余烬之城 · Play</a></div>';
+        }
+      }
+    ];
+
+    /* ---------- 大月亮 canvas（低分辨率像素化 + Bayer 抖动） ---------- */
+    var canvasEl = document.getElementById('moon-canvas');
+    var stage = document.getElementById('moon-stage');
+    var ctx = canvasEl.getContext('2d');
+    var mx = document.createElement('canvas');
+    var mctx = mx.getContext('2d');
+    var RES = 112;                    // 低分辨率像素网格
+    mx.width = mx.height = RES;
+    var CUR = { from: 0, to: 0, shown: 0 };
+    var preview = null, lastT = performance.now();
+    var moonV = document.createElement('canvas');
+    moonV.width = moonV.height = RES;
+
+    function hash01(x, y) {
+      var s = Math.sin(x * 127.1 + y * 311.7) * 43758.5453;
+      return s - Math.floor(s);
+    }
+    function vnoise(x, y) {
+      var xi = Math.floor(x), yi = Math.floor(y);
+      var xf = x - xi, yf = y - yi;
+      var u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+      var a = hash01(xi, yi), b = hash01(xi + 1, yi), c = hash01(xi, yi + 1), d = hash01(xi + 1, yi + 1);
+      return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+    }
+    function fbm(x, y, o) {
+      var v = 0, amp = 0.5, f = 1, n = 0;
+      for (var i = 0; i < o; i++) { v += amp * vnoise(x * f, y * f); n += amp; amp *= 0.5; f *= 2.03; }
+      return v / n;
+    }
+
+    // 渲染一个月相到 mx 画布：p = 0(新月) .. 0.5(满) .. 1(残月)
+    function renderMoon(p, t) {
+      var img = mctx.createImageData(RES, RES);
+      var d = img.data;
+      var c0 = RES / 2, R = RES * 0.44;
+      var ph = ((p % 1) + 1) % 1;
+      var sx = Math.sin(ph * Math.PI * 2);
+      var k = -Math.cos(ph * Math.PI * 2);        // 新月=-1 满月=+1
+      var wob = t * 0.00022;
+      for (var y = 0; y < RES; y++) {
+        for (var x = 0; x < RES; x++) {
+          var dx = (x - c0) / R, dy = (y - c0) / R;
+          var r2 = dx * dx + dy * dy;
+          var g = 0, a0 = 0;
+          if (r2 <= 1) {
+            var n = fbm(x / 14 + wob, y / 14 - wob, 4) * 0.62 + fbm(x / 5 + 3.7, y / 5 + 1.2, 3) * 0.38;
+            var z = Math.sqrt(1 - r2);
+            var lit = dx * sx + z * k > 0;
+            var b = lit ? (0.30 + 0.72 * n) : (0.05 + 0.10 * n);
+            // Bayer 有序抖动（4x4）量化到灰阶
+            var bayer = B4[y % 4][x % 4] / 16;
+            var lv = b * 8;                        // 8 级灰度
+            var lo = Math.floor(lv);
+            var q = lo + (lv - lo > bayer ? 1 : 0);
+            g = Math.min(255, Math.round((q / 8) * 255));
+            a0 = 255;
+          }
+          var i4 = (y * RES + x) * 4;
+          d[i4] = d[i4 + 1] = d[i4 + 2] = g;
+          d[i4 + 3] = a0;
+        }
+      }
+      mctx.putImageData(img, 0, 0);
+      // 黑幕（事件视界）：纯黑大圆衬底
+      var vctx = moonV.getContext('2d');
+      vctx.clearRect(0, 0, RES, RES);
+      vctx.drawImage(mx, 0, 0);
+    }
+
+    function compose(t) {
+      var w = canvasEl.width, h = canvasEl.height;
+      ctx.imageSmoothingEnabled = false;
+      ctx.clearRect(0, 0, w, h);
+      ctx.drawImage(moonV, 0, 0, w, h);
+      // 像素星点（画布边角区域，闪烁）
+      ctx.fillStyle = '#fff';
+      for (var i = 0; i < 22; i++) {
+        var sxx = hash01(i, 7.3), syy = hash01(i, 13.7);
+        var sx = 16 + sxx * (w - 32), sy = 16 + syy * (h - 32);
+        var rad = Math.hypot(sx - w / 2, sy - h / 2);
+        if (rad < w * 0.52) continue;               // 避开月亮区域
+        var tw = (Math.sin(t * 0.002 + i * 2.1) + 1) / 2;
+        ctx.globalAlpha = 0.25 + 0.6 * tw;
+        var sz = 2 + (i % 2);
+        ctx.fillRect(Math.round(sx), Math.round(sy), sz, sz);
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    /* ---------- 月相图标 ---------- */
+    var iconsBox = document.getElementById('moon-icons');
+    var iconEls = [];
+    for (var i = 0; i < 8; i++) {
+      (function (idx) {
+        var btn = document.createElement('button');
+        btn.className = 'moon-icon';
+        btn.type = 'button';
+        btn.setAttribute('role', 'tab');
+        btn.setAttribute('aria-label', PHASES[idx].name + ' ' + PHASES[idx].en);
+        var ic = document.createElement('canvas');
+        ic.width = 24;
+        ic.height = 24;
+        btn.appendChild(ic);
+        iconsBox.appendChild(btn);
+        iconEls.push(btn);
+        drawIcon(ic, idx / 8, false);
+        btn.addEventListener('click', function () { goPhase(idx); });
+        btn.addEventListener('pointerenter', function () { preview = idx; drawIcon(ic, idx / 8, true); });
+        btn.addEventListener('pointerleave', function () { preview = null; });
+      })(i);
+    }
+
+    function drawIcon(cv, p, hover) {
+      var x = cv.getContext('2d');
+      x.clearRect(0, 0, 24, 24);
+      var sx = Math.sin(p * Math.PI * 2), k = -Math.cos(p * Math.PI * 2);
+      for (var yy = 0; yy < 24; yy++) {
+        for (var xx = 0; xx < 24; xx++) {
+          var dx = (xx - 11.5) / 10, dy = (yy - 11.5) / 10;
+          var r2 = dx * dx + dy * dy;
+          if (r2 > 1) continue;
+          var z = Math.sqrt(1 - r2);
+          var lit = dx * sx + z * k > 0;
+          var bayer = B4[yy % 4][xx % 4] / 16;
+          var v = lit ? 0.92 : 0.10;
+          var out = v + (bayer - 0.5) * 0.14;
+          var g = Math.max(0, Math.min(255, Math.round(out * 255)));
+          x.fillStyle = 'rgb(' + g + ',' + g + ',' + g + ')';
+          x.fillRect(xx, yy, 1, 1);
+        }
+      }
+    }
+
+    /* ---------- 面板 + 字符洗牌 ---------- */
+    var panel = document.getElementById('moon-panel');
+    var codeEl = document.getElementById('moon-panel-code');
+    var titleEl = document.getElementById('moon-panel-title');
+    var leadEl = document.getElementById('moon-panel-lead');
+    var bodyEl = document.getElementById('moon-panel-body');
+    var current = -1;
+
+    function shuffleText(el, text, done) {
+      var chars = text.split('');
+      el.innerHTML = '';
+      var spans = chars.map(function (ch) {
+        var sp = document.createElement('span');
+        sp.className = 'shuffle-char';
+        sp.textContent = ch === ' ' ? '\u00A0' : ch;
+        el.appendChild(sp);
+        return sp;
+      });
+      var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@#$%&*';
+      var frames = 0;
+      var timer = setInterval(function () {
+        frames++;
+        for (var i = 0; i < spans.length; i++) {
+          if (frames > i * 0.9 + 5) {
+            spans[i].textContent = chars[i] === ' ' ? '\u00A0' : chars[i];
+          } else {
+            spans[i].textContent = letters[(Math.random() * letters.length) | 0];
+          }
+        }
+        if (frames > spans.length * 0.9 + 6) {
+          clearInterval(timer);
+          spans.forEach(function (sp, i) { sp.textContent = chars[i] === ' ' ? '\u00A0' : chars[i]; });
+          if (done) done();
+        }
+      }, 32);
+    }
+
+    function applyPhase(idx, animate) {
+      var ph = PHASES[idx];
+      codeEl.textContent = ph.code;
+      if (animate) {
+        panel.classList.add('is-switching');
+        setTimeout(function () {
+          shuffleText(titleEl, ph.title);
+          leadEl.textContent = ph.lead;
+          bodyEl.innerHTML = ph.body();
+          panel.classList.remove('is-switching');
+        }, 280);
+      } else {
+        titleEl.textContent = ph.title;
+        leadEl.textContent = ph.lead;
+        bodyEl.innerHTML = ph.body();
+      }
+      current = idx;
+      iconEls.forEach(function (b, i2) { b.classList.toggle('is-active', i2 === idx); });
+    }
+
+    /* ---------- 渐漫过渡（cubic-bezier(0.16,1,0.3,1)） ---------- */
+    var prevT = performance.now();
+    function loop(t) {
+      var dt = Math.min(50, t - prevT);
+      prevT = t;
+      var target = preview !== null ? preview : current;
+      if (current < 0) target = 0;
+      CUR.from = CUR.shown;
+      CUR.to = target;
+      CUR.shown += (CUR.to - CUR.shown) * 0.16;
+      if (Math.abs(CUR.to - CUR.shown) < 0.002) CUR.shown = CUR.to;
+      renderMoon(CUR.shown, t);
+      compose(t);
+      requestAnimationFrame(loop);
+    }
+
+    /* ---------- 交互 ---------- */
+    function goPhase(idx) {
+      if (idx === current) return;
+      applyPhase(idx, true);
+    }
+    window.addEventListener('keydown', function (e) {
+      if (window.__sv && window.__sv.state.currentScene !== 2) return;
+      if (e.key === 'ArrowRight') goPhase((current + 1) % 8);
+      else if (e.key === 'ArrowLeft') goPhase((current + 7) % 8);
+    });
+
+    function resize() {
+      var rect = stage.getBoundingClientRect();
+      var DPR2 = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvasEl.width = Math.max(2, Math.round(rect.width * DPR2));
+      canvasEl.height = Math.max(2, Math.round(rect.height * DPR2));
+    }
+    if (typeof ResizeObserver !== 'undefined') new ResizeObserver(resize).observe(stage);
+    else window.addEventListener('resize', resize);
+    resize();
+
+    applyPhase(0, false);
+    requestAnimationFrame(loop);
+    return { goPhase: goPhase, phases: PHASES };
+  })();
+
 })();

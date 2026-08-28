@@ -10,11 +10,11 @@
   <meta property="og:url" content="https://2126431683a-netizen.github.io/">
   <title>陈黄勇 | CHY Galaxy</title>
   <link rel="stylesheet" href="assets/site.css?v=2026-08-27-31">
-  <link rel="stylesheet" href="assets/home.css?v=2026-08-28-17">
+  <link rel="stylesheet" href="assets/home.css?v=2026-08-28-18">
   <script src="assets/libs/gsap.min.js" defer></script>
   <script src="assets/libs/MotionPathPlugin.min.js" defer></script>
   <script src="assets/site.js?v=2026-08-27-23" defer></script>
-  <script src="assets/home.js?v=2026-08-28-17" defer></script>
+  <script src="assets/home.js?v=2026-08-28-18" defer></script>
   <script src="assets/hero-gl.js?v=2026-08-28-19" defer></script>
   <script src="assets/mousefx.js?v=2026-08-28-20" defer></script>
 <link rel="stylesheet" href="assets/fx.css?v=2026-08-28-30">
@@ -90,66 +90,26 @@
       </button>
     </section>
 
-    <section class="scene scene-solar sv-scene" id="scene-solar" aria-label="作品星系">
+    <section class="scene scene-solar sv-scene moon-page" id="scene-solar" aria-label="月亮相位 · 作品星系">
       <canvas class="space-deep" id="space-deep" aria-hidden="true"></canvas>
       <div class="orbit-grid" aria-hidden="true"></div>
 
-      <div class="solar-universe" data-solar>
-        <p class="solar-title" data-solar-title>〈 作品星系 · 选择一颗星球 〉</p>
+      <p class="solar-title moon-page-title">〈 作品星系 · 月亮相位 〉</p>
 
-        <div class="solar-stage" data-solar-stage role="list" aria-label="星球列表">
-          <div class="orbit orbit-1" aria-hidden="true"></div>
-          <div class="orbit orbit-2" aria-hidden="true"></div>
-          <div class="orbit orbit-3" aria-hidden="true"></div>
-
-          <button class="sun" type="button" role="listitem" data-planet="sun" style="--angle: 0deg; --dist: 0px">
-            <span class="sun-glow" aria-hidden="true"></span>
-            <span class="sun-core" aria-hidden="true"></span>
-            <span class="planet-label">CHY<span class="planet-tag">先认识我</span></span>
-          </button>
-          <button class="planet planet-p1" type="button" role="listitem" data-planet="projects" style="--angle: 24deg; --dist: 170px">
-            <span class="planet-core" aria-hidden="true"></span>
-            <span class="planet-label">PROJECTS<span class="planet-tag">做过的项目</span></span>
-          </button>
-          <button class="planet planet-p2" type="button" role="listitem" data-planet="skills" style="--angle: 82deg; --dist: 262px">
-            <span class="planet-core" aria-hidden="true"></span>
-            <span class="planet-label">SKILLS<span class="planet-tag">我会什么</span></span>
-          </button>
-          <button class="planet planet-p3" type="button" role="listitem" data-planet="ops" style="--angle: 138deg; --dist: 170px">
-            <span class="planet-core" aria-hidden="true"></span>
-            <span class="planet-label">OPS<span class="planet-tag">运营那些事</span></span>
-          </button>
-          <button class="planet planet-p4" type="button" role="listitem" data-planet="story" style="--angle: 196deg; --dist: 262px">
-            <span class="planet-core" aria-hidden="true"></span>
-            <span class="planet-label">STORY<span class="planet-tag">走到今天</span></span>
-          </button>
-          <button class="planet planet-p5" type="button" role="listitem" data-planet="lens" style="--angle: 252deg; --dist: 170px">
-            <span class="planet-core" aria-hidden="true"></span>
-            <span class="planet-label">LENS<span class="planet-tag">我怎么看游戏</span></span>
-          </button>
-          <button class="planet planet-p6" type="button" role="listitem" data-planet="link" style="--angle: 310deg; --dist: 262px">
-            <span class="planet-core" aria-hidden="true"></span>
-            <span class="planet-label">LINK<span class="planet-tag">找到我</span></span>
-          </button>
-        </div>
-
-        <div class="planet-focus" data-planet-focus aria-hidden="true">
-          <span class="focus-core" aria-hidden="true"></span>
-          <span class="focus-ring" aria-hidden="true"></span>
-        </div>
-
-        <aside class="planet-panel" data-planet-panel hidden>
-          <header class="panel-head">
-            <p class="panel-code" data-panel-code>Planet 01</p>
-            <h2 class="panel-title" data-panel-title>项目终端</h2>
-            <button class="panel-close" type="button" data-planet-close aria-label="返回星系">
-              <img src="assets/fonts/pixel-arrow-left.svg" alt="" aria-hidden="true" class="pixel-arrow">
-              <span>返回星系</span>
-            </button>
-          </header>
-          <div class="panel-body" data-panel-body></div>
-        </aside>
+      <div class="moon-stage" id="moon-stage">
+        <canvas class="moon-canvas" id="moon-canvas" aria-hidden="true"></canvas>
       </div>
+
+      <aside class="moon-panel" id="moon-panel">
+        <header class="moon-panel-head">
+          <p class="moon-panel-code" id="moon-panel-code">PHASE 0 / LANDING</p>
+          <h2 class="moon-panel-title" id="moon-panel-title">作品星系</h2>
+        </header>
+        <p class="moon-panel-lead" id="moon-panel-lead"></p>
+        <div class="moon-panel-body" id="moon-panel-body"></div>
+      </aside>
+
+      <div class="moon-icons" id="moon-icons" role="tablist" aria-label="月相选择"></div>
     </section>
 
     <footer class="scene sv-scene scene-contact" id="scene-contact" aria-label="联系">
