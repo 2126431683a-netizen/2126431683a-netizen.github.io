@@ -494,8 +494,9 @@
   to { transform: translateY(-50%); }
 }
 
+/* 胶片按用户要求必须循环播放：即使系统开启减弱动态，也只放慢不放停 */
 @media (prefers-reduced-motion: reduce) {
-  .film-track { animation: none; }
+  .film-track { animation-duration: 44s; }
 }
 
 .film-frame {
@@ -716,6 +717,11 @@
   font-size: clamp(18px, 2.6vw, 28px);
   letter-spacing: 0.16em;
   color: rgba(255, 255, 255, 0.9);
+}
+
+/* 场景模式：标题下移，避免被顶部固定导航盖住 */
+body[data-page="home"].scene-mode .scene-solar .solar-title {
+  top: 96px;
 }
 
 /* ============================================================
@@ -979,5 +985,30 @@ body[data-page="home"].scene-mode .scene-flow > footer {
   }
   .ph-contact-chip {
     text-align: center;
+  }
+}
+
+/* —— 站点 global 减弱动态会把所有动画压到 0.01ms；内容动效按用户体验要求保留 —— */
+@media (prefers-reduced-motion: reduce) {
+  .film-track {
+    animation-duration: 44s !important;
+    animation-iteration-count: infinite !important;
+  }
+  .solar-stage .planet,
+  .solar-stage .sun {
+    animation-duration: 44s !important;
+    animation-iteration-count: infinite !important;
+  }
+  .solar-stage::after {
+    animation-duration: 60s !important;
+    animation-iteration-count: infinite !important;
+  }
+  .space-deep {
+    animation-duration: 300s !important;
+    animation-iteration-count: infinite !important;
+  }
+  .ph-contact-chip,
+  .cinema-arrow {
+    animation: none !important;
   }
 }
