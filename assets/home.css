@@ -1034,3 +1034,19 @@ body[data-page="home"].scene-mode .scene-flow > footer {
     animation: none;
   }
 }
+
+/* ============================================================
+   鼠标追踪光球（mousefx）
+   ============================================================ */
+.mousefx {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mousefx { display: none; }
+}
