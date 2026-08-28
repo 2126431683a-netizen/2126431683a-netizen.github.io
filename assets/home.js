@@ -341,6 +341,85 @@
   }
 
   /* ==================== 3) 星系：流程轨道补充 ==================== */
+
+  // —— 程序化“月面岩石”纹理（参考图那种坑洼月面，非光滑圆球） ——
+  function hash01(x, y) {
+    var s = Math.sin(x * 127.1 + y * 311.7) * 43758.5453;
+    return s - Math.floor(s);
+  }
+  function vnoise2(x, y) {
+    var xi = Math.floor(x), yi = Math.floor(y);
+    var xf = x - xi, yf = y - yi;
+    var u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+    var a = hash01(xi, yi), b = hash01(xi + 1, yi), c = hash01(xi, yi + 1), d = hash01(xi + 1, yi + 1);
+    return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+  }
+  function fbm2(x, y, oct) {
+    var v = 0, amp = 0.5, f = 1, norm = 0;
+    for (var i = 0; i < oct; i++) {
+      v += amp * vnoise2(x * f, y * f);
+      norm += amp;
+      amp *= 0.5;
+      f *= 2.03;
+    }
+    return v / norm;
+  }
+
+  function moonTexture(seed) {
+    var S = 112;
+    var cv = document.createElement('canvas');
+    cv.width = cv.height = S;
+    var x = cv.getContext('2d');
+    // 凹凸 + 光照 + 噪声边缘 —— 逐像素生成
+    var img = x.createImageData(S, S);
+    var d = img.data;
+    var cx = S / 2, cy = S / 2, R = S * 0.46;
+    for (var py = 0; py < S; py++) {
+      for (var px = 0; px < S; px++) {
+        var dx = (px - cx) / R, dy = (py - cy) / R;
+        var rr = Math.sqrt(dx * dx + dy * dy);
+        var ang = Math.atan2(dy, dx);
+        var edge = 0.9 + (fbm2(Math.cos(ang) * 1.7 + seed, Math.sin(ang) * 1.7 + seed * 1.7, 3) - 0.5) * 0.3;
+        var i4 = (py * S + px) * 4;
+        if (rr >= edge) {
+          d[i4] = d[i4 + 1] = d[i4 + 2] = 0;
+          d[i4 + 3] = 0;
+          continue;
+        }
+        // 高频褶皱 + 中频山脊
+        var v = fbm2(px / 24 + seed, py / 24 - seed * 0.63, 4) * 0.58 +
+                fbm2(px / 8 + seed * 2.1, py / 8 + seed, 3) * 0.42;
+        // 定向光照（左上亮 / 右下暗）+ 边缘亮环
+        var lit = clamp(0.5 + 0.85 * (-(dx * 0.6 + dy * 0.72)), 0, 1.25);
+        var g = v * 0.85 * lit;
+        if (rr > edge - 0.1) g += 0.32 * lit;          // 受光侧边缘高光
+        g = clamp(g, 0, 1);
+        g = Math.round(g * 5.5) / 5.5;                  // 轻度量化，像素质感
+        var c = Math.round(g * 255);
+        d[i4] = c; d[i4 + 1] = c; d[i4 + 2] = c;
+        d[i4 + 3] = 255;
+      }
+    }
+    x.putImageData(img, 0, 0);
+    // 环形山：暗底 + 受光侧亮边（像参考图的陨石坑）
+    for (var k = 0; k < 14; k++) {
+      var crx = cx + (Math.random() - 0.5) * R * 1.4;
+      var cry = cy + (Math.random() - 0.5) * R * 1.3;
+      var crr = 4 + Math.random() * 12;
+      if (Math.sqrt((crx - cx) * (crx - cx) + (cry - cy) * (cry - cy)) > R * 0.72) continue;
+      x.fillStyle = 'rgba(0,0,0,0.34)';
+      x.beginPath();
+      x.arc(crx, cry, crr, 0, 7);
+      x.fill();
+      x.strokeStyle = 'rgba(255,255,255,0.55)';
+      x.lineWidth = 1.7;
+      x.beginPath();
+      x.arc(crx, cry, crr, Math.PI * 1.05, Math.PI * 1.95);
+      x.stroke();
+    }
+    return cv.toDataURL();
+  }
+
   var solarStage = document.querySelector('[data-solar-stage]');
   if (solarStage) {
     var ORDER = ['projects', 'skills', 'ops', 'story', 'lens', 'link'];
@@ -356,6 +435,15 @@
       badge.setAttribute('aria-hidden', 'true');
       badge.textContent = '0' + (idx + 1);
       body.appendChild(badge);
+      // 月面岩石纹理（每个星球的皱褶和环形山不一样）
+      var core = body.querySelector('.planet-core');
+      if (core) {
+        var url = moonTexture(idx * 7.31 + 2.17);
+        core.style.background = 'none';
+        core.style.backgroundImage = 'url(' + url + ')';
+        core.style.backgroundSize = '100% 100%';
+        core.style.backgroundRepeat = 'no-repeat';
+      }
     });
   }
 
