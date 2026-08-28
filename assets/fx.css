@@ -46,14 +46,6 @@
   filter: blur(0);
 }
 
-/* 素材统一：站点内影像全部灰阶（对齐参考页的单色像素材质） */
-main img,
-main video,
-.page-hero img,
-.page-hero video {
-  filter: grayscale(1) contrast(1.05);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .fx-canvas { display: none; }
   .fx-sec { opacity: 1; transform: none; filter: none; transition: none; }
