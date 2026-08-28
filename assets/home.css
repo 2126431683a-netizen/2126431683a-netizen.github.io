@@ -727,13 +727,6 @@ body[data-page="home"].scene-mode .scene-solar .solar-title {
 /* ============================================================
    全站统一（首页局部）：星系色调对齐单色材质
    ============================================================ */
-.scene-solar .sun-core,
-.scene-solar .sun-glow,
-.scene-solar .focus-core,
-.scene-solar .focus-ring,
-.scene-solar .planet-halo {
-  filter: saturate(0);
-}
 
 /* 月球节点：纹理由生成器提供（坑洼月面），去掉 CSS 假陨石坑 */
 .scene-solar .planet-core::before {
