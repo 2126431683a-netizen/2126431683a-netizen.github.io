@@ -1637,3 +1637,8 @@ body[data-page="home"].scene-mode .scene-flow > footer {
     top: calc(21svh + min(13svh, 30vw) + 10px);
   }
 }
+
+/* 说明行置于地球地平线之上 */
+.moon-caption {
+  z-index: 3;
+}
