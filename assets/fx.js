@@ -169,7 +169,8 @@
   startFx();
 
   /* ---- 段落入场 + 边界粒子幕 ---- */
-  var sections = document.querySelectorAll('main > section, main > .page, header.page-hero, section.contact-band, .scene');
+  var sections = [].slice.call(document.querySelectorAll('main > section, main > .page, header.page-hero, section.contact-band, .scene'))
+    .filter(function (sec) { return !sec.classList.contains('sv-scene'); });
   var observer = 'IntersectionObserver' in window
     ? new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {

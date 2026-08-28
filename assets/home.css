@@ -844,3 +844,152 @@
 .orbit-grid {
   z-index: 1;
 }
+
+/* ============================================================
+   整屏场景切换（sv-*）：状态机场景层 + 字符波面转场贴片
+   ============================================================ */
+
+/* 场景模式：锁定视口，放弃真实滚动（由 home.js 添加 .scene-mode） */
+body[data-page="home"].scene-mode {
+  overflow: hidden;
+  height: 100vh;
+}
+
+body[data-page="home"].scene-mode .scene-flow {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+body[data-page="home"].scene-mode .scene-flow > .scene,
+body[data-page="home"].scene-mode .scene-flow > footer {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+  scroll-snap-type: none;
+  scroll-snap-align: none;
+}
+
+.sv-scene {
+  will-change: opacity, transform, clip-path;
+}
+
+.sv-current {
+  z-index: 2;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.sv-incoming {
+  z-index: 1;
+  visibility: visible;
+}
+
+.sv-hidden {
+  z-index: 1;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 转场字符波面（fixed，高于场景内容，不挡交互） */
+.sv-wave {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+/* 背景乱码层（常驻运行，位于场景内容之上、导航之下） */
+.sv-glitch {
+  position: fixed;
+  inset: 0;
+  z-index: 42;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+/* 联系场景（第四屏） */
+.scene-contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px;
+  background: #000;
+}
+
+.ph-contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  text-align: center;
+  max-width: 560px;
+}
+
+.ph-contact-title {
+  margin: 0;
+  color: #fff;
+  font-family: var(--pixel);
+  font-weight: 400;
+  font-size: clamp(30px, 5vw, 56px);
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.25);
+}
+
+.ph-contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.ph-contact-chip {
+  color: #fff;
+  font-family: var(--pixel);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  padding: 10px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 12px;
+  transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.ph-contact-chip:hover,
+.ph-contact-chip:focus-visible {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 0 22px rgba(255, 255, 255, 0.14);
+}
+
+.scene-contact small {
+  color: rgba(255, 255, 255, 0.42);
+  font-family: var(--pixel);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sv-wave,
+  .sv-glitch {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .ph-contact-links {
+    flex-direction: column;
+    width: 100%;
+  }
+  .ph-contact-chip {
+    text-align: center;
+  }
+}

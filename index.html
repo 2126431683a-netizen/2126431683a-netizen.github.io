@@ -10,13 +10,13 @@
   <meta property="og:url" content="https://2126431683a-netizen.github.io/">
   <title>陈黄勇 | CHY Galaxy</title>
   <link rel="stylesheet" href="assets/site.css?v=2026-08-27-30">
-  <link rel="stylesheet" href="assets/home.css?v=2026-08-28-09">
+  <link rel="stylesheet" href="assets/home.css?v=2026-08-28-15">
   <script src="assets/libs/gsap.min.js" defer></script>
   <script src="assets/libs/MotionPathPlugin.min.js" defer></script>
   <script src="assets/site.js?v=2026-08-27-22" defer></script>
-  <script src="assets/home.js?v=2026-08-28-14" defer></script>
+  <script src="assets/home.js?v=2026-08-28-15" defer></script>
 <link rel="stylesheet" href="assets/fx.css?v=2026-08-28-30">
-  <script src="assets/fx.js?v=2026-08-28-06" defer></script>
+  <script src="assets/fx.js?v=2026-08-28-31" defer></script>
 </head>
 <body data-page="home">
   <a class="skip-link" href="#main">跳到主要内容</a>
@@ -37,7 +37,7 @@
 
   <main id="main" class="scene-flow" aria-label="CHY galaxy">
 
-    <section class="scene scene-hero" id="scene-hero" aria-label="陈黄勇">
+    <section class="scene scene-hero sv-scene" id="scene-hero" aria-label="陈黄勇">
       <canvas class="ph-portal" id="portal-canvas" aria-hidden="true"></canvas>
       <div class="ph-dots" aria-hidden="true"></div>
 
@@ -69,7 +69,7 @@
       </button>
     </section>
 
-    <section class="scene odyssey" id="odyssey" aria-label="作品胶片">
+    <section class="scene odyssey sv-scene" id="odyssey" aria-label="作品胶片">
       <canvas class="odyssey-textfield" id="odyssey-textfield" aria-hidden="true"></canvas>
 
       <div class="film-strip" aria-hidden="true">
@@ -88,7 +88,7 @@
       </button>
     </section>
 
-    <section class="scene scene-solar" id="scene-solar" aria-label="作品星系">
+    <section class="scene scene-solar sv-scene" id="scene-solar" aria-label="作品星系">
       <canvas class="space-deep" id="space-deep" aria-hidden="true"></canvas>
       <div class="orbit-grid" aria-hidden="true"></div>
 
@@ -150,15 +150,21 @@
       </div>
     </section>
 
-    <footer class="ph-footer">
-      <small>© <span data-year>2026</span> 陈黄勇 · CHY.GALAXY —— 以像素为骨，以作品为星</small>
-      <nav class="ph-footer-nav" aria-label="页脚导航">
-        <a href="mailto:2126431683@qq.com">2126431683@qq.com</a>
-        <a href="tel:19279459077">192 7945 9077</a>
-        <a href="#scene-hero">回到顶部</a>
-      </nav>
+    <footer class="scene sv-scene scene-contact" id="scene-contact" aria-label="联系">
+      <div class="ph-contact">
+        <p class="ph-foot-kicker">CONTACT / 联系</p>
+        <h2 class="ph-contact-title">下一套系统，<br>一起做。</h2>
+        <div class="ph-contact-links">
+          <a class="ph-contact-chip" href="mailto:2126431683@qq.com">2126431683@qq.com</a>
+          <a class="ph-contact-chip" href="tel:19279459077">192 7945 9077</a>
+          <a class="ph-contact-chip" href="assets/陈黄勇_游戏产品经理_系统策划_简历.pdf" download>下载简历 PDF</a>
+        </div>
+        <small>© <span data-year>2026</span> 陈黄勇 · CHY.GALAXY —— 以像素为骨，以作品为星</small>
+      </div>
     </footer>
 
   </main>
+  <canvas class="sv-glitch" id="sv-glitch" aria-hidden="true"></canvas>
+  <canvas class="sv-wave" id="sv-wave" aria-hidden="true"></canvas>
 </body>
 </html>

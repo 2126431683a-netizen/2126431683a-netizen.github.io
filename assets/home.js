@@ -652,4 +652,347 @@
       a.addEventListener('click', function () { header.classList.remove('ph-open'); });
     });
   }
+
+  /* ============================================================
+     SV —— 整屏场景切换（字符波面转场，仿 Kimi 招聘页）
+     1) 场景状态机 { currentScene, targetScene, direction, progress }
+     2) 场景 absolute 覆盖视口，clip-path/opacity/transform 交接
+     3) 固定全屏 Canvas：字符网格沿双正弦波面成片揭示/隐藏
+     4) 常驻背景乱码 Canvas（10px×20px 网格，5%/几十 ms 更新）
+     5) wheel / touch / 键盘方向键 / 站内锚点按钮 全部接入
+     ============================================================ */
+  var SV = (function () {
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---------- 场景 ---------- */
+    var sceneIds = ['scene-hero', 'odyssey', 'scene-solar', 'scene-contact'];
+    var scenes = sceneIds.map(function (id) { return document.getElementById(id); }).filter(Boolean);
+    if (scenes.length < 2) return null;
+
+    document.body.classList.add('scene-mode');
+    scenes.forEach(function (el) { el.classList.add('sv-scene'); });
+
+    /* ---------- 状态机 ---------- */
+    var state = { currentScene: 0, targetScene: 0, direction: 0, progress: 0 };
+    var animating = false;
+    var t0 = 0, lastSettle = 0, wheelAccum = 0;
+    var DUR = 1150;                 // 转场时长 ms
+
+    function applyVisibility() {
+      scenes.forEach(function (el, i) {
+        var isCurrent = i === state.currentScene;
+        var isIncoming = animating && i === state.targetScene;
+        el.classList.toggle('sv-current', isCurrent);
+        el.classList.toggle('sv-incoming', isIncoming);
+        el.classList.toggle('sv-hidden', !isCurrent && !isIncoming);
+        el.style.clipPath = '';
+        el.style.transform = '';
+        el.style.opacity = '';
+      });
+    }
+
+    function finish() {
+      state.currentScene = state.targetScene;
+      state.progress = 1;
+      animating = false;
+      state.targetScene = state.currentScene;
+      state.direction = 0;
+      applyVisibility();
+      waveHide();
+      lastSettle = performance.now();
+      wheelAccum = 0;
+    }
+
+    function beginTransition(target, dir) {
+      if (animating || target === state.currentScene || target < 0 || target >= scenes.length) return false;
+      if (performance.now() - lastSettle < 320) return false;   // 滚轮锁：刚落幕再等 320ms
+      animating = true;
+      state.targetScene = target;
+      state.direction = dir;
+      state.progress = 0;
+      t0 = performance.now();
+      applyVisibility();
+      if (reduced) { finish(); return true; }
+      waveShow();
+      rafWave = requestAnimationFrame(waveFrame);
+      return true;
+    }
+
+    function go(dir) { return beginTransition(state.currentScene + dir, dir); }
+    function goTo(i) { return beginTransition(i, i > state.currentScene ? 1 : -1); }
+
+    /* ---------- 字符波面 Canvas ---------- */
+    var wave = document.getElementById('sv-wave');
+    var wctx = wave && wave.getContext('2d');
+    var CELL = 12;
+    var CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&*'.split('');
+    var gw = 0, gh = 0, cells = [];
+    var W = 0, H = 0, WD = 0, WDpr = 1;
+    var rafWave = null, rafGlitch = null;
+    var easeInOutCubic = function (x) {
+      return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    };
+    function smoothstep(a, b, x) {
+      var t = Math.max(0, Math.min(1, (x - a) / (b - a)));
+      return t * t * (3 - 2 * t);
+    }
+    var randChar = function () { return CHARSET[(Math.random() * CHARSET.length) | 0]; };
+
+    function waveResize() {
+      if (!wave || !wctx) return;
+      WDpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = window.innerWidth;
+      H = window.innerHeight;
+      wave.width = Math.round(W * WDpr);
+      wave.height = Math.round(H * WDpr);
+      wctx.setTransform(WDpr, 0, 0, WDpr, 0, 0);
+      gw = Math.ceil(W / CELL);
+      gh = Math.ceil(H / CELL);
+      cells = new Array(gw * gh);
+      for (var i = 0; i < cells.length; i++) {
+        cells[i] = {
+          ch: randChar(),                       // 随机字符
+          gray: 70 + ((Math.random() * 180) | 0), // 随机灰度颜色
+          thr: Math.random(),                   // 随机阈值
+          edge: Math.random() * 2 - 1           // 随机边缘偏移量
+        };
+      }
+      wctx.imageSmoothingEnabled = false;
+    }
+
+    // 波面：两条正弦叠加，让边界不规则起伏
+    function waveYAt(x, baseY, now) {
+      var fx = x / Math.max(1, gw - 1);
+      return baseY +
+        26 * Math.sin(fx * Math.PI * 1.7 + now * 0.0016) +
+        15 * Math.sin(fx * Math.PI * 3.4 - now * 0.0011);
+    }
+
+    function drawWave(now, p, e) {
+      var baseY = e * H;                        // waveY = ease(progress) * canvasHeight
+      wctx.clearRect(0, 0, W, H);
+      // 只遍历波面附近的有限行（性能）
+      var y0 = Math.max(0, Math.floor((baseY - 6 * CELL) / CELL));
+      var y1 = Math.min(gh - 1, Math.ceil((baseY + 1.5 * CELL) / CELL));
+      if (y0 > y1) return;
+      wctx.font = Math.round(CELL * 0.92) + 'px "Fusion Pixel 12px Mono zh_hans", Menlo, Consolas, monospace';
+      for (var y = y0; y <= y1; y++) {
+        var rowBase = y * gw;
+        for (var x = 0; x < gw; x++) {
+          var c = cells[rowBase + x];
+          var cellTop = y * CELL;
+          var wx = waveYAt(x, baseY, now) + c.edge * 4.5;   // 波面(含每格随机偏移)
+          var d = wx - cellTop;                              // 到达的字符 = 波面之上
+          var presence = smoothstep(0, CELL * 2.6, d);       // 距波面越远越实
+          var lead = 0;
+          if (presence === 0) {
+            // 波面下方一点点的前锋微光
+            lead = (1 - smoothstep(-CELL * 1.6, 0, d)) * 0.22;
+            if (lead < 0.04) continue;
+          }
+          // 时间 + 随机阈值 → 噪声开关
+          var nv = 0.5 + 0.5 * Math.sin(now * 0.004 + c.thr * 6.283 + (x * 7.3 + y * 3.1));
+          var gate = nv > c.thr * 0.62 ? 1 : 0.16;
+          var alpha = ((c.gray / 255) * (presence * 0.9 + lead * gate) * gate);
+          if (alpha < 0.02) continue;
+          wctx.fillStyle = 'rgba(' + c.gray + ',' + c.gray + ',' + c.gray + ',' + alpha.toFixed(3) + ')';
+          wctx.fillText(c.ch, x * CELL, y * CELL + CELL * 0.82);
+          // 少量随机替换字符与颜色 → 闪烁 / 乱码刷新感
+          if (Math.random() < 0.045 * presence) {
+            c.ch = randChar();
+            c.gray = 60 + ((Math.random() * 190) | 0);
+          }
+        }
+      }
+    }
+
+    function waveFrame(now) {
+      if (!animating) return;
+      var p = Math.max(0, Math.min(1, (now - t0) / DUR));
+      state.progress = p;
+      var e = easeInOutCubic(p);
+      var oldEl = scenes[state.currentScene];
+      var newEl = scenes[state.targetScene];
+      // 新旧场景交接：旧场景被波面从上往下裁掉
+      var clipY = e * H;
+      oldEl.style.clipPath = 'inset(' + clipY.toFixed(1) + 'px 0 0 0)';
+      if (state.direction >= 0) {
+        oldEl.style.transform = 'translateY(' + (-e * 4).toFixed(2) + '%)';
+        newEl.style.opacity = (0.35 + 0.65 * e).toFixed(3);
+        newEl.style.transform = 'translateY(' + ((1 - e) * 5).toFixed(2) + '%) scale(' + (1 + (1 - e) * 0.02).toFixed(4) + ')';
+      } else {
+        oldEl.style.transform = 'translateY(' + (e * 4).toFixed(2) + '%)';
+        newEl.style.opacity = (0.35 + 0.65 * e).toFixed(3);
+        newEl.style.transform = 'translateY(' + (-(1 - e) * 5).toFixed(2) + '%) scale(' + (1 + (1 - e) * 0.02).toFixed(4) + ')';
+      }
+      if (p > 0.02 && p < 0.98) drawWave(now, p, e);   // 接近 0/1 时不绘制字符
+      if (p >= 1) { finish(); return; }
+      rafWave = requestAnimationFrame(waveFrame);
+    }
+
+    function waveShow() {
+      wave.style.display = 'block';
+    }
+    function waveHide() {
+      wave.style.display = 'none';
+      if (wctx) wctx.clearRect(0, 0, W, H);
+    }
+
+    /* ---------- 背景乱码 Canvas（常驻） ---------- */
+    var glitch = document.getElementById('sv-glitch');
+    var gctx = glitch && glitch.getContext('2d');
+    var GCELLW = 10, GCELLH = 20;
+    var grayPalette = [30, 44, 58, 74, 92];
+    var gGrid = [];
+    var gCols = 0, gRows = 0;
+    var gAcc = 0, gLast = 0;
+
+    function glitchResize() {
+      if (!glitch || !gctx) return;
+      var dpr2 = Math.min(window.devicePixelRatio || 1, 2);
+      glitch.width = Math.round(W * dpr2);
+      glitch.height = Math.round(H * dpr2);
+      gctx.setTransform(dpr2, 0, 0, dpr2, 0, 0);
+      gctx.imageSmoothingEnabled = false;
+      gCols = Math.ceil(W / GCELLW);
+      gRows = Math.ceil(H / GCELLH);
+      gGrid = new Array(gCols * gRows);
+      gctx.font = Math.round(GCELLH * 0.62) + 'px "Fusion Pixel 12px Mono zh_hans", Menlo, Consolas, monospace';
+      for (var i = 0; i < gGrid.length; i++) {
+        gGrid[i] = { ch: randChar(), cur: grayPalette[(Math.random() * grayPalette.length) | 0], tgt: 0 };
+        drawGlitchCell(i);
+      }
+    }
+
+    function drawGlitchCell(i) {
+      var c = gGrid[i];
+      var x = (i % gCols) * GCELLW;
+      var y = ((i / gCols) | 0) * GCELLH;
+      var v = Math.round(c.cur);
+      var a = 0.08 + (v / 96) * 0.16;               // 暗灰面纱，几乎不抢戏
+      gctx.fillStyle = 'rgba(' + v + ',' + v + ',' + v + ',' + a.toFixed(3) + ')';
+      gctx.fillText(c.ch, x, y + GCELLH * 0.78);
+    }
+
+    function glitchStep(now) {
+      if (now - gLast < 46) return;             // 每几十毫秒更新一批
+      gLast = now;
+      var n = Math.max(1, Math.round(gGrid.length * 0.05));
+      for (var k = 0; k < n; k++) {
+        var i = (Math.random() * gGrid.length) | 0;
+        var c = gGrid[i];
+        c.ch = randChar();
+        var p2 = grayPalette[(Math.random() * grayPalette.length) | 0];
+        c.tgt = p2;
+      }
+    }
+
+    function glitchFrame(now) {
+      if (document.hidden) { rafGlitch = requestAnimationFrame(glitchFrame); return; }
+      glitchStep(now);
+      // 颜色向目标平滑插值，只重绘仍在变化的格子
+      for (var i = 0; i < gGrid.length; i++) {
+        var c = gGrid[i];
+        var diff = c.tgt - c.cur;
+        if (diff > 0.5 || diff < -0.5) {
+          c.cur += diff * 0.22;
+          drawGlitchCell(i);
+        }
+      }
+      rafGlitch = requestAnimationFrame(glitchFrame);
+    }
+
+    /* ---------- 输入：wheel / 键盘 / touch / 站内锚点 ---------- */
+    function onWheel(e) {
+      e.preventDefault();
+      wheelAccum += e.deltaY;
+      if (Math.abs(wheelAccum) < 48) return;
+      var dir = wheelAccum > 0 ? 1 : -1;
+      wheelAccum = 0;
+      if (go(dir)) {
+        // 触发后短暂锁住，防惯性连跳
+        setTimeout(function () { wheelAccum = 0; }, 120);
+      }
+    }
+
+    function onKey(e) {
+      var k = e.key;
+      if (k === 'ArrowDown' || k === 'PageDown' || k === ' ') { e.preventDefault(); go(1); }
+      else if (k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); go(-1); }
+      else if (k === 'Home') { e.preventDefault(); goTo(0); }
+      else if (k === 'End') { e.preventDefault(); goTo(scenes.length - 1); }
+    }
+
+    var touchY = 0, touchT = 0, touchActive = false;
+    function onTouchStart(e) {
+      touchActive = true;
+      touchY = e.touches[0].clientY;
+      touchT = performance.now();
+    }
+    function onTouchMove(e) {
+      if (!touchActive) return;
+      e.preventDefault();
+      var dy = touchY - e.touches[0].clientY;
+      var dt = performance.now() - touchT;
+      var fast = Math.abs(dy) > 36 && dt < 220;
+      if (Math.abs(dy) > 64 || fast) {
+        go(dy > 0 ? 1 : -1);
+        touchY = e.touches[0].clientY;
+      }
+    }
+    function onTouchEnd() { touchActive = false; }
+
+    window.addEventListener('wheel', onWheel, { passive: false });
+    window.addEventListener('keydown', onKey);
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: false });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
+
+    // “滑动开启探索 / 继续了解”按钮与 # 锚点 → 切场景
+    var anchorMap = {};
+    scenes.forEach(function (el, i) { anchorMap[el.id] = i; });
+    document.querySelectorAll('[data-goto]').forEach(function (btn) {
+      var idx = anchorMap[btn.dataset.goto];
+      if (idx === undefined) return;
+      btn.addEventListener('click', function (e) { e.preventDefault(); goTo(idx); });
+    });
+    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      var idx = anchorMap[a.getAttribute('href').slice(1)];
+      if (idx === undefined) return;
+      a.addEventListener('click', function (e) { e.preventDefault(); goTo(idx); });
+    });
+
+    /* ---------- 生命周期 ---------- */
+    window.addEventListener('resize', function () {
+      waveResize();
+      glitchResize();
+    });
+
+    waveResize();
+    glitchResize();
+    applyVisibility();
+    if (!reduced) {
+      rafGlitch = requestAnimationFrame(glitchFrame);
+    }
+
+    /* 调试/清理 API */
+    var api = {
+      state: state,
+      go: go,
+      goTo: goTo,
+      isAnimating: function () { return animating; },
+      cleanup: function () {
+        if (rafWave) cancelAnimationFrame(rafWave);
+        if (rafGlitch) cancelAnimationFrame(rafGlitch);
+        window.removeEventListener('wheel', onWheel);
+        window.removeEventListener('keydown', onKey);
+        window.removeEventListener('touchstart', onTouchStart);
+        window.removeEventListener('touchmove', onTouchMove);
+        window.removeEventListener('touchend', onTouchEnd);
+      }
+    };
+    window.__sv = api;
+    return api;
+  })();
+
 })();
