@@ -337,7 +337,7 @@
         '放开那个女巫', '灰堡黎明', '暮鸦之墓', '雾港疑云', '三国文字合成塔防',
         'HotPick Studio', '余烬之城', 'Emberfall', '可运行 Demo', '试玩',
         '用户分层', '战斗循环', '养成曲线', '经济模型', '移动端适配', '数据验证',
-        'B 站热搜', '内容工作流', 'MVP 边界', 'P0 / P1 / P2', '回到星系', '点击星球'
+        'B 站热搜', '内容工作流', 'MVP 边界', 'P0 / P1 / P2', '月亮手册', '点击月相'
       ];
       var stepY = 12;
       x.font = '9px ' + FONT;
@@ -944,7 +944,7 @@
     var PHASES = [
       {
         code: 'PHASE 0 · NEW MOON', name: '着陆', en: 'NEW MOON', page: '',
-        title: '作品星系',
+        title: '月球手册',
         line: '点下面的小月亮切换类目。点大月亮，打开该类目的完整页。',
         body: function () {
           return '<ul class="pb-list">' +
@@ -970,21 +970,22 @@
       {
         code: 'PHASE 2 · FIRST QUARTER', name: '项目', en: 'FIRST QUARTER', page: 'projects.html',
         title: '做过的项目',
-        line: '做过六个项目：女巫、暮鸦、雾港、塔防、HotPick、余烬。',
+        line: '做过六个项目，点开就能看：女巫、暮鸦、雾港、塔防、HotPick、余烬。',
         body: function () {
           var P = [
-            { n: '放开那个女巫：灰堡黎明', d: 'Godot 4 · 卡牌回合 RPG —— 3 AP 速度行动战斗、角色收集养成、28 节点关卡。', l: [['PRD', 'assets/docs/release-the-witch-prd.pdf'], ['试玩 →', 'release-the-witch-game.html']] },
-            { n: '暮鸦之墓', d: 'Godot 4.3 · 开放世界 ARPG —— 主城/野外/副本，任务、战斗、AI 与装备成长闭环。', l: [['GDD', 'assets/docs/mournraven-gdd.pdf']] },
-            { n: '雾港疑云', d: 'Web + Unity · 悬疑叙事 —— 真相度与信任双变量、信件收集、三幕四结局。', l: [] },
-            { n: '三国文字合成塔防', d: 'React + TS · 策略塔防 —— 8 条合成线、双经济、20 波战役。', l: [] },
-            { n: 'HotPick Studio', d: 'React · Electron · AI 产品 —— 热点发现到数据复盘的五阶段工作台。', l: [['PRD', 'assets/docs/hotpick-studio-prd.pdf']] },
-            { n: '余烬之城 Emberfall', d: 'Godot 4.7 · 生存城建 SLG —— 熔炉供暖、资源调度、暴风雪压力的可玩切片。', l: [['试玩 →', 'emberfall-game.html']] }
+            { n: '放开那个女巫：灰堡黎明', d: 'Godot 4 · 卡牌回合 RPG —— 3 AP 速度行动战斗、角色收集养成、28 节点关卡。', href: 'project-witch.html', l: [['PRD', 'assets/docs/release-the-witch-prd.pdf'], ['试玩 →', 'release-the-witch-game.html']] },
+            { n: '暮鸦之墓', d: 'Godot 4.3 · 开放世界 ARPG —— 主城/野外/副本，任务、战斗、AI 与装备成长闭环。', href: 'project-raven.html', l: [['GDD', 'assets/docs/mournraven-gdd.pdf']] },
+            { n: '雾港疑云', d: 'Web + Unity · 悬疑叙事 —— 真相度与信任双变量、信件收集、三幕四结局。', href: 'project-fog.html', l: [] },
+            { n: '三国文字合成塔防', d: 'React + TS · 策略塔防 —— 8 条合成线、双经济、20 波战役。', href: 'project-sango.html', l: [] },
+            { n: 'HotPick Studio', d: 'React · Electron · AI 产品 —— 热点发现到数据复盘的五阶段工作台。', href: 'project-hotpick.html', l: [['PRD', 'assets/docs/hotpick-studio-prd.pdf']] },
+            { n: '余烬之城 Emberfall', d: 'Godot 4.7 · 生存城建 SLG —— 熔炉供暖、资源调度、暴风雪压力的可玩切片。', href: 'project-emberfall.html', l: [['试玩 →', 'emberfall-game.html']] }
           ];
           return '<ul class="pb-list">' + P.map(function (p) {
             var links = p.l.length ? '<span class="pb-links">' + p.l.map(function (x) {
               return '<a href="' + x[1] + '" target="' + (x[1].indexOf('.pdf') >= 0 ? '_blank' : '_self') + '" rel="noopener">' + x[0] + '</a>';
             }).join('') + '</span>' : '';
-            return '<li><strong>' + p.n + '</strong><span>' + p.d + '</span>' + links + '</li>';
+            return '<li><a class="pb-card-open" href="' + p.href + '" aria-label="' + p.n + '"></a>' +
+              '<strong>' + p.n + '</strong><span>' + p.d + '</span>' + links + '</li>';
           }).join('') + '</ul>';
         }
       },

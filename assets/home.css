@@ -1642,3 +1642,26 @@ body[data-page="home"].scene-mode .scene-flow > footer {
 .moon-caption {
   z-index: 3;
 }
+
+/* 项目卡片整卡可点（覆盖层链接 + 上方胶囊保持可点） */
+.moon-panel-body .pb-list li {
+  position: relative;
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.moon-panel-body .pb-list li:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.moon-panel-body .pb-card-open {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 12px;
+}
+
+.moon-panel-body .pb-links {
+  position: relative;
+  z-index: 2;
+}
