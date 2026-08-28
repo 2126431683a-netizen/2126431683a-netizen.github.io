@@ -998,57 +998,81 @@
 
     var B4 = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]];
 
-    /* ---------- 8 月相 = 8 个类目；右侧展示该类目项目经历；点大月亮进二级页 ---------- */
+    /* ---------- 8 月相 = 8 个类目；右侧即该类目的完整内容（无跳转） ---------- */
+    function shots(el) {
+      var imgs = [].join.call(arguments, '');
+      return '<span class="pb-shot-row">' + imgs + '</span>';
+    }
     var PHASES = [
       {
         code: 'PHASE 0 · NEW MOON', name: '着陆', en: 'NEW MOON', page: '',
         title: '月球手册',
-        line: '点下面的小月亮切换类目。点大月亮，打开该类目的完整页。',
+        line: '点下面的小月亮切换内容。八个阶段，八段东西，全在这一个页面里。',
         body: function () {
           return '<ul class="pb-list">' +
-            '<li><strong>06</strong><span>个项目档案</span></li>' +
-            '<li><strong>05</strong><span>个可运行 Demo</span></li>' +
-            '<li><strong>30%</strong><span>内容上过热搜</span></li>' +
-            '<li><strong>08</strong><span>个月相 = 8 个入口</span></li>' +
+            '<li><strong>06</strong><span>个项目档案，截图和要点都在下面</span></li>' +
+            '<li><strong>05</strong><span>个可运行 Demo，点了就能玩</span></li>' +
+            '<li><strong>30%</strong><span>内容上过热搜，单条最高 300 万播放</span></li>' +
+            '<li><strong>08</strong><span>个月相 = 8 段内容，没有第二层页面</span></li>' +
             '</ul>';
         }
       },
       {
-        code: 'PHASE 1 · WAXING CRESCENT', name: '关于我', en: 'WAXING CRESCENT', page: 'about.html',
+        code: 'PHASE 1 · WAXING CRESCENT', name: '关于我', en: 'WAXING CRESCENT', page: '',
         title: '关于我',
         line: '我叫陈黄勇。学网络与新媒体，做产品和编导。',
         body: function () {
           return '<div class="pb-profile"><img class="pb-photo img-color" src="assets/portfolio/profile.png" alt="陈黄勇">' +
-            '<div class="pb-profile-text"><p>我叫陈黄勇。2022 年入学，2026 年毕业，学的是网络与新媒体。编导、运营、产品都做过，现在做产品和编导。</p>' +
+            '<div class="pb-profile-text"><p>2022 年入学，2026 年毕业。编导、运营、产品都做过，现在做产品和编导。</p>' +
             '<p class="pb-profile-note">简历在这里，完整介绍在下面。</p></div></div>' +
+            '<ul class="pb-list">' +
+            '<li class="pb-card"><img class="pb-thumb" src="assets/portfolio/content-workflow.png" alt="内容工作流"><div class="pb-card-body"><strong>内容编导</strong><span>AI 类目编导：三条内容赛道，选题、脚本、分镜、排期、复盘一条线。影视编导出身，内容三成进过 B 站热搜。</span></div></li>' +
+            '</ul>' +
             '<div class="pb-actions"><a href="assets/陈黄勇_产品经理_系统策划_编导_简历.pdf" download>下载简历 PDF</a>' +
-            '<a class="pb-ghost" href="about.html">完整页 →</a></div>';
+            '<a class="pb-ghost" href="mailto:2126431683@qq.com">邮件</a><a class="pb-ghost" href="tel:19279459077">电话</a></div>';
         }
       },
       {
-        code: 'PHASE 2 · FIRST QUARTER', name: '项目', en: 'FIRST QUARTER', page: 'projects.html',
+        code: 'PHASE 2 · FIRST QUARTER', name: '项目', en: 'FIRST QUARTER', page: '',
         title: '做过的项目',
-        line: '做过六个项目，点开就能看：女巫、暮鸦、雾港、塔防、HotPick、余烬。',
+        line: '六个项目，点开就能看：女巫、暮鸦、雾港、塔防、HotPick、余烬。',
         body: function () {
           var P = [
-            { n: '放开那个女巫：灰堡黎明', d: 'Godot 4 · 卡牌回合 RPG —— 3 AP 速度行动战斗、角色收集养成、28 节点关卡。', href: 'project-witch.html', l: [['PRD', 'assets/docs/release-the-witch-prd.pdf'], ['试玩 →', 'release-the-witch-game.html']] },
-            { n: '暮鸦之墓', d: 'Godot 4.3 · 开放世界 ARPG —— 主城/野外/副本，任务、战斗、AI 与装备成长闭环。', href: 'project-raven.html', l: [['GDD', 'assets/docs/mournraven-gdd.pdf']] },
-            { n: '雾港疑云', d: 'Web + Unity · 悬疑叙事 —— 真相度与信任双变量、信件收集、三幕四结局。', href: 'project-fog.html', l: [] },
-            { n: '三国文字合成塔防', d: 'React + TS · 策略塔防 —— 8 条合成线、双经济、20 波战役。', href: 'project-sango.html', l: [] },
-            { n: 'HotPick Studio', d: 'React · Electron · AI 产品 —— 热点发现到数据复盘的五阶段工作台。', href: 'project-hotpick.html', l: [['PRD', 'assets/docs/hotpick-studio-prd.pdf']] },
-            { n: '余烬之城 Emberfall', d: 'Godot 4.7 · 生存城建 SLG —— 熔炉供暖、资源调度、暴风雪压力的可玩切片。', href: 'project-emberfall.html', l: [['试玩 →', 'emberfall-game.html']] }
+            { n: '放开那个女巫：灰堡黎明', d: 'Godot 4 · 卡牌回合 RPG', img: ['assets/portfolio/witch-city.png', 'assets/portfolio/witch-battle.png'],
+              b: ['3 AP 速度行动战斗：移动/攻击/技能共享行动点', '角色收集与养成，28 节点关卡', '移动端布局与真机验证'],
+              l: [['PRD', 'assets/docs/release-the-witch-prd.pdf'], ['试玩 →', 'release-the-witch-game.html']] },
+            { n: '暮鸦之墓', d: 'Godot 4.3 · 开放世界 ARPG', img: ['assets/portfolio/mournraven-world.png', 'assets/portfolio/mournraven-dungeon.png'],
+              b: ['主城 / 野外 / 副本三类区域', '战斗、AI 与装备成长闭环', '12 类 JSON 配置表，数值可热更'],
+              l: [['GDD', 'assets/docs/mournraven-gdd.pdf']] },
+            { n: '雾港疑云', d: 'Web + Unity · 悬疑叙事', img: ['assets/portfolio/fog-harbor-top.png', 'assets/portfolio/fog-harbor-gameplay.png'],
+              b: ['真相度与信任双变量决策', '信件收集与线索网', '三幕四结局分支'],
+              l: [] },
+            { n: '三国文字合成塔防', d: 'React + TS · 策略塔防', img: ['assets/portfolio/sango.jpg', 'assets/portfolio/sango-gameplay.png'],
+              b: ['8 条合成线', '双经济（金币/粮草）', '20 波战役节奏'],
+              l: [] },
+            { n: 'HotPick Studio', d: 'React · Electron · AI 产品', img: ['assets/portfolio/hotpick.jpg', 'assets/portfolio/hotpick-flow.png'],
+              b: ['五阶段工作台：选题→评分→转化→生产→复盘', '热点数据接入与信号打分', 'PRD 25 条编号需求'],
+              l: [['PRD', 'assets/docs/hotpick-studio-prd.pdf']] },
+            { n: '余烬之城 Emberfall', d: 'Godot 4.7 · 生存城建 SLG', img: ['assets/portfolio/emberfall-city.png', 'assets/portfolio/emberfall-map.png'],
+              b: ['熔炉供暖驱动生存压力', '资源调度与暴风雪事件', '可玩切片：完整闭环'],
+              l: [['试玩 →', 'emberfall-game.html']] }
           ];
           return '<ul class="pb-list">' + P.map(function (p) {
             var links = p.l.length ? '<span class="pb-links">' + p.l.map(function (x) {
               return '<a href="' + x[1] + '" target="' + (x[1].indexOf('.pdf') >= 0 ? '_blank' : '_self') + '" rel="noopener">' + x[0] + '</a>';
             }).join('') + '</span>' : '';
-            return '<li><a class="pb-card-open" href="' + p.href + '" aria-label="' + p.n + '"></a>' +
-              '<strong>' + p.n + '</strong><span>' + p.d + '</span>' + links + '</li>';
+            var imgs = p.img.map(function (s2) {
+              return '<img class="pb-shot" src="' + s2 + '" alt="' + p.n + '">';
+            }).join('');
+            var bl = p.b.map(function (x) { return '<li>' + x + '</li>'; }).join('');
+            return '<li class="pb-rich"><strong>' + p.n + '</strong><span class="pb-rich-tag">' + p.d + '</span>' +
+              '<span class="pb-shot-row">' + imgs + '</span>' +
+              '<ul class="pb-bullets">' + bl + '</ul>' + links + '</li>';
           }).join('') + '</ul>';
         }
       },
       {
-        code: 'PHASE 3 · WAXING GIBBOUS', name: '技能', en: 'WAXING GIBBOUS', page: 'about.html',
+        code: 'PHASE 3 · WAXING GIBBOUS', name: '技能', en: 'WAXING GIBBOUS', page: '',
         title: '我会什么',
         line: '会写需求文档，会做系统，会写脚本，也会剪片子。',
         body: function () {
@@ -1057,36 +1081,53 @@
             '<li><strong>系统策划</strong><span>战斗与数值、养成与关卡循环、经济与产出消耗。</span></li>' +
             '<li><strong>技术落地</strong><span>Godot / Unity / React、JSON 配置与存档、移动端验证。</span></li>' +
             '<li><strong>内容编导</strong><span>选题、脚本、分镜、排期、复盘。</span></li>' +
+            '</ul>' +
+            '<p class="moon-mini-head">干活顺序</p>' +
+            '<ul class="pb-list pb-steps">' +
+            '<li><strong>01 定位与范围</strong><span>明确用户、乐趣、约束，先守住 MVP。</span></li>' +
+            '<li><strong>02 系统与数值</strong><span>拆状态、输入输出与依赖，定成长基线。</span></li>' +
+            '<li><strong>03 文档与配置</strong><span>PRD/GDD、流程、容错、配表，能直接执行。</span></li>' +
+            '<li><strong>04 验证与迭代</strong><span>引擎里跑完整链路，P0/P1/P2 给验收线。</span></li>' +
             '</ul>';
         }
       },
       {
-        code: 'PHASE 4 · FULL MOON', name: '运营', en: 'FULL MOON', page: 'operations.html',
+        code: 'PHASE 4 · FULL MOON', name: '运营', en: 'FULL MOON', page: '',
         title: '运营那些事',
         line: '做过内容运营：三条 AI 赛道，30% 上过热搜。',
         body: function () {
           return '<div class="pb-stats"><div><strong>30%</strong><span>热搜命中率</span></div>' +
             '<div><strong>#02</strong><span>最高热搜榜</span></div>' +
             '<div><strong>300万</strong><span>单条最高播放</span></div></div>' +
-            '<ul class="pb-list"><li><strong>HotPick Studio</strong><span>把选题、评分、转化、生产、复盘的重复判断做成五阶段内容工作台。</span>' +
-            '<span class="pb-links"><a href="assets/docs/hotpick-studio-prd.pdf" target="_blank" rel="noopener">PRD</a></span></li></ul>';
-        }
-      },
-      {
-        code: 'PHASE 5 · WANING GIBBOUS', name: '游戏理解', en: 'WANING GIBBOUS', page: 'game-analysis.html',
-        title: '我怎么看游戏',
-        line: '玩游戏比较多，拆过动作、开放世界、叙事、策略这几类。',
-        body: function () {
-          return '<ul class="pb-list">' +
-            '<li><strong>动作</strong><span>《只狼》《黑神话：悟空》—— 精确输入与节奏化的攻防交换。</span></li>' +
-            '<li><strong>开放世界</strong><span>《艾尔登法环》《巫师 3》—— 目的由玩家自己长出来的探索结构。</span></li>' +
-            '<li><strong>叙事</strong><span>《雾港疑云》同源方法 —— 双变量驱动的分支叙事。</span></li>' +
-            '<li><strong>策略 / SLG</strong><span>《三国塔防》《白色荒野》—— 循环与压力的设计取舍。</span></li>' +
+            '<ul class="pb-list">' +
+            '<li><strong>三条内容赛道</strong><span>AI 科普 · 工具实操 · AIGC 创作，栏目、脚本、分镜、排期一条线。</span></li>' +
+            '<li><strong>HotPick Studio</strong><span>把选题、评分、转化、生产、复盘的重复判断做成五阶段工作台。</span>' +
+            '<span class="pb-links"><a href="assets/docs/hotpick-studio-prd.pdf" target="_blank" rel="noopener">PRD</a></span></li>' +
             '</ul>';
         }
       },
       {
-        code: 'PHASE 6 · LAST QUARTER', name: '经历', en: 'LAST QUARTER', page: 'about.html',
+        code: 'PHASE 5 · WANING GIBBOUS', name: '游戏理解', en: 'WANING GIBBOUS', page: '',
+        title: '我怎么看游戏',
+        line: '玩游戏比较多，拆过七个类型，每类都写了看法。',
+        body: function () {
+          var G = [
+            ['assets/games/sekiro.jpg', '动作', '《只狼》《黑神话：悟空》—— 精确输入与节奏化的攻防交换。'],
+            ['assets/games/elden-ring.jpg', '开放世界', '《艾尔登法环》《巫师 3》—— 目的由玩家自己长出来的探索结构。'],
+            ['assets/games/forza-horizon.jpg', '竞速', '《极限竞速：地平线》—— 手感与自由探索边界的平衡。'],
+            ['assets/portfolio/fog-harbor-top.png', '叙事', '《雾港疑云》同源方法 —— 双变量驱动的分支叙事。'],
+            ['assets/games/plants-vs-zombies.jpg', '休闲', '《植物大战僵尸》—— 单关卡的资源节奏与决策压力。'],
+            ['assets/games/horizon-zero-dawn.jpg', 'FPS', '《地平线：零之曙光》—— 武器学习曲线与公平性。'],
+            ['assets/games/whiteout-survival.jpg', '策略 / SLG', '《三国塔防》《白色荒野》—— 循环与压力的设计取舍。']
+          ];
+          return '<ul class="pb-list">' + G.map(function (g) {
+            return '<li class="pb-rich"><img class="pb-shot" src="' + g[0] + '" alt="">' +
+              '<strong>' + g[1] + '</strong><span>' + g[2] + '</span></li>';
+          }).join('') + '</ul>';
+        }
+      },
+      {
+        code: 'PHASE 6 · LAST QUARTER', name: '经历', en: 'LAST QUARTER', page: '',
         title: '走到今天',
         line: '2022 年进大学，2026 年毕业。读的是网络与新媒体。',
         body: function () {
@@ -1094,12 +1135,12 @@
             '<article><p>2026.06-</p><div><h3>西安纬度网络科技</h3><span>AI 类目编导：三条内容赛道 + 两款 Godot 游戏全流程策划。</span></div></article>' +
             '<article><p>2026.02-06</p><div><h3>Newegg 新蛋</h3><span>电商产品经理实习生：竞品调研、差异化方案与转化复盘。</span></div></article>' +
             '<article><p>2023.06-09</p><div><h3>闻泰科技 · 荣耀平板</h3><span>产品运营实习生：知识库建设，自助查询率 +40%，咨询量 -20%。</span></div></article>' +
-            '<article><p>2022-2026</p><div><h3>西安欧亚学院</h3><span>网络与新媒体本科 · 影视编导方向。</span></div></article>' +
+            '<article><p>2022-2026</p><div><h3>西安欧亚学院</h3><span>网络与新媒体本科 · 影视编导方向，获陕西省大学生广播电视公益广告创意剧本奖。</span></div></article>' +
             '</div>';
         }
       },
       {
-        code: 'PHASE 7 · WANING CRESCENT', name: '联系', en: 'WANING CRESCENT', page: 'about.html#contact',
+        code: 'PHASE 7 · WANING CRESCENT', name: '联系', en: 'WANING CRESCENT', page: '',
         title: '找到我',
         line: '邮件、电话都行，想玩 Demo 也可以。',
         body: function () {
@@ -1289,10 +1330,11 @@
       }
     }
 
-    /* ---------- 点击大月亮 → 进入该类目二级页 ---------- */
+    /* ---------- 点击大月亮 → 展开当前相位内容（不跳转） ---------- */
     canvasEl.addEventListener('click', function () {
-      var ph = PHASES[current];
-      if (ph.page) window.location.href = ph.page;
+      if (current >= 0) applyPhase(current, true);
+      var body = document.getElementById('moon-panel-body');
+      if (body) body.scrollTop = 0;
     });
     canvasEl.classList.add('moon-clickable');
 

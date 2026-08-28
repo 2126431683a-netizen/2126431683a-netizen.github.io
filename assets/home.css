@@ -1829,3 +1829,83 @@ body[data-page="home"].scene-mode .scene-flow > footer {
     font-size: 10px;
   }
 }
+
+/* ============================================================
+   右侧富内容（所有内容就地呈现，不跳转）
+   ============================================================ */
+.moon-panel {
+  width: min(560px, 46vw);
+}
+
+.moon-panel-body .pb-rich {
+  display: block;
+}
+
+.moon-panel-body .pb-rich-tag {
+  display: block;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: var(--pixel);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
+}
+
+.moon-panel-body .pb-shot-row {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0 10px;
+  flex-wrap: wrap;
+}
+
+.moon-panel-body .pb-shot {
+  width: 128px;
+  height: 84px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  image-rendering: pixelated;
+}
+
+.moon-panel-body .pb-bullets {
+  list-style: none;
+  margin: 6px 0 10px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.moon-panel-body .pb-bullets li {
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+.moon-panel-body .pb-bullets li::before {
+  content: "▸";
+  margin-right: 6px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.moon-panel-body .moon-mini-head {
+  margin: 16px 0 8px;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: var(--pixel);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+}
+
+@media (max-width: 900px) {
+  .moon-panel {
+    width: auto;
+  }
+  .moon-panel-body .pb-shot {
+    width: 110px;
+    height: 72px;
+  }
+}
