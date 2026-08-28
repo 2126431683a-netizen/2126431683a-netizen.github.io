@@ -1966,3 +1966,55 @@ body[data-page="home"].scene-mode .scene-flow > footer {
 .ph-footer a:hover {
   color: #dfe8ff;
 }
+
+/* 设计思路 & 项目介绍 */
+.ody-about {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.18);
+}
+
+.ody-about-head {
+  margin: 0 0 6px;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: var(--pixel);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+}
+
+.ody-about p {
+  margin: 0 0 6px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+/* 手机端第二屏再优化：卡片与时间线收窄 */
+@media (max-width: 900px) {
+  .odyssey-copy {
+    padding: 16px 14px;
+  }
+  .odyssey-title {
+    font-size: 26px;
+  }
+  .odyssey-timeline {
+    margin-bottom: 12px;
+  }
+  .ody-node small {
+    font-size: 9px;
+  }
+  .ody-node strong {
+    font-size: 11px;
+  }
+  .ody-node:not(:first-child)::before {
+    left: -60%;
+    right: 60%;
+  }
+  .ody-about p {
+    font-size: 11px;
+  }
+  .moon-page-title {
+    white-space: normal;
+    text-align: center;
+  }
+}

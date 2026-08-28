@@ -366,9 +366,10 @@
         if (!pRun) return;
         pCur.x += (pTarget.x - pCur.x) * 0.07;
         pCur.y += (pTarget.y - pCur.y) * 0.07;
-        if (stripEl) stripEl.style.transform = 'translate(' + (-pCur.x * 14).toFixed(1) + 'px,' + (-pCur.y * 9).toFixed(1) + 'px)';
-        if (copyEl) copyEl.style.transform = 'translate(' + (pCur.x * 7).toFixed(1) + 'px,' + (pCur.y * 5).toFixed(1) + 'px)';
-        if (fieldEl) fieldEl.style.transform = 'translate(' + (-pCur.x * 22).toFixed(1) + 'px,' + (-pCur.y * 14).toFixed(1) + 'px)';
+        // 用 translate 属性做视差（不覆盖 transform，移动端居中不受影响）
+        if (stripEl) stripEl.style.translate = (-pCur.x * 14).toFixed(1) + 'px ' + (-pCur.y * 9).toFixed(1) + 'px';
+        if (copyEl) copyEl.style.translate = (pCur.x * 7).toFixed(1) + 'px ' + (pCur.y * 5).toFixed(1) + 'px';
+        if (fieldEl) fieldEl.style.translate = (-pCur.x * 22).toFixed(1) + 'px ' + (-pCur.y * 14).toFixed(1) + 'px';
         pRaf = requestAnimationFrame(pFrame);
       }
       pRun = true;
@@ -1420,39 +1421,48 @@
     }, { passive: true });
 
     var raf = null;
+    var colorOn = false;
     function frame(t) {
       if (document.hidden) { raf = requestAnimationFrame(frame); return; }
       cur.x += (target.x - cur.x) * 0.12;
       cur.y += (target.y - cur.y) * 0.12;
       var hue = (t * 0.04) % 360;
 
-      // 彩色层：彩虹八环（mix-blend color）
-      cctx.clearRect(0, 0, W, H);
-      var R = 88;
-      for (var i = 0; i < 8; i++) {
-        var a = (i / 8) * Math.PI * 2;
-        var ox = cur.x + Math.cos(a) * 34;
-        var oy = cur.y + Math.sin(a) * 34;
-        var h = (hue + i * 45) % 360;
-        var g = cctx.createRadialGradient(ox, oy, 0, ox, oy, R);
-        g.addColorStop(0, 'hsla(' + h + ', 96%, 62%, 0.62)');
-        g.addColorStop(0.6, 'hsla(' + h + ', 90%, 55%, 0.28)');
-        g.addColorStop(1, 'hsla(' + h + ', 90%, 50%, 0)');
-        cctx.fillStyle = g;
-        cctx.beginPath();
-        cctx.arc(ox, oy, R, 0, Math.PI * 2);
-        cctx.fill();
+      // 仅第二屏（Odyssey）：彩虹八环染色；其余场景纯手电筒
+      var isColorScene = window.__sv ? window.__sv.state.currentScene === 1 : false;
+      if (isColorScene) {
+        if (!colorOn) { colorOn = true; colorCv.style.display = 'block'; }
+        cctx.clearRect(0, 0, W, H);
+        var R = 88;
+        for (var i = 0; i < 8; i++) {
+          var a = (i / 8) * Math.PI * 2;
+          var ox = cur.x + Math.cos(a) * 34;
+          var oy = cur.y + Math.sin(a) * 34;
+          var h = (hue + i * 45) % 360;
+          var g = cctx.createRadialGradient(ox, oy, 0, ox, oy, R);
+          g.addColorStop(0, 'hsla(' + h + ', 96%, 62%, 0.62)');
+          g.addColorStop(0.6, 'hsla(' + h + ', 90%, 55%, 0.28)');
+          g.addColorStop(1, 'hsla(' + h + ', 90%, 50%, 0)');
+          cctx.fillStyle = g;
+          cctx.beginPath();
+          cctx.arc(ox, oy, R, 0, Math.PI * 2);
+          cctx.fill();
+        }
+      } else if (colorOn) {
+        colorOn = false;
+        cctx.clearRect(0, 0, W, H);
+        colorCv.style.display = 'none';
       }
 
-      // 光晕层（screen）：柔和白蓝光
+      // 手电筒：白色聚光（全场景常亮）
       gctx.clearRect(0, 0, W, H);
-      var g2 = gctx.createRadialGradient(cur.x, cur.y, 0, cur.x, cur.y, 210);
-      g2.addColorStop(0, 'rgba(210, 225, 255, 0.20)');
-      g2.addColorStop(0.5, 'rgba(170, 195, 255, 0.07)');
-      g2.addColorStop(1, 'rgba(150, 180, 255, 0)');
+      var g2 = gctx.createRadialGradient(cur.x, cur.y, 0, cur.x, cur.y, 260);
+      g2.addColorStop(0, 'rgba(235, 242, 255, 0.16)');
+      g2.addColorStop(0.35, 'rgba(200, 215, 255, 0.08)');
+      g2.addColorStop(1, 'rgba(170, 190, 255, 0)');
       gctx.fillStyle = g2;
       gctx.beginPath();
-      gctx.arc(cur.x, cur.y, 210, 0, Math.PI * 2);
+      gctx.arc(cur.x, cur.y, 260, 0, Math.PI * 2);
       gctx.fill();
 
       raf = requestAnimationFrame(frame);
