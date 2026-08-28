@@ -140,7 +140,16 @@
           <div class="pb-profile">
             <img class="pb-photo img-color" src="assets/portfolio/profile.png" alt="陈黄勇证件照">
             <div>
-              <p class="pb-lead">陈黄勇，游戏产品经理 / 运营策划 / 系统策划。学的是网络与新媒体，做的是游戏——所以我写的判断，最后都会做成能玩的东西。</p>
+              <p class="pb-lead">陈黄勇，产品经理 / 运营策划 / 编导。影视编导的底子，产品经理的手艺——所以我写的判断，最后都会变成能看、能用的东西。</p>
+          <ul class="pb-list pb-cards">
+            <li class="pb-card">
+              <img class="pb-thumb" src="assets/portfolio/content-workflow.png" alt="内容工作流">
+              <div class="pb-card-body">
+                <strong>内容编导</strong>
+                <span>AI 类目编导：三条内容赛道，选题、脚本、分镜、排期、复盘一条线。影视编导出身，内容三成进过 B 站热搜。</span>
+              </div>
+            </li>
+          </ul>
               <div class="pb-stats">
                 <div><strong>06</strong><span>项目档案</span></div>
                 <div><strong>05</strong><span>可运行 Demo</span></div>
@@ -148,7 +157,7 @@
             </div>
           </div>
           <div class="pb-actions">
-            <a href="assets/陈黄勇_游戏产品经理_系统策划_简历.pdf" download>下载简历 PDF</a>
+            <a href="assets/陈黄勇_产品经理_系统策划_编导_简历.pdf" download>下载简历 PDF</a>
             <a class="pb-ghost" href="mailto:2126431683@qq.com">发邮件</a>
             <a class="pb-ghost" href="tel:19279459077">打电话</a>
           </div>`
@@ -220,7 +229,7 @@
             <li><strong>技术落地</strong><span>Godot / Unity / React、JSON 配置与存档、移动端适配验证 —— 策划稿要能跑才算被验证。</span></li>
           </ul>
           <div class="pb-actions">
-            <a href="assets/陈黄勇_游戏产品经理_系统策划_简历.pdf" download>下载简历 PDF</a>
+            <a href="assets/陈黄勇_产品经理_系统策划_编导_简历.pdf" download>下载简历 PDF</a>
           </div>`
       },
       ops: {

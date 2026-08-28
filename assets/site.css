@@ -4203,3 +4203,29 @@ html:has(body[data-page="home"]) {
   background: rgba(255, 255, 255, 0.12);
   border-color: rgba(255, 255, 255, 0.4);
 }
+
+/* ============================================================
+   与首页统一的像素风格（子页面）
+   ============================================================ */
+/* 像素品牌标：纯白小方块 + 光晕（同首页 ph-brand-mark） */
+.brand-mark {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  font-size: 0;
+  background: #fff;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.8);
+}
+
+.brand-copy strong {
+  font-family: var(--pixel);
+  letter-spacing: 0.08em;
+}
+
+/* 页面大标题 → 像素字（同首页大字） */
+.page-title {
+  font-family: var(--pixel);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 24px rgba(255, 255, 255, 0.16);
+}
