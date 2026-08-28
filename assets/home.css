@@ -1,17 +1,104 @@
 /* ============================================================
-   主页 · 特效层（home.css）
-   仅在 index.html 引入；在 site.css 之后加载，覆盖英雄区，做出
-   Kimi about-us 那类“流光黑洞”的影院级观感。星系（solar）部分
-   仍沿用 site.css/site.js，不改动。
+   主页 · 像素风 UI（home.css · v2）
+   仿照 Moonshot 招聘《关于我们》页：纯黑底、像素字体大标题、
+   中央像素传送门、四角信息位、矩阵字符雨滚动特效。
+   星系（solar）部分仍沿用 site.css / site.js，不改动。
    ============================================================ */
 
-/* ---- 英雄区：建立层叠上下文，保证 canvas / 星空 / 文本 分层正确 ---- */
-.scene-hero {
-  isolation: isolate;
+/* ---- 顶部导航（固定） ---- */
+.ph-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 28px;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
 }
 
-/* 光流画布（特效承担者） */
-.warp-canvas {
+.ph-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  font-family: var(--pixel);
+  font-size: 15px;
+  letter-spacing: 0.1em;
+}
+
+.ph-brand .ph-brand-mark {
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.8);
+  image-rendering: pixelated;
+}
+
+.ph-links {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.ph-links a {
+  position: relative;
+  color: rgba(255, 255, 255, 0.62);
+  font-family: var(--pixel);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  transition: color 160ms ease;
+}
+
+.ph-links a:hover,
+.ph-links a:focus-visible {
+  color: #fff;
+}
+
+.ph-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -6px;
+  height: 1px;
+  background: #fff;
+  transition: right 200ms ease;
+}
+
+.ph-links a:hover::after,
+.ph-links a:focus-visible::after {
+  right: 0;
+}
+
+.ph-burger {
+  display: none;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: #fff;
+  font-family: var(--pixel);
+  font-size: 18px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ---- 首屏 HERO ---- */
+.scene-hero {
+  display: block;
+  padding: 0;
+  min-height: 100svh;
+  background: #000;
+}
+
+.ph-portal {
   position: absolute;
   inset: 0;
   z-index: 0;
@@ -21,154 +108,325 @@
   background: #000;
 }
 
-/* 影院氛围叠加：边缘暗角 + 顶部滤光，保证文字可读且更有纵深感 */
-.warp-scrim {
+/* 半调网点纹理（边缘可见，中央留给传送门） */
+.ph-dots {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background:
-    radial-gradient(120% 120% at 50% 42%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.55) 82%, rgba(0, 0, 0, 0.9) 100%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.05) 26%, rgba(0, 0, 0, 0.05) 72%, rgba(0, 0, 0, 0.6) 100%);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1.4px);
+  background-size: 6px 6px;
+  -webkit-mask-image: radial-gradient(90% 90% at 50% 50%, transparent 34%, rgba(0, 0, 0, 0.85) 100%);
+  mask-image: radial-gradient(90% 90% at 50% 50%, transparent 34%, rgba(0, 0, 0, 0.85) 100%);
+  opacity: 0.5;
 }
 
-/* 主页星空：放在遮罩上、文字下 */
-.scene-hero .starfield {
-  z-index: 2;
+/* 左上角标题区 */
+.ph-hero-copy {
+  position: absolute;
+  z-index: 3;
+  top: 17%;
+  left: 6%;
+  max-width: 560px;
+}
+
+.ph-kicker {
+  margin: 0 0 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.72);
+  font-family: var(--pixel);
+  font-size: clamp(14px, 1.6vw, 18px);
+  letter-spacing: 0.2em;
+}
+
+.ph-kicker::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+}
+
+.ph-title {
+  margin: 0;
+  color: #fff;
+  font-family: var(--pixel);
+  font-weight: 400;
+  font-size: clamp(26px, 4.6vw, 46px);
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  text-shadow: 0 0 22px rgba(255, 255, 255, 0.22);
+}
+
+.ph-title .ph-hl {
+  position: relative;
+  white-space: nowrap;
+}
+
+.ph-title .ph-hl::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  width: 100%;
+  height: 4px;
+  background-image: linear-gradient(90deg, #fff 0 55%, transparent 55%), linear-gradient(90deg, transparent 0 45%, #fff 45%);
+  background-size: 10px 4px;
   opacity: 0.85;
 }
 
-.scene-hero-grid {
-  position: relative;
+.ph-role {
+  margin: 22px 0 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--pixel);
+  font-size: clamp(12px, 1.3vw, 14px);
+  letter-spacing: 0.12em;
+}
+
+/* 底部信息位（左下 / 右下） */
+.ph-hero-foot {
+  position: absolute;
   z-index: 3;
+  left: 6%;
+  right: 6%;
+  bottom: 9%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
 }
 
-.swipe-hint {
-  z-index: 4;
+.ph-builder {
+  max-width: 320px;
 }
 
-/* ---- 主标题：把“陈黄勇”调度成影院级大字 ---- */
-.hero-title {
-  font-weight: 700;
-}
-
-/* 眉标 CHY.GALAXY：保留像素复古，但更精致，带一点光谱高亮 */
-.hero-name {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  color: rgba(255, 255, 255, 0.62);
+.ph-foot-kicker {
+  margin: 0 0 8px;
+  color: rgba(255, 255, 255, 0.66);
   font-family: var(--pixel);
-  font-size: clamp(13px, 1.6vw, 17px);
-  letter-spacing: 0.34em;
-}
-
-.hero-name::before {
-  content: "";
-  width: 34px;
-  height: 2px;
-  background: linear-gradient(90deg, #ffba78, #a884ff, #6cb2ff);
-  box-shadow: 0 0 12px rgba(168, 132, 255, 0.6);
-}
-
-/* 主名（陈黄勇）：非 pixel，改用展示字体做渐变大字 + 柔和光晕 */
-.hero-line:not(.hero-dim) {
-  font-size: clamp(60px, 12vw, 156px);
-  line-height: 0.98;
-  letter-spacing: -0.02em;
-  font-weight: 700;
-  background: linear-gradient(115deg, #ffffff 0%, #eef1ff 30%, #ffd9b0 62%, #b9c8ff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  filter: drop-shadow(0 0 26px rgba(150, 160, 255, 0.28)) drop-shadow(0 2px 10px rgba(0, 0, 0, 0.6));
-}
-
-/* 副标（游戏产品 · 运营 · 系统）：克制、留白 */
-.hero-dim {
-  margin-top: 18px;
-  color: rgba(255, 255, 255, 0.5);
-  font-size: clamp(18px, 2.6vw, 30px);
-  letter-spacing: 0.04em;
-  font-weight: 400;
-}
-
-/* ---- 右侧侧栏：玻璃质卡片化，呼应影院暗调 ---- */
-.hero-side {
-  gap: 22px;
-  padding: 28px 28px 26px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02));
-  backdrop-filter: blur(10px);
-  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-.hero-pixel {
-  color: #fff;
-  font-family: var(--pixel);
-  font-size: clamp(20px, 2.4vw, 30px);
-  line-height: 1.3;
-  letter-spacing: 0.04em;
-  text-shadow: 0 0 18px rgba(255, 255, 255, 0.35);
-}
-
-.hero-note {
-  color: rgba(255, 255, 255, 0.5);
   font-size: 13px;
-  line-height: 1.85;
+  letter-spacing: 0.14em;
+}
+
+.ph-builder-note {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12.5px;
+  line-height: 1.9;
   letter-spacing: 0.04em;
 }
 
-.hero-facts {
-  gap: 30px;
+.ph-facts {
+  display: flex;
+  gap: 22px;
+  margin-top: 16px;
 }
 
-.hero-facts strong {
+.ph-facts span {
+  color: rgba(255, 255, 255, 0.44);
+  font-family: var(--pixel);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+
+.ph-facts strong {
+  color: #fff;
+  font-size: 16px;
+  margin-right: 4px;
+}
+
+/* 右下大字（像素） */
+.ph-tagline {
+  text-align: right;
+}
+
+.ph-tagline .ph-foot-kicker {
+  margin-bottom: 14px;
+}
+
+.ph-tagline .ph-foot-big {
+  margin: 0;
   color: #fff;
   font-family: var(--pixel);
-  font-size: clamp(24px, 3vw, 32px);
-  line-height: 1;
-  text-shadow: 0 0 20px rgba(168, 132, 255, 0.5);
+  font-weight: 400;
+  font-size: clamp(26px, 4.2vw, 44px);
+  line-height: 1.18;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 26px rgba(255, 255, 255, 0.24);
 }
 
-.hero-facts span {
+/* 底部中央滚动提示 */
+.ph-hint {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: var(--pixel);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition: color 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.ph-hint:hover,
+.ph-hint:focus-visible {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.34);
+  box-shadow: 0 0 26px rgba(255, 255, 255, 0.16);
+}
+
+.ph-hint:hover .pixel-arrow,
+.ph-hint:focus-visible .pixel-arrow {
+  animation: hint-bounce 830ms ease-in-out infinite;
+}
+
+/* ---- 探索阶段（矩阵字符雨） ---- */
+.explore {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  background: #000;
+}
+
+.explore-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: #000;
+}
+
+.explore-title {
+  position: absolute;
+  z-index: 2;
+  top: 7%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: var(--pixel);
+  font-weight: 400;
+  font-size: clamp(20px, 3vw, 30px);
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+  text-shadow: 0 0 24px rgba(255, 255, 255, 0.3);
+}
+
+.explore-title::before,
+.explore-title::after {
   color: rgba(255, 255, 255, 0.5);
-  font-size: 12px;
+}
+
+.explore-note {
+  position: absolute;
+  z-index: 2;
+  top: calc(7% + 64px);
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  color: rgba(255, 255, 255, 0.42);
+  font-family: var(--pixel);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+
+/* ---- 页脚 ---- */
+.ph-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 34px 28px 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ph-footer small,
+.ph-footer a {
+  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--pixel);
+  font-size: 12.5px;
   letter-spacing: 0.08em;
 }
 
-/* “进入星系”按钮：提亮 + 光谱下划线 */
-.swipe-hint {
-  color: rgba(255, 255, 255, 0.66);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(0, 0, 0, 0.35);
-  padding: 12px 20px;
-  backdrop-filter: blur(6px);
-}
-
-.swipe-hint:hover,
-.swipe-hint:focus-visible {
+.ph-footer a:hover {
   color: #fff;
-  border-color: rgba(255, 255, 255, 0.32);
-  box-shadow: 0 0 26px rgba(150, 160, 255, 0.25);
 }
 
-/* ---- 响应式：窄屏时侧栏回到全宽玻璃卡，标题缩至适配 ---- */
+.ph-footer-nav {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+/* ---- 响应式 ---- */
 @media (max-width: 760px) {
-  .scene-hero {
-    padding: 64px 0 96px;
+  .ph-header {
+    padding: 12px 16px;
   }
-  .scene-hero-grid {
-    grid-template-columns: 1fr;
-    gap: 32px;
+  .ph-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 14px 18px 18px;
+    background: rgba(0, 0, 0, 0.94);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   }
-  .hero-line:not(.hero-dim) {
-    font-size: clamp(46px, 15vw, 80px);
+  .ph-links a {
+    display: block;
+    padding: 9px 0;
+    width: 100%;
   }
-  .hero-side {
-    border-left: 0;
+  .ph-header.ph-open .ph-links {
+    display: flex;
+  }
+  .ph-burger {
+    display: block;
+  }
+
+  .ph-hero-copy {
+    top: 13%;
+    left: 7%;
+    right: 7%;
+  }
+  .ph-hero-foot {
+    left: 7%;
+    right: 7%;
+    bottom: 13%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .ph-tagline {
+    text-align: left;
+  }
+  .ph-dots {
+    opacity: 0.35;
+  }
+  .explore-title {
+    top: 9%;
+  }
+  .explore-note {
+    top: calc(9% + 60px);
   }
 }
