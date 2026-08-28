@@ -1018,7 +1018,7 @@
         }
       },
       {
-        code: 'PHASE 1 · WAXING CRESCENT', name: '关于我', en: 'WAXING CRESCENT', page: '',
+        code: 'PHASE 1 · WAXING CRESCENT', name: '关于我', en: 'WAXING CRESCENT', page: 'about.html',
         title: '关于我',
         line: '我叫陈黄勇。学网络与新媒体，做产品和编导。',
         body: function () {
@@ -1033,27 +1033,27 @@
         }
       },
       {
-        code: 'PHASE 2 · FIRST QUARTER', name: '项目', en: 'FIRST QUARTER', page: '',
+        code: 'PHASE 2 · FIRST QUARTER', name: '项目', en: 'FIRST QUARTER', page: 'projects.html',
         title: '做过的项目',
         line: '六个项目，点开就能看：女巫、暮鸦、雾港、塔防、HotPick、余烬。',
         body: function () {
           var P = [
-            { n: '放开那个女巫：灰堡黎明', d: 'Godot 4 · 卡牌回合 RPG', img: ['assets/portfolio/witch-city.png', 'assets/portfolio/witch-battle.png'],
+            { n: '放开那个女巫：灰堡黎明', href: 'project-witch.html', d: 'Godot 4 · 卡牌回合 RPG', img: ['assets/portfolio/witch-city.png', 'assets/portfolio/witch-battle.png'],
               b: ['3 AP 速度行动战斗：移动/攻击/技能共享行动点', '角色收集与养成，28 节点关卡', '移动端布局与真机验证'],
               l: [['PRD', 'assets/docs/release-the-witch-prd.pdf'], ['试玩 →', 'release-the-witch-game.html']] },
-            { n: '暮鸦之墓', d: 'Godot 4.3 · 开放世界 ARPG', img: ['assets/portfolio/mournraven-world.png', 'assets/portfolio/mournraven-dungeon.png'],
+            { n: '暮鸦之墓', href: 'project-raven.html', d: 'Godot 4.3 · 开放世界 ARPG', img: ['assets/portfolio/mournraven-world.png', 'assets/portfolio/mournraven-dungeon.png'],
               b: ['主城 / 野外 / 副本三类区域', '战斗、AI 与装备成长闭环', '12 类 JSON 配置表，数值可热更'],
               l: [['GDD', 'assets/docs/mournraven-gdd.pdf']] },
-            { n: '雾港疑云', d: 'Web + Unity · 悬疑叙事', img: ['assets/portfolio/fog-harbor-top.png', 'assets/portfolio/fog-harbor-gameplay.png'],
+            { n: '雾港疑云', href: 'project-fog.html', d: 'Web + Unity · 悬疑叙事', img: ['assets/portfolio/fog-harbor-top.png', 'assets/portfolio/fog-harbor-gameplay.png'],
               b: ['真相度与信任双变量决策', '信件收集与线索网', '三幕四结局分支'],
               l: [] },
-            { n: '三国文字合成塔防', d: 'React + TS · 策略塔防', img: ['assets/portfolio/sango.jpg', 'assets/portfolio/sango-gameplay.png'],
+            { n: '三国文字合成塔防', href: 'project-sango.html', d: 'React + TS · 策略塔防', img: ['assets/portfolio/sango.jpg', 'assets/portfolio/sango-gameplay.png'],
               b: ['8 条合成线', '双经济（金币/粮草）', '20 波战役节奏'],
               l: [] },
-            { n: 'HotPick Studio', d: 'React · Electron · AI 产品', img: ['assets/portfolio/hotpick.jpg', 'assets/portfolio/hotpick-flow.png'],
+            { n: 'HotPick Studio', href: 'project-hotpick.html', d: 'React · Electron · AI 产品', img: ['assets/portfolio/hotpick.jpg', 'assets/portfolio/hotpick-flow.png'],
               b: ['五阶段工作台：选题→评分→转化→生产→复盘', '热点数据接入与信号打分', 'PRD 25 条编号需求'],
               l: [['PRD', 'assets/docs/hotpick-studio-prd.pdf']] },
-            { n: '余烬之城 Emberfall', d: 'Godot 4.7 · 生存城建 SLG', img: ['assets/portfolio/emberfall-city.png', 'assets/portfolio/emberfall-map.png'],
+            { n: '余烬之城 Emberfall', href: 'project-emberfall.html', d: 'Godot 4.7 · 生存城建 SLG', img: ['assets/portfolio/emberfall-city.png', 'assets/portfolio/emberfall-map.png'],
               b: ['熔炉供暖驱动生存压力', '资源调度与暴风雪事件', '可玩切片：完整闭环'],
               l: [['试玩 →', 'emberfall-game.html']] }
           ];
@@ -1065,14 +1065,14 @@
               return '<img class="pb-shot" src="' + s2 + '" alt="' + p.n + '">';
             }).join('');
             var bl = p.b.map(function (x) { return '<li>' + x + '</li>'; }).join('');
-            return '<li class="pb-rich"><strong>' + p.n + '</strong><span class="pb-rich-tag">' + p.d + '</span>' +
+            return '<li class="pb-rich"><a class="pb-card-open" href="' + p.href + '" aria-label="' + p.n + '"></a><strong>' + p.n + '</strong><span class="pb-rich-tag">' + p.d + '</span>' +
               '<span class="pb-shot-row">' + imgs + '</span>' +
               '<ul class="pb-bullets">' + bl + '</ul>' + links + '</li>';
           }).join('') + '</ul>';
         }
       },
       {
-        code: 'PHASE 3 · WAXING GIBBOUS', name: '技能', en: 'WAXING GIBBOUS', page: '',
+        code: 'PHASE 3 · WAXING GIBBOUS', name: '技能', en: 'WAXING GIBBOUS', page: 'about.html',
         title: '我会什么',
         line: '会写需求文档，会做系统，会写脚本，也会剪片子。',
         body: function () {
@@ -1092,7 +1092,7 @@
         }
       },
       {
-        code: 'PHASE 4 · FULL MOON', name: '运营', en: 'FULL MOON', page: '',
+        code: 'PHASE 4 · FULL MOON', name: '运营', en: 'FULL MOON', page: 'operations.html',
         title: '运营那些事',
         line: '做过内容运营：三条 AI 赛道，30% 上过热搜。',
         body: function () {
@@ -1107,7 +1107,7 @@
         }
       },
       {
-        code: 'PHASE 5 · WANING GIBBOUS', name: '游戏理解', en: 'WANING GIBBOUS', page: '',
+        code: 'PHASE 5 · WANING GIBBOUS', name: '游戏理解', en: 'WANING GIBBOUS', page: 'game-analysis.html',
         title: '我怎么看游戏',
         line: '玩游戏比较多，拆过七个类型，每类都写了看法。',
         body: function () {
@@ -1127,7 +1127,7 @@
         }
       },
       {
-        code: 'PHASE 6 · LAST QUARTER', name: '经历', en: 'LAST QUARTER', page: '',
+        code: 'PHASE 6 · LAST QUARTER', name: '经历', en: 'LAST QUARTER', page: 'about.html',
         title: '走到今天',
         line: '2022 年进大学，2026 年毕业。读的是网络与新媒体。',
         body: function () {
@@ -1140,7 +1140,7 @@
         }
       },
       {
-        code: 'PHASE 7 · WANING CRESCENT', name: '联系', en: 'WANING CRESCENT', page: '',
+        code: 'PHASE 7 · WANING CRESCENT', name: '联系', en: 'WANING CRESCENT', page: 'about.html#contact',
         title: '找到我',
         line: '邮件、电话都行，想玩 Demo 也可以。',
         body: function () {
@@ -1332,9 +1332,8 @@
 
     /* ---------- 点击大月亮 → 展开当前相位内容（不跳转） ---------- */
     canvasEl.addEventListener('click', function () {
-      if (current >= 0) applyPhase(current, true);
-      var body = document.getElementById('moon-panel-body');
-      if (body) body.scrollTop = 0;
+      var ph = PHASES[current];
+      if (ph && ph.page) window.location.href = ph.page;
     });
     canvasEl.classList.add('moon-clickable');
 

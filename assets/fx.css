@@ -69,6 +69,10 @@ main img.img-color,
 .panel-body .pb-thumb {
   filter: none;
 }
+.pb-shot,
+.moon-panel-body .pb-shot {
+  filter: none;
+}
 body[data-page="projects"] main img,
 body[data-page="insights"] main img {
   filter: none;
