@@ -739,3 +739,43 @@
     inset 0 0 0 1px rgba(255, 255, 255, 0.12),
     0 0 22px rgba(255, 255, 255, 0.18);
 }
+
+/* ============================================================
+   轨道坐标修正：按钮=球体；标签/光晕外置；锚点补偿。
+   —— 之前按钮含标签，静态中心在 (50%,50%)+(w/2,h/2)，
+      导致月球围绕偏离圆心的点公转、与虚线轨道错位。
+   ============================================================ */
+.solar-stage .planet,
+.solar-stage .sun {
+  display: block;
+  gap: 0;
+}
+
+.solar-stage .planet-core,
+.solar-stage .sun-core {
+  display: block;
+}
+
+.solar-stage .planet-label {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.solar-stage .sun-glow {
+  inset: 0;
+  margin: auto;
+  width: 130px;
+  height: 130px;
+}
+
+/* 锚点补偿：先把元素中心平移回舞台中心，再执行轨道变换 */
+.solar-stage .planet,
+.solar-stage .sun {
+  transform:
+    translate(calc(-1 * var(--ox, 28px)), calc(-1 * var(--oy, 28px)))
+    rotate(calc(var(--angle) + var(--rev)))
+    translate(var(--dist, 0px), 0)
+    rotate(calc(-1 * (var(--angle) + var(--rev))));
+}

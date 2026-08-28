@@ -422,6 +422,13 @@
 
   var solarStage = document.querySelector('[data-solar-stage]');
   if (solarStage) {
+    // 锚点补偿：按钮中心（=球心）对齐舞台中心，轨道才与虚线圆环重合
+    document.querySelectorAll('[data-planet]').forEach(function (body) {
+      var w = body.offsetWidth || 56;
+      var h = body.offsetHeight || 56;
+      body.style.setProperty('--ox', (w / 2) + 'px');
+      body.style.setProperty('--oy', (h / 2) + 'px');
+    });
     var ORDER = ['projects', 'skills', 'ops', 'story', 'lens', 'link'];
     document.querySelectorAll('[data-planet]').forEach(function (body) {
       if (body.dataset.planet === 'sun') return;
