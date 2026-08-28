@@ -1331,3 +1331,64 @@ body[data-page="home"].scene-mode .scene-flow > footer {
     transform: translateX(-50%) translateY(8px);
   }
 }
+
+/* 类目面板（月相页 v3：右侧=该类目项目经历） */
+.moon-panel {
+  width: min(470px, 42vw);
+}
+
+.moon-panel.is-switching {
+  opacity: 0.25;
+  transform: translateY(-50%) translateY(10px);
+}
+
+.moon-panel-lead {
+  margin: 0 0 14px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  line-height: 1.85;
+  letter-spacing: 0.03em;
+}
+
+.moon-panel-body {
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  padding-right: 4px;
+}
+
+/* 点大月亮进二级页 */
+.moon-clickable {
+  cursor: pointer;
+}
+
+.moon-open-hint {
+  margin: 12px 0 0;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: var(--pixel);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  transition: opacity 250ms ease;
+}
+
+/* 月相图标跟随月亮靠左 */
+.moon-icons {
+  left: calc(50% - 58% / 2);
+  transform: translateX(calc(-50% + 4vw));
+  bottom: 26px;
+}
+
+@media (max-width: 900px) {
+  .moon-panel {
+    width: min(470px, 92vw);
+  }
+  .moon-icons {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 12px;
+  }
+  .moon-panel.is-switching {
+    transform: translateX(50%) translateY(10px);
+  }
+}
