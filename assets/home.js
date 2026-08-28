@@ -478,6 +478,73 @@
     });
   }
 
+  /* ==================== 3.5) 星系 · GSAP 动效编排 ==================== */
+  if (solarStage && typeof gsap !== 'undefined' && !reducedMotion) {
+    gsap.registerPlugin(MotionPathPlugin);
+    var stage = solarStage;
+    var moons = [].slice.call(document.querySelectorAll('.planet'));
+    var cores = [].slice.call(document.querySelectorAll('.planet-core'));
+
+    // 彗星光点（真实元素，沿轨道 MotionPath 流动）
+    var comet = document.createElement('span');
+    comet.className = 'orbit-comet';
+    comet.setAttribute('aria-hidden', 'true');
+    stage.appendChild(comet);
+    stage.classList.add('has-gsap');
+
+    // 入场编排：轨道浮现 → 月球逐颗弹出 → 标签/彗星跟进
+    gsap.set(cores, { scale: 0, opacity: 0, transformOrigin: '50% 50%' });
+    gsap.set('.planet-label, .planet-badge', { opacity: 0 });
+    gsap.set('.orbit-2', { opacity: 0 });
+    gsap.set(comet, { opacity: 0 });
+
+    var entered = false;
+    var gio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting || entered) return;
+        entered = true;
+        gio.disconnect();
+        var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+        tl.to('.orbit-2', { opacity: 1, duration: 1.5 })
+          .to(cores, { scale: 1, opacity: 1, duration: 1.05, ease: 'back.out(1.9)', stagger: 0.12 }, '-=1.0')
+          .to('.planet-label, .planet-badge', { opacity: 1, duration: 0.5, stagger: 0.06 }, '-=0.5')
+          .to(comet, { opacity: 1, duration: 0.6, ease: 'power2.in' }, '-=0.3');
+
+        // 彗星沿圆轨道匀速流动（缓入缓出循环）
+        var R = 262;
+        var cw = stage.offsetWidth / 2;
+        var chh = stage.offsetHeight / 2;
+        var pts = [];
+        for (var i = 0; i <= 128; i++) {
+          var a = (i / 128) * Math.PI * 2;
+          pts.push({ x: cw + Math.cos(a) * R, y: chh + Math.sin(a) * R });
+        }
+        gsap.set(comet, { xPercent: -50, yPercent: -50 });
+        gsap.timeline({ repeat: -1, delay: 2.4 }).to(comet, {
+          motionPath: { path: pts, curviness: 0 },
+          duration: 34,
+          ease: 'sine.inOut'
+        });
+      });
+    }, { threshold: 0.16 });
+    gio.observe(stage);
+
+    // 悬停磁吸 & 点击脉冲
+    moons.forEach(function (p) {
+      var core = p.querySelector('.planet-core');
+      if (!core) return;
+      p.addEventListener('pointerenter', function () {
+        gsap.to(core, { scale: 1.16, duration: 0.4, ease: 'power3.out', overwrite: 'auto' });
+      });
+      p.addEventListener('pointerleave', function () {
+        gsap.to(core, { scale: 1, duration: 0.5, ease: 'power3.out', overwrite: 'auto' });
+      });
+      p.addEventListener('click', function () {
+        gsap.fromTo(core, { scale: 1 }, { scale: 1.3, duration: 0.22, yoyo: true, repeat: 1, ease: 'power2.out', overwrite: 'auto' });
+      });
+    });
+  }
+
   /* ==================== 4) 头部折叠菜单（移动端） ==================== */
   var header = document.querySelector('.ph-header');
   var burger = document.querySelector('.ph-burger');
