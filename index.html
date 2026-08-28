@@ -5,19 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" content="陈黄勇 · 游戏产品经理 / 运营策划 / 系统策划。一个星系：每个星球是一段能力与作品的入口。">
   <meta property="og:title" content="陈黄勇 | CHY Galaxy">
-  <meta property="og:description" content="电影式序章后进入作品星系：点击星球，展开游戏产品、运营策划与系统策划的作品。">
+  <meta property="og:description" content="点击星球，展开游戏产品、运营策划与系统策划的作品星系。">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://2126431683a-netizen.github.io/">
   <title>陈黄勇 | CHY Galaxy</title>
   <link rel="stylesheet" href="assets/site.css?v=2026-08-27-18">
-  <link rel="stylesheet" href="assets/home.css?v=2026-08-28-03">
+  <link rel="stylesheet" href="assets/home.css?v=2026-08-28-04">
   <script src="assets/site.js?v=2026-08-27-19" defer></script>
-  <script src="assets/home.js?v=2026-08-28-03" defer></script>
-  <noscript>
-    <style>body.no-scroll { overflow: auto; } .cinema { display: none; }</style>
-  </noscript>
+  <script src="assets/home.js?v=2026-08-28-04" defer></script>
 </head>
-<body data-page="home" class="no-scroll no-js">
+<body data-page="home">
   <a class="skip-link" href="#main">跳到主要内容</a>
 
   <header class="ph-header">
@@ -34,52 +31,58 @@
     <button class="ph-burger" type="button" aria-expanded="false" aria-label="打开菜单">≡</button>
   </header>
 
-  <!-- 电影式序章：传送门 → ASCII 流沙 → 字符雨城（自动循环；点击/滚动进入星系） -->
-  <div class="cinema" id="cinema" data-phase="0">
-    <canvas class="cinema-canvas" id="cinema-canvas" aria-hidden="true"></canvas>
+  <main id="main" class="scene-flow" aria-label="CHY galaxy">
 
-    <div class="cinema-stage">
-      <div class="phase phase-a">
-        <p class="cinema-kicker">CHY.GALAXY</p>
-        <h1 class="cinema-name">陈黄勇</h1>
-        <p class="cinema-role">游戏产品经理 / 运营策划 / 系统策划</p>
+    <section class="scene scene-hero" id="scene-hero" aria-label="陈黄勇">
+      <canvas class="ph-portal" id="portal-canvas" aria-hidden="true"></canvas>
+      <div class="ph-dots" aria-hidden="true"></div>
+
+      <div class="ph-hero-copy">
+        <p class="ph-kicker">CHY.GALAXY</p>
+        <h1 class="ph-title">以作品为星，<span class="ph-hl">把光带回来</span></h1>
+        <p class="ph-role">陈黄勇 · 游戏产品经理 / 运营策划 / 系统策划</p>
       </div>
 
-      <div class="phase phase-b">
-        <h2 class="cinema-title">造可玩的系统。</h2>
-        <p class="cinema-sub">BUILD PLAYABLE SYSTEMS —— 设计要跑起来，才算被验证</p>
-        <div class="cinema-cols">
-          <div class="cinema-col is-old">
-            <p>纸面设计</p>
-            <p>拍脑袋数值</p>
-            <p>单线程努力</p>
-            <p>追逐当下热点</p>
-            <p>跟随共识的安全感</p>
+      <div class="ph-hero-foot">
+        <div class="ph-builder">
+          <p class="ph-foot-kicker">Game builder</p>
+          <p class="ph-builder-note">We look forward to building the future of playable systems with you.</p>
+          <div class="ph-facts" aria-label="档案概览">
+            <span><strong>06</strong>项目</span>
+            <span><strong>05</strong>Demo</span>
+            <span><strong>30%</strong>热搜</span>
           </div>
-          <span class="cinema-arrow" aria-hidden="true">→</span>
-          <div class="cinema-col is-new">
-            <p>循环先于内容</p>
-            <p>数据验证判断</p>
-            <p>系统互相咬合</p>
-            <p>用户分层与真实反馈</p>
-            <p>独立思考的审美</p>
-          </div>
+        </div>
+        <div class="ph-tagline">
+          <p class="ph-foot-kicker">Click a planet</p>
+          <p class="ph-foot-big">Build your own<br>galaxy.</p>
         </div>
       </div>
 
-      <div class="phase phase-c">
-        <h2 class="cinema-super">〈 探索阶段 〉</h2>
-        <p class="cinema-note">字符正在落成你的作品星系 —— 继续了解，进入星球</p>
+      <button class="ph-hint" type="button" data-goto="odyssey" aria-label="滑动开启探索">
+        <span>滑动开启探索</span>
+        <img src="assets/fonts/pixel-arrow-right.svg" alt="" aria-hidden="true" class="pixel-arrow pixel-arrow-down">
+      </button>
+    </section>
+
+    <section class="scene odyssey" id="odyssey" aria-label="作品胶片">
+      <canvas class="odyssey-textfield" id="odyssey-textfield" aria-hidden="true"></canvas>
+
+      <div class="film-strip" aria-hidden="true">
+        <div class="film-track" id="film-track"></div>
       </div>
-    </div>
 
-    <button class="cinema-hint" type="button" aria-label="继续了解">
-      <span>继续了解</span>
-      <img src="assets/fonts/pixel-arrow-right.svg" alt="" aria-hidden="true" class="pixel-arrow pixel-arrow-down">
-    </button>
-  </div>
+      <div class="odyssey-copy">
+        <h2 class="odyssey-title">The CHY Odyssey</h2>
+        <p class="odyssey-since">Since 2022</p>
+        <p class="odyssey-lines">也许有一天会发现<br>可玩的系统没有尽头<br>我希望它一直没有尽头<br><span class="en">The beginning of playable.</span></p>
+      </div>
 
-  <main id="main" class="scene-flow" aria-label="CHY galaxy">
+      <button class="ph-hint" type="button" data-goto="scene-solar" aria-label="继续了解">
+        <span>继续了解</span>
+        <img src="assets/fonts/pixel-arrow-right.svg" alt="" aria-hidden="true" class="pixel-arrow pixel-arrow-down">
+      </button>
+    </section>
 
     <section class="scene scene-solar" id="scene-solar" aria-label="作品星系">
       <div class="starfield starfield-dense" aria-hidden="true"></div>
@@ -147,7 +150,7 @@
       <nav class="ph-footer-nav" aria-label="页脚导航">
         <a href="mailto:2126431683@qq.com">2126431683@qq.com</a>
         <a href="tel:19279459077">192 7945 9077</a>
-        <a href="#scene-solar">回到星系顶部</a>
+        <a href="#scene-hero">回到顶部</a>
       </nav>
     </footer>
 
