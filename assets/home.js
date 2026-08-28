@@ -1386,4 +1386,82 @@
     return window.__moonx;
   })();
 
+
+  /* ============================================================
+     COLORFOLLOW —— 鼠标到哪里，哪里就有色彩
+     彩虹色环跟随光标（弹性惯性），mix-blend-mode: color 让经过的
+     黑白内容就地染上颜色（保留亮度只加色相）；附一层 screen 光晕。
+     ============================================================ */
+  (function () {
+    if (reducedMotion) return;
+    var colorCv = document.getElementById('cursor-color');
+    var glowCv = document.getElementById('cursor-glow');
+    if (!colorCv || !glowCv) return;
+    var cctx = colorCv.getContext('2d');
+    var gctx = glowCv.getContext('2d');
+    var W = 0, H = 0, DPRc = Math.min(window.devicePixelRatio || 1, 1.5);
+    var target = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    var cur = { x: target.x, y: target.y };
+
+    function resize() {
+      W = window.innerWidth;
+      H = window.innerHeight;
+      colorCv.width = Math.round(W * DPRc);
+      colorCv.height = Math.round(H * DPRc);
+      cctx.setTransform(DPRc, 0, 0, DPRc, 0, 0);
+      glowCv.width = Math.round(W * DPRc);
+      glowCv.height = Math.round(H * DPRc);
+      gctx.setTransform(DPRc, 0, 0, DPRc, 0, 0);
+    }
+
+    window.addEventListener('pointermove', function (e) {
+      target.x = e.clientX;
+      target.y = e.clientY;
+    }, { passive: true });
+
+    var raf = null;
+    function frame(t) {
+      if (document.hidden) { raf = requestAnimationFrame(frame); return; }
+      cur.x += (target.x - cur.x) * 0.12;
+      cur.y += (target.y - cur.y) * 0.12;
+      var hue = (t * 0.04) % 360;
+
+      // 彩色层：彩虹八环（mix-blend color）
+      cctx.clearRect(0, 0, W, H);
+      var R = 88;
+      for (var i = 0; i < 8; i++) {
+        var a = (i / 8) * Math.PI * 2;
+        var ox = cur.x + Math.cos(a) * 34;
+        var oy = cur.y + Math.sin(a) * 34;
+        var h = (hue + i * 45) % 360;
+        var g = cctx.createRadialGradient(ox, oy, 0, ox, oy, R);
+        g.addColorStop(0, 'hsla(' + h + ', 96%, 62%, 0.62)');
+        g.addColorStop(0.6, 'hsla(' + h + ', 90%, 55%, 0.28)');
+        g.addColorStop(1, 'hsla(' + h + ', 90%, 50%, 0)');
+        cctx.fillStyle = g;
+        cctx.beginPath();
+        cctx.arc(ox, oy, R, 0, Math.PI * 2);
+        cctx.fill();
+      }
+
+      // 光晕层（screen）：柔和白蓝光
+      gctx.clearRect(0, 0, W, H);
+      var g2 = gctx.createRadialGradient(cur.x, cur.y, 0, cur.x, cur.y, 210);
+      g2.addColorStop(0, 'rgba(210, 225, 255, 0.20)');
+      g2.addColorStop(0.5, 'rgba(170, 195, 255, 0.07)');
+      g2.addColorStop(1, 'rgba(150, 180, 255, 0)');
+      gctx.fillStyle = g2;
+      gctx.beginPath();
+      gctx.arc(cur.x, cur.y, 210, 0, Math.PI * 2);
+      gctx.fill();
+
+      raf = requestAnimationFrame(frame);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    raf = requestAnimationFrame(frame);
+    window.__colorFollow = { cleanup: function () { if (raf) cancelAnimationFrame(raf); } };
+  })();
+
 })();

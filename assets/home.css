@@ -1909,3 +1909,60 @@ body[data-page="home"].scene-mode .scene-flow > footer {
     height: 72px;
   }
 }
+
+/* ============================================================
+   鼠标色彩跟随（COLORFOLLOW）
+   ============================================================ */
+.cursor-color {
+  position: fixed;
+  inset: 0;
+  z-index: 34;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  mix-blend-mode: color;
+}
+
+.cursor-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-color,
+  .cursor-glow {
+    display: none;
+  }
+}
+
+/* 第二屏小月亮：加冷色光晕（呼应色彩主题） */
+.odyssey-moon {
+  filter: drop-shadow(0 0 16px rgba(120, 170, 255, 0.55)) drop-shadow(0 0 44px rgba(150, 120, 255, 0.25));
+}
+
+/* 第二屏玻璃卡：贴一道彩色渐晕 */
+.odyssey-copy::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 12% 0%, rgba(120, 170, 255, 0.10), transparent 55%),
+    radial-gradient(120% 100% at 90% 100%, rgba(255, 150, 210, 0.08), transparent 55%);
+}
+
+/* 月相面板：链接/统计的彩味点缀（仅 hover 微光） */
+.moon-panel-body .pb-links a:hover {
+  box-shadow: 0 0 12px rgba(140, 180, 255, 0.25);
+}
+
+.ph-contact-chip:hover,
+.ph-footer a:hover {
+  color: #dfe8ff;
+}
