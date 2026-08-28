@@ -1,11 +1,11 @@
 /* ============================================================
-   主页 · 像素风 UI（home.css · v2）
-   仿照 Moonshot 招聘《关于我们》页：纯黑底、像素字体大标题、
-   中央像素传送门、四角信息位、矩阵字符雨滚动特效。
-   星系（solar）部分仍沿用 site.css / site.js，不改动。
+   主页动效层（home.css · v3 —— 电影式序章）
+   仿 Moonshot 招聘《关于我们》的时间线动效：一整屏生成式 ASCII，
+   三段循环（传送门 → 流沙 → 字符雨城），文案为本人内容。
+   星系（solar）仍沿用 site.css / site.js，不改动。
    ============================================================ */
 
-/* ---- 顶部导航（固定） ---- */
+/* ---- 顶部导航（固定，置于序章之上） ---- */
 .ph-header {
   position: fixed;
   top: 0;
@@ -37,7 +37,6 @@
   height: 12px;
   background: #fff;
   box-shadow: 0 0 14px rgba(255, 255, 255, 0.8);
-  image-rendering: pixelated;
 }
 
 .ph-links {
@@ -90,259 +89,198 @@
   cursor: pointer;
 }
 
-/* ---- 首屏 HERO ---- */
-.scene-hero {
-  display: block;
-  padding: 0;
-  min-height: 100svh;
-  background: #000;
+/* ---- 序章：固定整屏 ---- */
+body.no-scroll {
+  overflow: hidden;
 }
 
-.ph-portal {
+.cinema {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: #000;
+  transition: opacity 900ms ease;
+}
+
+.cinema.is-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cinema-canvas {
   position: absolute;
   inset: 0;
-  z-index: 0;
   width: 100%;
   height: 100%;
   display: block;
-  background: #000;
 }
 
-/* 半调网点纹理（边缘可见，中央留给传送门） */
-.ph-dots {
+/* 文案层：全部居中于“黑洞”内 */
+.cinema-stage {
   position: absolute;
   inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1.4px);
-  background-size: 6px 6px;
-  -webkit-mask-image: radial-gradient(90% 90% at 50% 50%, transparent 34%, rgba(0, 0, 0, 0.85) 100%);
-  mask-image: radial-gradient(90% 90% at 50% 50%, transparent 34%, rgba(0, 0, 0, 0.85) 100%);
-  opacity: 0.5;
-}
-
-/* 左上角标题区 */
-.ph-hero-copy {
-  position: absolute;
-  z-index: 3;
-  top: 17%;
-  left: 6%;
-  max-width: 560px;
-}
-
-.ph-kicker {
-  margin: 0 0 12px;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 10px;
-  color: rgba(255, 255, 255, 0.72);
+  justify-content: center;
+  pointer-events: none;
+}
+
+.cinema-stage .phase {
+  position: absolute;
+  text-align: center;
+  max-width: min(88vw, 620px);
+  transition: opacity 900ms ease, transform 900ms ease;
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.cinema[data-phase="0"] .phase-a,
+.cinema[data-phase="1"] .phase-b,
+.cinema[data-phase="2"] .phase-c {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* —— A 段：名字与身份 —— */
+.phase-a .cinema-kicker {
+  margin: 0 0 14px;
+  color: rgba(255, 255, 255, 0.66);
   font-family: var(--pixel);
-  font-size: clamp(14px, 1.6vw, 18px);
-  letter-spacing: 0.2em;
+  font-size: clamp(13px, 1.5vw, 17px);
+  letter-spacing: 0.34em;
 }
 
-.ph-kicker::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  background: #fff;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
-}
-
-.ph-title {
+.phase-a .cinema-name {
   margin: 0;
   color: #fff;
   font-family: var(--pixel);
   font-weight: 400;
-  font-size: clamp(26px, 4.6vw, 46px);
-  line-height: 1.3;
+  font-size: clamp(44px, 8vw, 88px);
+  line-height: 1.05;
   letter-spacing: 0.06em;
-  text-shadow: 0 0 22px rgba(255, 255, 255, 0.22);
+  text-shadow: 0 0 34px rgba(255, 255, 255, 0.3);
 }
 
-.ph-title .ph-hl {
-  position: relative;
-  white-space: nowrap;
+.phase-a .cinema-role {
+  margin: 18px 0 0;
+  color: rgba(255, 255, 255, 0.55);
+  font-family: var(--pixel);
+  font-size: clamp(12px, 1.4vw, 15px);
+  letter-spacing: 0.16em;
+  line-height: 1.9;
 }
 
-.ph-title .ph-hl::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -10px;
-  width: 100%;
-  height: 4px;
-  background-image: linear-gradient(90deg, #fff 0 55%, transparent 55%), linear-gradient(90deg, transparent 0 45%, #fff 45%);
-  background-size: 10px 4px;
-  opacity: 0.85;
+/* —— B 段：主题 + 新旧对照 —— */
+.phase-b .cinema-title {
+  margin: 0 0 12px;
+  color: #fff;
+  font-family: var(--pixel);
+  font-weight: 400;
+  font-size: clamp(24px, 3.4vw, 40px);
+  letter-spacing: 0.1em;
 }
 
-.ph-role {
-  margin: 22px 0 0;
+.phase-b .cinema-sub {
+  margin: 0 0 34px;
   color: rgba(255, 255, 255, 0.5);
   font-family: var(--pixel);
-  font-size: clamp(12px, 1.3vw, 14px);
-  letter-spacing: 0.12em;
-}
-
-/* 底部信息位（左下 / 右下） */
-.ph-hero-foot {
-  position: absolute;
-  z-index: 3;
-  left: 6%;
-  right: 6%;
-  bottom: 9%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-}
-
-.ph-builder {
-  max-width: 320px;
-}
-
-.ph-foot-kicker {
-  margin: 0 0 8px;
-  color: rgba(255, 255, 255, 0.66);
-  font-family: var(--pixel);
-  font-size: 13px;
+  font-size: clamp(11px, 1.2vw, 14px);
   letter-spacing: 0.14em;
 }
 
-.ph-builder-note {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 12.5px;
-  line-height: 1.9;
-  letter-spacing: 0.04em;
-}
-
-.ph-facts {
+.cinema-cols {
   display: flex;
+  align-items: flex-start;
+  justify-content: center;
   gap: 22px;
-  margin-top: 16px;
 }
 
-.ph-facts span {
-  color: rgba(255, 255, 255, 0.44);
+.cinema-col {
+  width: 148px;
+}
+
+.cinema-col p {
+  margin: 0 0 11px;
+  color: rgba(255, 255, 255, 0.52);
   font-family: var(--pixel);
-  font-size: 12px;
-  letter-spacing: 0.06em;
+  font-size: clamp(11px, 1.15vw, 13px);
+  letter-spacing: 0.1em;
+  text-align: left;
 }
 
-.ph-facts strong {
-  color: #fff;
+.cinema-col.is-new p {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.cinema-arrow {
+  flex: none;
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: var(--pixel);
   font-size: 16px;
-  margin-right: 4px;
+  animation: cinema-arrow 1.6s ease-in-out infinite;
 }
 
-/* 右下大字（像素） */
-.ph-tagline {
-  text-align: right;
+@keyframes cinema-arrow {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
 }
 
-.ph-tagline .ph-foot-kicker {
-  margin-bottom: 14px;
-}
-
-.ph-tagline .ph-foot-big {
-  margin: 0;
-  color: #fff;
+/* —— C 段：探索阶段 —— */
+.phase-c .cinema-super {
+  margin: 0 0 10px;
+  color: rgba(255, 255, 255, 0.85);
   font-family: var(--pixel);
-  font-weight: 400;
-  font-size: clamp(26px, 4.2vw, 44px);
-  line-height: 1.18;
-  letter-spacing: 0.04em;
-  text-shadow: 0 0 26px rgba(255, 255, 255, 0.24);
+  font-size: clamp(18px, 2.4vw, 26px);
+  letter-spacing: 0.18em;
 }
 
-/* 底部中央滚动提示 */
-.ph-hint {
+.phase-c .cinema-note {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: var(--pixel);
+  font-size: clamp(11px, 1.2vw, 13px);
+  letter-spacing: 0.12em;
+}
+
+/* —— 底部提示：继续了解 —— */
+.cinema-hint {
   position: absolute;
-  z-index: 4;
+  z-index: 2;
   left: 50%;
-  bottom: 26px;
+  bottom: 30px;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px 18px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.66);
   font-family: var(--pixel);
   font-size: 13px;
   letter-spacing: 0.12em;
   background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 12px;
   backdrop-filter: blur(6px);
   cursor: pointer;
   transition: color 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+  animation: cinema-breathe 2.6s ease-in-out infinite;
 }
 
-.ph-hint:hover,
-.ph-hint:focus-visible {
+.cinema-hint:hover,
+.cinema-hint:focus-visible {
   color: #fff;
-  border-color: rgba(255, 255, 255, 0.34);
-  box-shadow: 0 0 26px rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 26px rgba(255, 255, 255, 0.18);
 }
 
-.ph-hint:hover .pixel-arrow,
-.ph-hint:focus-visible .pixel-arrow {
+.cinema-hint .pixel-arrow {
   animation: hint-bounce 830ms ease-in-out infinite;
 }
 
-/* ---- 探索阶段（矩阵字符雨） ---- */
-.explore {
-  position: relative;
-  min-height: 100svh;
-  overflow: hidden;
-  background: #000;
-}
-
-.explore-canvas {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  background: #000;
-}
-
-.explore-title {
-  position: absolute;
-  z-index: 2;
-  top: 7%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin: 0;
-  color: rgba(255, 255, 255, 0.9);
-  font-family: var(--pixel);
-  font-weight: 400;
-  font-size: clamp(20px, 3vw, 30px);
-  letter-spacing: 0.14em;
-  white-space: nowrap;
-  text-shadow: 0 0 24px rgba(255, 255, 255, 0.3);
-}
-
-.explore-title::before,
-.explore-title::after {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.explore-note {
-  position: absolute;
-  z-index: 2;
-  top: calc(7% + 64px);
-  left: 50%;
-  transform: translateX(-50%);
-  margin: 0;
-  color: rgba(255, 255, 255, 0.42);
-  font-family: var(--pixel);
-  font-size: 13px;
-  letter-spacing: 0.12em;
-  white-space: nowrap;
+@keyframes cinema-breathe {
+  0%, 100% { opacity: 0.72; }
+  50% { opacity: 1; }
 }
 
 /* ---- 页脚 ---- */
@@ -372,6 +310,11 @@
   display: flex;
   gap: 18px;
   flex-wrap: wrap;
+}
+
+/* ---- 无 JS 兜底：不遮挡内容 ---- */
+.no-js .cinema {
+  display: none;
 }
 
 /* ---- 响应式 ---- */
@@ -404,29 +347,16 @@
     display: block;
   }
 
-  .ph-hero-copy {
-    top: 13%;
-    left: 7%;
-    right: 7%;
+  .phase-a .cinema-name {
+    font-size: clamp(36px, 12vw, 56px);
   }
-  .ph-hero-foot {
-    left: 7%;
-    right: 7%;
-    bottom: 13%;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
+  .cinema-cols {
+    gap: 12px;
   }
-  .ph-tagline {
-    text-align: left;
+  .cinema-col {
+    width: 44vw;
   }
-  .ph-dots {
-    opacity: 0.35;
-  }
-  .explore-title {
-    top: 9%;
-  }
-  .explore-note {
-    top: calc(9% + 60px);
+  .cinema-stage .phase {
+    max-width: 94vw;
   }
 }
