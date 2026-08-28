@@ -958,7 +958,8 @@
         line: '我叫陈黄勇。学网络与新媒体，做产品和编导。',
         body: function () {
           return '<div class="pb-profile"><img class="pb-photo img-color" src="assets/portfolio/profile.png" alt="陈黄勇">' +
-            '<div class="pb-stats"><div><strong>06</strong><span>项目档案</span></div><div><strong>05</strong><span>可运行 Demo</span></div></div></div>' +
+            '<div class="pb-profile-text"><p>我叫陈黄勇。2022 年入学，2026 年毕业，学的是网络与新媒体。编导、运营、产品都做过，现在做产品和编导。</p>' +
+            '<p class="pb-profile-note">简历在这里，完整介绍在下面。</p></div></div>' +
             '<div class="pb-actions"><a href="assets/陈黄勇_产品经理_系统策划_编导_简历.pdf" download>下载简历 PDF</a>' +
             '<a class="pb-ghost" href="about.html">完整页 →</a></div>';
         }

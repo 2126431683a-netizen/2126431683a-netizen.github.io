@@ -1392,3 +1392,158 @@ body[data-page="home"].scene-mode .scene-flow > footer {
     transform: translateX(50%) translateY(10px);
   }
 }
+
+/* ============================================================
+   月相面板作用域样式：让 pb-* 组件在 .moon-panel-body 里正常排版
+   ============================================================ */
+.moon-panel-body .pb-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.moon-panel-body .pb-list li {
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm, 12px);
+}
+
+.moon-panel-body .pb-list strong {
+  display: block;
+  color: #fff;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  margin-bottom: 4px;
+}
+
+.moon-panel-body .pb-list span {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 12.5px;
+  line-height: 1.7;
+  display: block;
+}
+
+.moon-panel-body .pb-links {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.moon-panel-body .pb-links a {
+  color: #fff;
+  font-family: var(--pixel);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.moon-panel-body .pb-links a:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.moon-panel-body .pb-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.moon-panel-body .pb-actions a {
+  color: #fff;
+  font-family: var(--pixel);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+.moon-panel-body .pb-actions a:hover {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+
+.moon-panel-body .pb-actions .pb-ghost {
+  color: rgba(255, 255, 255, 0.75);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.moon-panel-body .pb-actions .pb-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.moon-panel-body .pb-profile {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 4px;
+}
+
+.moon-panel-body .pb-photo {
+  flex: none;
+  width: 104px;
+  height: 128px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.moon-panel-body .pb-profile-text p {
+  margin: 0 0 8px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.moon-panel-body .pb-profile-text .pb-profile-note {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 12px;
+}
+
+.moon-panel-body .pb-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.moon-panel-body .pb-timeline article {
+  display: flex;
+  gap: 14px;
+}
+
+.moon-panel-body .pb-timeline article > p {
+  flex: none;
+  width: 74px;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--pixel);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  margin: 2px 0 0;
+  text-align: left;
+}
+
+.moon-panel-body .pb-timeline h3 {
+  margin: 0 0 4px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.moon-panel-body .pb-timeline span {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 12.5px;
+  line-height: 1.7;
+  display: block;
+}
