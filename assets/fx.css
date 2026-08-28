@@ -58,3 +58,9 @@ main video,
   .fx-canvas { display: none; }
   .fx-sec { opacity: 1; transform: none; filter: none; transition: none; }
 }
+
+/* 个人照片豁免：用户本人的照片保持彩色（项目截图/视频仍灰度统一） */
+main img.img-color,
+.page-hero img.img-color {
+  filter: none;
+}
