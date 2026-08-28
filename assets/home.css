@@ -678,28 +678,17 @@
   box-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
 }
 
-/* 来回循环摆动（ping-pong 沿轨道） */
-.planet-p1 { animation: swing-p1 34s ease-in-out infinite alternate; }
-.planet-p2 { animation: swing-p2 44s ease-in-out infinite alternate; }
-.planet-p3 { animation: swing-p3 26s ease-in-out infinite alternate; }
-.planet-p4 { animation: swing-p4 40s ease-in-out infinite alternate; }
-.planet-p5 { animation: swing-p5 30s ease-in-out infinite alternate; }
-.planet-p6 { animation: swing-p6 48s ease-in-out infinite alternate; }
-
-@keyframes swing-p1 { from { --rev: -18deg; } to { --rev: 18deg; } }
-@keyframes swing-p2 { from { --rev: -26deg; } to { --rev: 26deg; } }
-@keyframes swing-p3 { from { --rev: -11deg; } to { --rev: 11deg; } }
-@keyframes swing-p4 { from { --rev: -20deg; } to { --rev: 20deg; } }
-@keyframes swing-p5 { from { --rev: -14deg; } to { --rev: 14deg; } }
-@keyframes swing-p6 { from { --rev: -28deg; } to { --rev: 28deg; } }
-
-/* 聚焦时暂停摆动（保持原交互） */
-.solar-universe.is-focused .planet,
-.solar-universe.is-focused .sun {
-  animation-play-state: paused;
+/* 月球群绕圈“横着转”（参考图：保持队形一起公转） */
+.planet-p1, .planet-p2, .planet-p3, .planet-p4, .planet-p5, .planet-p6 {
+  animation: orbit-group 44s linear infinite;
 }
 
-/* 轨道上游走的闪光点（来回） */
+@keyframes orbit-group {
+  from { --rev: 0deg; }
+  to { --rev: 360deg; }
+}
+
+/* 轨道上游走的闪光点（同向绕圈） */
 .solar-stage::after {
   content: "";
   position: absolute;
@@ -713,13 +702,13 @@
   box-shadow:
     0 0 12px 5px rgba(255, 255, 255, 0.4),
     0 0 30px 14px rgba(255, 255, 255, 0.1);
-  animation: comet-swing 30s ease-in-out infinite alternate;
+  animation: comet-orbit 44s linear infinite;
   pointer-events: none;
 }
 
-@keyframes comet-swing {
-  from { transform: rotate(-330deg) translate(0, -262px); }
-  to { transform: rotate(0deg) translate(0, -262px); }
+@keyframes comet-orbit {
+  from { transform: rotate(0deg) translate(0, -262px); }
+  to { transform: rotate(360deg) translate(0, -262px); }
 }
 
 /* 标题字号放大，匹配流程页 */
