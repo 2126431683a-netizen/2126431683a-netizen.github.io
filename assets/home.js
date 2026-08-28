@@ -1025,7 +1025,7 @@
       {
         code: 'PHASE 6 · LAST QUARTER', name: '经历', en: 'LAST QUARTER', page: 'about.html',
         title: '走到今天',
-        line: '2022 年入行，编导、运营、产品都做过一遍。',
+        line: '2022 年进大学，2026 年毕业。读的是网络与新媒体。',
         body: function () {
           return '<div class="pb-timeline">' +
             '<article><p>2026.06-</p><div><h3>西安纬度网络科技</h3><span>AI 类目编导：三条内容赛道 + 两款 Godot 游戏全流程策划。</span></div></article>' +
