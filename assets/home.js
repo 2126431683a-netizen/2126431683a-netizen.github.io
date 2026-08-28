@@ -316,6 +316,64 @@
     }
 
     buildFilm();
+
+    // —— 荧光小月亮（呼应月球手册，Bayer 抖动 + 陨石坑） ——
+    var om = document.getElementById('odyssey-moon');
+    if (om) {
+      var OMR = 48;
+      om.width = OMR;
+      om.height = OMR;
+      var ox = om.getContext('2d');
+      var oimg = ox.createImageData(OMR, OMR);
+      var od = oimg.data;
+      var ocx = OMR / 2, ocy = OMR / 2, orad = OMR * 0.46;
+      var OB = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]];
+      var ocrat = [[0.28, 0.22, 0.16], [-0.3, 0.36, 0.13], [0.38, -0.28, 0.12], [-0.12, -0.1, 0.09], [0.12, 0.42, 0.08]];
+      for (var oy2 = 0; oy2 < OMR; oy2++) {
+        for (var ox2 = 0; ox2 < OMR; ox2++) {
+          var odx = (ox2 - ocx) / orad, ody = (oy2 - ocy) / orad;
+          var orr = odx * odx + ody * ody;
+          var oi4 = (oy2 * OMR + ox2) * 4;
+          if (orr > 1) { od[oi4 + 3] = 0; continue; }
+          var on = 0.5 + 0.5 * Math.sin(ox2 * 0.9 + Math.sin(oy2 * 0.7) * 2.1);
+          var ob = 0.55 + 0.42 * on;
+          for (var oc = 0; oc < ocrat.length; oc++) {
+            var cdx = odx - ocrat[oc][0], cdy = ody - ocrat[oc][1];
+            if (cdx * cdx + cdy * cdy < ocrat[oc][2]) ob *= 0.3;
+          }
+          var obayer = OB[oy2 % 4][ox2 % 4] / 16;
+          var olv = ob * 6;
+          var ol = Math.floor(olv);
+          var og = Math.round((ol + (olv - ol > obayer ? 1 : 0)) / 6 * 255);
+          od[oi4] = od[oi4 + 1] = od[oi4 + 2] = og;
+          od[oi4 + 3] = 255;
+        }
+      }
+      ox.putImageData(oimg, 0, 0);
+    }
+
+    // —— 鼠标视差：胶片 / 文案 / 文字墙 按不同深度跟随 ——
+    if (!reducedMotion && window.matchMedia('(pointer: fine)').matches) {
+      var pTarget = { x: 0, y: 0 }, pCur = { x: 0, y: 0 }, pRaf = null, pRun = false;
+      var stripEl = document.querySelector('.film-strip');
+      var copyEl = document.querySelector('.odyssey-copy');
+      var fieldEl = document.getElementById('odyssey-textfield');
+      window.addEventListener('pointermove', function (e) {
+        pTarget.x = e.clientX / window.innerWidth - 0.5;
+        pTarget.y = e.clientY / window.innerHeight - 0.5;
+      }, { passive: true });
+      function pFrame() {
+        if (!pRun) return;
+        pCur.x += (pTarget.x - pCur.x) * 0.07;
+        pCur.y += (pTarget.y - pCur.y) * 0.07;
+        if (stripEl) stripEl.style.transform = 'translate(' + (-pCur.x * 14).toFixed(1) + 'px,' + (-pCur.y * 9).toFixed(1) + 'px)';
+        if (copyEl) copyEl.style.transform = 'translate(' + (pCur.x * 7).toFixed(1) + 'px,' + (pCur.y * 5).toFixed(1) + 'px)';
+        if (fieldEl) fieldEl.style.transform = 'translate(' + (-pCur.x * 22).toFixed(1) + 'px,' + (-pCur.y * 14).toFixed(1) + 'px)';
+        pRaf = requestAnimationFrame(pFrame);
+      }
+      pRun = true;
+      pRaf = requestAnimationFrame(pFrame);
+    }
   }
 
   // —— 背景“印刷字符”纹理（只画一次，静态零开销） ——
@@ -1054,73 +1112,6 @@
       }
     ];
 
-    /* ---------- 地球地平线（从地面仰望月球） ---------- */
-    var planetEl = document.getElementById('moon-planet');
-    var planetCtx = planetEl && planetEl.getContext('2d');
-    var plow = document.createElement('canvas');
-    var plctx = plow.getContext('2d');
-
-    function drawPlanet() {
-      if (!planetEl || !planetCtx) return;
-      var pr = planetEl.getBoundingClientRect();
-      var pw = Math.max(2, Math.round(pr.width));
-      var ph = Math.max(2, Math.round(pr.height));
-      var dpr2 = Math.min(window.devicePixelRatio || 1, 1.5);
-      planetEl.width = Math.round(pw * dpr2);
-      planetEl.height = Math.round(ph * dpr2);
-      planetCtx.setTransform(dpr2, 0, 0, dpr2, 0, 0);
-      planetCtx.imageSmoothingEnabled = false;
-
-      // 低分辨率像素网格
-      var cw = Math.max(40, Math.round(pw / 5));
-      var ch = Math.max(16, Math.round(ph / 5));
-      plow.width = cw;
-      plow.height = ch;
-      var img = plctx.createImageData(cw, ch);
-      var d = img.data;
-      var cx = cw / 2;
-      var cy = ch + cw * 0.62;                 // 地球圆心在画面下方，只露顶部弧
-      var R = cw * 0.82;
-      var B4p = B4;
-      for (var y = 0; y < ch; y++) {
-        for (var x = 0; x < cw; x++) {
-          var dx = (x - cx), dy = (y - cy);
-          var dist = Math.sqrt(dx * dx + dy * dy);
-          var i4 = (y * cw + x) * 4;
-          var g = 0, a = 255;
-          if (dist <= R) {
-            // 地面：灰度 + 噪声斑块 + Bayer 抖动
-            var n = fbm(x / 26 + 4.2, y / 26 - 2.1, 4);
-            var base = 0.10 + 0.20 * n + (dy * 0.0004);
-            var bayer = B4p[y & 3][x & 3] / 16;
-            var q = (base * 6) | 0;
-            var g2 = Math.round((q + (bayer > 0.5 ? 1 : 0)) / 6 * 70);
-            // 边缘暗化，中央月光反射
-            var edge = 1 - Math.pow(Math.max(0, (dist - R * 0.72)) / (R * 0.28), 2);
-            g = Math.round(g2 * edge);
-            // 月光反射：中下部的亮条纹（水面/地面反光）
-            if (Math.abs(x - cx) < cw * 0.05 && dist > R * 0.30) {
-              var shimmer = 0.5 + 0.5 * fbm(x / 3.1, y / 4.7, 3);
-              g = Math.max(g, Math.round((26 + 60 * shimmer) * edge));
-            }
-            // 大气亮弧：贴着地平线一圈
-            var dA = dist - R;
-            if (dA > -3.2 && dA < 0.6) {
-              var glow = Math.exp(-Math.abs(dA) / 1.4);
-              g = Math.max(g, Math.round(120 * glow + 60 * glow * glow));
-            }
-          } else {
-            a = 0;
-          }
-          d[i4] = d[i4 + 1] = d[i4 + 2] = g;
-          d[i4 + 3] = a;
-        }
-      }
-      plctx.putImageData(img, 0, 0);
-      planetCtx.clearRect(0, 0, pw, ph);
-      planetCtx.drawImage(plow, 0, 0, pw, ph);
-    }
-
     /* ---------- 大月亮 canvas（低分辨率像素化 + Bayer 抖动） ---------- */
     var canvasEl = document.getElementById('moon-canvas');
     var stage = document.getElementById('moon-stage');
@@ -1337,7 +1328,6 @@
       var DPR2 = Math.min(window.devicePixelRatio || 1, 1.5);
       canvasEl.width = Math.max(2, Math.round(rect.width * DPR2));
       canvasEl.height = Math.max(2, Math.round(rect.height * DPR2));
-      drawPlanet();
     }
     if (typeof ResizeObserver !== 'undefined') new ResizeObserver(resize).observe(stage);
     else window.addEventListener('resize', resize);

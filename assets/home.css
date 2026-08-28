@@ -1665,3 +1665,167 @@ body[data-page="home"].scene-mode .scene-flow > footer {
   position: relative;
   z-index: 2;
 }
+
+/* ============================================================
+   月球页 · 回归太空视角（移除地球地平线）
+   ============================================================ */
+.moon-stage {
+  top: 45%;
+}
+
+.moon-caption {
+  top: calc(45% + min(31vh, 270px) + 14px);
+}
+
+@media (max-width: 900px) {
+  .moon-stage {
+    top: 24svh;
+  }
+  .moon-caption {
+    top: calc(24svh + min(13svh, 30vw) + 10px);
+  }
+}
+
+/* ============================================================
+   第二屏（作品胶片）美化：小月亮 + 玻璃卡 + 像素时间线
+   ============================================================ */
+.odyssey-moon {
+  position: absolute;
+  right: 12%;
+  top: 18%;
+  width: 150px;
+  height: 150px;
+  z-index: 1;
+  image-rendering: pixelated;
+  pointer-events: none;
+  animation: ody-bob 14s ease-in-out infinite alternate;
+  opacity: 0.95;
+}
+
+@keyframes ody-bob {
+  from { transform: translateY(-6px); }
+  to { transform: translateY(8px); }
+}
+
+.odyssey-copy {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  right: clamp(24px, 7vw, 110px);
+  transform: translateY(-50%);
+  max-width: 460px;
+  padding: 28px 30px;
+  background: rgba(10, 10, 14, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  backdrop-filter: blur(8px);
+}
+
+.odyssey-copy .ph-foot-kicker {
+  margin: 0 0 8px;
+  font-size: 12px;
+}
+
+.odyssey-title {
+  margin: 0 0 4px;
+  color: #fff;
+  font-family: var(--pixel);
+  font-weight: 400;
+  font-size: clamp(30px, 3.6vw, 46px);
+  letter-spacing: 0.1em;
+  text-shadow: 3px 3px 0 #000;
+}
+
+.odyssey-since {
+  margin: 0 0 20px;
+  color: rgba(255, 255, 255, 0.55);
+  font-family: var(--pixel);
+  font-size: 13px;
+  letter-spacing: 0.18em;
+}
+
+/* 像素时间线 */
+.odyssey-timeline {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  margin: 0 0 18px;
+}
+
+.ody-node {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  min-width: 0;
+}
+
+.ody-dot {
+  width: 9px;
+  height: 9px;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+  position: relative;
+  z-index: 1;
+}
+
+.ody-node:not(:first-child)::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: -50%;
+  right: 50%;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.5) 0 5px, transparent 5px 10px);
+}
+
+.ody-node strong {
+  color: #fff;
+  font-family: var(--pixel);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-shadow: 2px 2px 0 #000;
+}
+
+.ody-node small {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.odyssey-lines {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: var(--pixel);
+  font-size: clamp(12px, 1.25vw, 14px);
+  line-height: 2;
+  letter-spacing: 0.1em;
+}
+
+.odyssey-lines .en {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 900px) {
+  .odyssey-moon {
+    right: 8%;
+    top: 10%;
+    width: 90px;
+    height: 90px;
+  }
+  .odyssey-copy {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: min(420px, 92vw);
+    max-width: 92vw;
+    padding: 20px 18px;
+  }
+  .ody-node small {
+    font-size: 10px;
+  }
+}
