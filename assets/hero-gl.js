@@ -13,7 +13,6 @@
   if (!canvas) return;
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var DPR = 1.5;                                  // 性能目标：1.5x
 
   var gl = canvas.getContext('webgl2', {
     antialias: false,
@@ -23,6 +22,16 @@
     powerPreference: 'high-performance'
   });
   if (!gl) { canvas.classList.add('hero-gl-fallback'); return; }
+
+  /* ---- 性能自适应：软件渲染/弱机 → 1.0x；正常硬件 → 1.5x ---- */
+  var rendererName = '';
+  try {
+    var dbg = gl.getExtension('WEBGL_debug_renderer_info');
+    rendererName = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : '';
+  } catch (e) { /* ignore */ }
+  var softwareGL = /swiftshader|llvmpipe|softpipe|software|basic render/i.test(rendererName);
+  var weakCPU = (navigator.hardwareConcurrency || 8) <= 4;
+  var currDPR = (softwareGL || weakCPU) ? 1.0 : 1.5;
 
   /* ---------------- 基础：全屏三角形 + VAO ---------------- */
   var vao = gl.createVertexArray();
@@ -264,8 +273,8 @@
 
   function resize() {
     var rect = canvas.getBoundingClientRect();
-    W = Math.max(8, Math.round(rect.width * DPR));
-    H = Math.max(8, Math.round(rect.height * DPR));
+    W = Math.max(8, Math.round(rect.width * currDPR));
+    H = Math.max(8, Math.round(rect.height * currDPR));
     if (canvas.width !== W || canvas.height !== H) {
       canvas.width = W;
       canvas.height = H;
@@ -325,9 +334,22 @@
     return true;
   }
 
+  var perfN = 0, perfAcc = 0, perfLast = 0, perfDone = false;
   function frame(now) {
     if (!running) return;
     if (document.hidden || !heroActive()) { raf = requestAnimationFrame(frame); return; }
+    if (!perfDone) {
+      if (perfLast) perfAcc += now - perfLast;
+      perfLast = now;
+      perfN++;
+      if (perfN >= 24) {
+        if (perfAcc / perfN > 34 && currDPR > 1) {
+          currDPR = 1;             // 弱机实测调度 → 降半分辨率保 60fps
+          resize();
+        }
+        perfDone = true;
+      }
+    }
     renderOnce(now);
     raf = requestAnimationFrame(frame);
   }
