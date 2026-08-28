@@ -4143,3 +4143,63 @@ html:has(body[data-page="home"]) {
     height: 520px;
   }
 }
+
+/* ---- 面板内嵌卡片：小图 + 信息 + 成果链接 ---- */
+.panel-body .pb-profile {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.panel-body .pb-photo {
+  flex: none;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.panel-body .pb-list.pb-cards li.pb-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.panel-body .pb-thumb {
+  flex: none;
+  width: 96px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.panel-body .pb-card-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.panel-body .pb-links {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.panel-body .pb-links a {
+  color: #fff;
+  font-family: var(--pixel);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.panel-body .pb-links a:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.4);
+}

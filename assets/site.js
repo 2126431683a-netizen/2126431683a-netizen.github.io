@@ -137,15 +137,20 @@
         title: '关于我',
         colors: { hi: '#fff2cf', mid: '#e8c66a', lo: '#a87f2e', halo: 'rgba(232,198,106,0.45)' },
         html: () => `
-          <p class="pb-lead">陈黄勇，游戏产品经理 / 运营策划 / 系统策划。学的是网络与新媒体，做的是游戏——所以我写的判断，最后都会做成能玩的东西。</p>
-          <div class="pb-stats">
-            <div><strong>06</strong><span>项目档案</span></div>
-            <div><strong>05</strong><span>可运行 Demo</span></div>
-            <div><strong>03</strong><span>公开设计文档</span></div>
+          <div class="pb-profile">
+            <img class="pb-photo img-color" src="assets/portfolio/profile.png" alt="陈黄勇证件照">
+            <div>
+              <p class="pb-lead">陈黄勇，游戏产品经理 / 运营策划 / 系统策划。学的是网络与新媒体，做的是游戏——所以我写的判断，最后都会做成能玩的东西。</p>
+              <div class="pb-stats">
+                <div><strong>06</strong><span>项目档案</span></div>
+                <div><strong>05</strong><span>可运行 Demo</span></div>
+              </div>
+            </div>
           </div>
           <div class="pb-actions">
             <a href="assets/陈黄勇_游戏产品经理_系统策划_简历.pdf" download>下载简历 PDF</a>
-            <a class="pb-ghost" href="about.html">完整档案页</a>
+            <a class="pb-ghost" href="mailto:2126431683@qq.com">发邮件</a>
+            <a class="pb-ghost" href="tel:19279459077">打电话</a>
           </div>`
       },
       projects: {
@@ -153,19 +158,55 @@
         title: '项目终端',
         colors: { hi: '#d9c9a8', mid: '#8d7a58', lo: '#4a3d2a', halo: 'rgba(217,201,168,0.4)' },
         html: () => `
-          <p class="pb-lead">六个项目，没一个是纸面功夫。每个都有独立档案：定位、系统、数值、我干了什么、长什么样，全在里面。挑一个点进去。</p>
-          <ul class="pb-list">
-            <li><strong>放开那个女巫：灰堡黎明</strong><span>Godot 4 · 卡牌回合 RPG —— 3 AP 速度行动战斗、角色收集养成、28 节点关卡与移动端规范。</span></li>
-            <li><strong>暮鸦之墓</strong><span>Godot 4.3 · 开放世界 ARPG —— 主城/野外/副本三类区域，任务、战斗、AI 与装备成长闭环。</span></li>
-            <li><strong>雾港疑云</strong><span>Web + Unity · 悬疑叙事 —— 真相度与信任双变量、信件收集、三幕四结局。</span></li>
-            <li><strong>三国文字合成塔防</strong><span>React + TS · 策略塔防 —— 8 条合成线、双经济、20 波战役。</span></li>
-            <li><strong>HotPick Studio</strong><span>React · Electron · AI 产品 —— 热点发现到数据复盘的五阶段工作台。</span></li>
-            <li><strong>余烬之城 Emberfall</strong><span>Godot 4.7 · 生存城建 SLG —— 熔炉供暖、资源调度、暴风雪压力的可玩切片。</span></li>
-          </ul>
-          <div class="pb-actions">
-            <a href="project-witch.html">项目档案总览</a>
-            <a class="pb-ghost" href="release-the-witch-game.html">试玩代表作</a>
-          </div>`
+          <p class="pb-lead">六个项目，没一个是纸面功夫。定位、系统、数值、我干了什么、长什么样——都在这里，不用再翻页面。</p>
+          <ul class="pb-list pb-cards">
+            <li class="pb-card">
+              <img class="pb-thumb" src="assets/portfolio/witch-city.png" alt="放开那个女巫截图">
+              <div class="pb-card-body">
+                <strong>放开那个女巫：灰堡黎明</strong>
+                <span>Godot 4 · 卡牌回合 RPG —— 3 AP 速度行动战斗、角色收集养成、28 节点关卡。</span>
+                <span class="pb-links"><a href="assets/docs/release-the-witch-prd.pdf" target="_blank" rel="noopener">PRD</a><a href="release-the-witch-game.html">试玩 →</a></span>
+              </div>
+            </li>
+            <li class="pb-card">
+              <img class="pb-thumb" src="assets/portfolio/mournraven-world.png" alt="暮鸦之墓截图">
+              <div class="pb-card-body">
+                <strong>暮鸦之墓</strong>
+                <span>Godot 4.3 · 开放世界 ARPG —— 主城/野外/副本，任务、战斗、AI 与装备成长闭环。</span>
+                <span class="pb-links"><a href="assets/docs/mournraven-gdd.pdf" target="_blank" rel="noopener">GDD</a></span>
+              </div>
+            </li>
+            <li class="pb-card">
+              <img class="pb-thumb" src="assets/portfolio/fog-harbor-tower.png" alt="雾港疑云截图">
+              <div class="pb-card-body">
+                <strong>雾港疑云</strong>
+                <span>Web + Unity · 悬疑叙事 —— 真相度与信任双变量、信件收集、三幕四结局。</span>
+              </div>
+            </li>
+            <li class="pb-card">
+              <img class="pb-thumb" src="assets/portfolio/sango-gameplay.png" alt="三国塔防截图">
+              <div class="pb-card-body">
+                <strong>三国文字合成塔防</strong>
+                <span>React + TS · 策略塔防 —— 8 条合成线、双经济、20 波战役。</span>
+              </div>
+            </li>
+            <li class="pb-card">
+              <img class="pb-thumb" src="assets/portfolio/hotpick.jpg" alt="HotPick Studio 截图">
+              <div class="pb-card-body">
+                <strong>HotPick Studio</strong>
+                <span>React · Electron · AI 产品 —— 热点发现到数据复盘的五阶段工作台。</span>
+                <span class="pb-links"><a href="assets/docs/hotpick-studio-prd.pdf" target="_blank" rel="noopener">PRD</a></span>
+              </div>
+            </li>
+            <li class="pb-card">
+              <img class="pb-thumb" src="assets/portfolio/emberfall-city.png" alt="余烬之城截图">
+              <div class="pb-card-body">
+                <strong>余烬之城 Emberfall</strong>
+                <span>Godot 4.7 · 生存城建 SLG —— 熔炉供暖、资源调度、暴风雪压力的可玩切片。</span>
+                <span class="pb-links"><a href="emberfall-game.html">试玩 →</a></span>
+              </div>
+            </li>
+          </ul>`
       },
       skills: {
         code: 'PLANET / 02',
@@ -179,7 +220,7 @@
             <li><strong>技术落地</strong><span>Godot / Unity / React、JSON 配置与存档、移动端适配验证 —— 策划稿要能跑才算被验证。</span></li>
           </ul>
           <div class="pb-actions">
-            <a class="pb-ghost" href="about.html">方法与经历</a>
+            <a href="assets/陈黄勇_游戏产品经理_系统策划_简历.pdf" download>下载简历 PDF</a>
           </div>`
       },
       ops: {
@@ -193,13 +234,16 @@
             <div><strong>#02</strong><span>最高热搜榜</span></div>
             <div><strong>300万</strong><span>单条最高播放</span></div>
           </div>
-          <ul class="pb-list">
-            <li><strong>HotPick Studio</strong><span>把选题、评分、转化、生产、复盘的重复判断做成五阶段内容工作台。</span></li>
-          </ul>
-          <div class="pb-actions">
-            <a href="project-hotpick.html">HotPick 档案</a>
-            <a class="pb-ghost" href="assets/docs/hotpick-studio-prd.pdf" target="_blank" rel="noopener">阅读 PRD</a>
-          </div>`
+          <ul class="pb-list pb-cards">
+            <li class="pb-card">
+              <img class="pb-thumb" src="assets/portfolio/hotpick-flow.png" alt="HotPick 工作台">
+              <div class="pb-card-body">
+                <strong>HotPick Studio</strong>
+                <span>把选题、评分、转化、生产、复盘的重复判断做成五阶段内容工作台。</span>
+                <span class="pb-links"><a href="assets/docs/hotpick-studio-prd.pdf" target="_blank" rel="noopener">PRD</a></span>
+              </div>
+            </li>
+          </ul>`
       },
       story: {
         code: 'PLANET / 04',
@@ -220,15 +264,36 @@
         colors: { hi: '#b8a8d9', mid: '#6d5d8d', lo: '#352c42', halo: 'rgba(184,168,217,0.4)' },
         html: () => `
           <p class="pb-lead">七组游戏体验，七份拆解。凭什么好玩、哪里会劝退、压力怎么给——每个类型我都写出了自己的一套看法。</p>
-          <ul class="pb-list">
-            <li><strong>动作</strong><span>《只狼》《黑神话：悟空》—— 精确输入与节奏化的攻防交换。</span></li>
-            <li><strong>开放世界</strong><span>《艾尔登法环》《巫师 3》—— 目的由玩家自己长出来的探索结构。</span></li>
-            <li><strong>叙事</strong><span>《雾港疑云》同源方法 —— 双变量驱动的分支叙事。</span></li>
-            <li><strong>策略 / SLG</strong><span>《三国塔防》《白色荒野》—— 循环与压力的设计取舍。</span></li>
-          </ul>
-          <div class="pb-actions">
-            <a href="game-analysis.html">打开研究档案</a>
-          </div>`
+          <ul class="pb-list pb-cards">
+            <li class="pb-card">
+              <img class="pb-thumb" src="assets/games/sekiro.jpg" alt="">
+              <div class="pb-card-body">
+                <strong>动作</strong>
+                <span>《只狼》《黑神话：悟空》—— 精确输入与节奏化的攻防交换。</span>
+              </div>
+            </li>
+            <li class="pb-card">
+              <img class="pb-thumb" src="assets/games/elden-ring.jpg" alt="">
+              <div class="pb-card-body">
+                <strong>开放世界</strong>
+                <span>《艾尔登法环》《巫师 3》—— 目的由玩家自己长出来的探索结构。</span>
+              </div>
+            </li>
+            <li class="pb-card">
+              <img class="pb-thumb" src="assets/portfolio/fog-harbor-top.png" alt="">
+              <div class="pb-card-body">
+                <strong>叙事</strong>
+                <span>《雾港疑云》同源方法 —— 双变量驱动的分支叙事。</span>
+              </div>
+            </li>
+            <li class="pb-card">
+              <img class="pb-thumb" src="assets/games/whiteout-survival.jpg" alt="">
+              <div class="pb-card-body">
+                <strong>策略 / SLG</strong>
+                <span>《三国塔防》《白色荒野》—— 循环与压力的设计取舍。</span>
+              </div>
+            </li>
+          </ul>`
       },
       link: {
         code: 'PLANET / 06',
