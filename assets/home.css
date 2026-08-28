@@ -904,17 +904,6 @@ body[data-page="home"].scene-mode .scene-flow > footer {
   image-rendering: pixelated;
 }
 
-/* 背景乱码层（常驻运行，位于场景内容之上、导航之下） */
-.sv-glitch {
-  position: fixed;
-  inset: 0;
-  z-index: 42;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  image-rendering: pixelated;
-}
-
 /* 联系场景（第四屏） */
 .scene-contact {
   display: flex;
@@ -978,8 +967,7 @@ body[data-page="home"].scene-mode .scene-flow > footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sv-wave,
-  .sv-glitch {
+  .sv-wave {
     display: none;
   }
 }

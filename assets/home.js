@@ -728,7 +728,7 @@
     var CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&*'.split('');
     var gw = 0, gh = 0, cells = [];
     var W = 0, H = 0, WD = 0, WDpr = 1;
-    var rafWave = null, rafGlitch = null;
+    var rafWave = null;
     var easeInOutCubic = function (x) {
       return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
     };
@@ -838,70 +838,6 @@
       if (wctx) wctx.clearRect(0, 0, W, H);
     }
 
-    /* ---------- 背景乱码 Canvas（常驻） ---------- */
-    var glitch = document.getElementById('sv-glitch');
-    var gctx = glitch && glitch.getContext('2d');
-    var GCELLW = 10, GCELLH = 20;
-    var grayPalette = [30, 44, 58, 74, 92];
-    var gGrid = [];
-    var gCols = 0, gRows = 0;
-    var gAcc = 0, gLast = 0;
-
-    function glitchResize() {
-      if (!glitch || !gctx) return;
-      var dpr2 = Math.min(window.devicePixelRatio || 1, 2);
-      glitch.width = Math.round(W * dpr2);
-      glitch.height = Math.round(H * dpr2);
-      gctx.setTransform(dpr2, 0, 0, dpr2, 0, 0);
-      gctx.imageSmoothingEnabled = false;
-      gCols = Math.ceil(W / GCELLW);
-      gRows = Math.ceil(H / GCELLH);
-      gGrid = new Array(gCols * gRows);
-      gctx.font = Math.round(GCELLH * 0.62) + 'px "Fusion Pixel 12px Mono zh_hans", Menlo, Consolas, monospace';
-      for (var i = 0; i < gGrid.length; i++) {
-        gGrid[i] = { ch: randChar(), cur: grayPalette[(Math.random() * grayPalette.length) | 0], tgt: 0 };
-        drawGlitchCell(i);
-      }
-    }
-
-    function drawGlitchCell(i) {
-      var c = gGrid[i];
-      var x = (i % gCols) * GCELLW;
-      var y = ((i / gCols) | 0) * GCELLH;
-      var v = Math.round(c.cur);
-      var a = 0.08 + (v / 96) * 0.16;               // 暗灰面纱，几乎不抢戏
-      gctx.fillStyle = 'rgba(' + v + ',' + v + ',' + v + ',' + a.toFixed(3) + ')';
-      gctx.fillText(c.ch, x, y + GCELLH * 0.78);
-    }
-
-    function glitchStep(now) {
-      if (now - gLast < 46) return;             // 每几十毫秒更新一批
-      gLast = now;
-      var n = Math.max(1, Math.round(gGrid.length * 0.05));
-      for (var k = 0; k < n; k++) {
-        var i = (Math.random() * gGrid.length) | 0;
-        var c = gGrid[i];
-        c.ch = randChar();
-        var p2 = grayPalette[(Math.random() * grayPalette.length) | 0];
-        c.tgt = p2;
-      }
-    }
-
-    function glitchFrame(now) {
-      if (document.hidden) { rafGlitch = requestAnimationFrame(glitchFrame); return; }
-      glitchStep(now);
-      // 颜色向目标平滑插值，只重绘仍在变化的格子
-      for (var i = 0; i < gGrid.length; i++) {
-        var c = gGrid[i];
-        var diff = c.tgt - c.cur;
-        if (diff > 0.5 || diff < -0.5) {
-          c.cur += diff * 0.22;
-          drawGlitchCell(i);
-        }
-      }
-      rafGlitch = requestAnimationFrame(glitchFrame);
-    }
-
     /* ---------- 输入：wheel / 键盘 / touch / 站内锚点 ---------- */
     function onWheel(e) {
       e.preventDefault();
@@ -965,15 +901,10 @@
     /* ---------- 生命周期 ---------- */
     window.addEventListener('resize', function () {
       waveResize();
-      glitchResize();
     });
 
     waveResize();
-    glitchResize();
     applyVisibility();
-    if (!reduced) {
-      rafGlitch = requestAnimationFrame(glitchFrame);
-    }
 
     /* 调试/清理 API */
     var api = {
@@ -983,7 +914,6 @@
       isAnimating: function () { return animating; },
       cleanup: function () {
         if (rafWave) cancelAnimationFrame(rafWave);
-        if (rafGlitch) cancelAnimationFrame(rafGlitch);
         window.removeEventListener('wheel', onWheel);
         window.removeEventListener('keydown', onKey);
         window.removeEventListener('touchstart', onTouchStart);
