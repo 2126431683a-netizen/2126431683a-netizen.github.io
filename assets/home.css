@@ -1221,3 +1221,113 @@ body[data-page="home"].scene-mode .scene-flow > footer {
     height: 40px;
   }
 }
+
+/* ============================================================
+   月相页 v2：右侧简历卡 + 月亮下一行朴素说明
+   ============================================================ */
+/* 右侧简历卡（固定内容，跟随月相切换的只有月亮和说明） */
+.moon-resume {
+  width: min(400px, 38vw);
+  max-height: calc(100svh - 150px);
+}
+
+.moon-resume-list {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.moon-resume-item {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.moon-resume-item:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.moon-resume-a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 14px;
+  font-family: var(--pixel);
+  font-size: 12.5px;
+  letter-spacing: 0.06em;
+}
+
+.moon-resume-name {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.moon-resume-arrow {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.moon-resume-item:hover .moon-resume-arrow {
+  color: #fff;
+}
+
+.moon-resume-note {
+  margin: 14px 0 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* 月亮下方一行说明（随月相切换淡入淡出） */
+.moon-caption {
+  position: absolute;
+  left: 50%;
+  top: calc(46% + min(31vh, 270px) + 14px);
+  transform: translateX(-58%);
+  width: min(560px, 52vw);
+  text-align: center;
+  transition: opacity 300ms ease, transform 300ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.moon-caption.is-switching {
+  opacity: 0.15;
+  transform: translateX(-58%) translateY(8px);
+}
+
+.moon-phase-name {
+  margin: 0 0 8px;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--pixel);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+}
+
+.moon-phase-line {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(15px, 1.7vw, 20px);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-shadow: 2px 2px 0 #000;
+}
+
+@media (max-width: 900px) {
+  .moon-resume {
+    width: min(400px, 92vw);
+  }
+  .moon-caption {
+    top: auto;
+    bottom: 76px;
+    transform: translateX(-50%);
+    width: 92vw;
+  }
+  .moon-caption.is-switching {
+    transform: translateX(-50%) translateY(8px);
+  }
+}
