@@ -1060,6 +1060,7 @@ body[data-page="home"].scene-mode .scene-flow > footer {
   color: rgba(255, 255, 255, 0.88);
   text-shadow: 2px 2px 0 #000;
   white-space: nowrap;
+  transform: translateX(-50%);
 }
 
 /* 舞台：90px 透视 + 轻微俯仰，3D 纵深 */
